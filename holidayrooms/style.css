@@ -5,12 +5,14 @@ html, body{
 /* App-bar styling */
 .app-bar-container{
   display: flex;
+  flex-flow: row wrap;
   width: 100%;
-  height: 60px;
+  height: 100%;
   background-color: rgb(234, 234, 234);
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
+  gap: 5px;
 }
 
 .app-bar-container .heading{
@@ -23,10 +25,59 @@ html, body{
   justify-content: center;
 }
 
+.app-bar-container .heading h1{
+  letter-spacing: 10px;
+}
+
+.app-bar-container .overview-container{
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 3px;
+  height: 35px;
+  overflow: hidden;
+}
+
+.app-bar-container .overview-container .title{ /*Title container*/
+  position: relative;
+  height: 100%;
+  color: rgb(43, 99, 210);
+  border-right: 1px solid rgb(173, 173, 173);
+  background-color: rgb(202, 202, 202);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.app-bar-container .overview-container .arrow{ /*Arrow container*/
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(9, 9, 237, 0.685);
+  padding-left: 5px;
+  padding-right: 5px;
+  position: relative;
+  height: 35px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.app-bar-container .overview-container .arrow-implement{ /*Arrow down*/
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid white;
+}
+
 .app-bar-container .buttons{
   margin-left: auto;
   margin-right: 15px;
-  height: 100%;
+  height: 35px;
   display: flex;
   gap: 5px;
   align-items: center;
@@ -39,8 +90,7 @@ html, body{
   border-radius: 2px;
   background-color: rgb(227, 227, 227);
   width: 100px;
-  height: 50%;
-  
+  height: 100%;
 }
 
 .app-bar-container .buttons button:hover{
@@ -50,4 +100,37 @@ html, body{
 
 .app-bar-container .buttons button:active{
   background-color: rgb(198, 198, 198);
+}
+
+/* Slider for pictures */
+.carousel {
+  width: 80%;
+  max-width: 800px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.carousel-images {
+  display: flex;
+  transition: transform 1s ease-in-out;
+}
+
+.carousel-image {
+  min-width: 100%;
+  height: auto;
+}
+
+@keyframes slide {
+  0% {
+      transform: translateX(0);
+  }
+  100% {
+      transform: translateX(-100%);
+  }
+}
+
+/* Animation für den Bildwechsel */
+.carousel {
+  animation: slide 30s infinite;
 }
