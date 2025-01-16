@@ -1,15 +1,11 @@
 <?php
 
+include 'config.php';
+
 function create_db_connection()
 {
-    // Database connection settings
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "inventarverwaltung_v0";
-
     // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli(SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
     // Check connection
     if ($conn->connect_error) {
