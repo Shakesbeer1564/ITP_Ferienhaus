@@ -27,7 +27,7 @@ Erstellt den User in der DB und erstellt eine Session mit einem Cookie.
 ---
 
 
-## Anmeldedaten verifizieren
+## Login
 
 Prüft die Anmeldedaten und erstellt eine Session.
 
