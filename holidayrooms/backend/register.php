@@ -3,7 +3,6 @@
 include 'database_connection.php'; 
 $conn = create_db_connection();
 
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
