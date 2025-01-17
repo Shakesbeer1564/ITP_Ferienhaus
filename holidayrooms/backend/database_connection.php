@@ -1,6 +1,6 @@
 <?php
 
-include 'config.php';
+include_once 'config.php';
 
 function create_db_connection()
 {

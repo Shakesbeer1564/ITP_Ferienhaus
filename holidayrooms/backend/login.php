@@ -1,7 +1,7 @@
 <?php
 
-include 'database_connection.php';
-include 'session_creation.php';
+include_once 'database_connection.php';
+include_once 'session_creation.php';
 
 $conn = create_db_connection();
 
