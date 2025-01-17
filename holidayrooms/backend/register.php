@@ -15,23 +15,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hash the password for security
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Prepare and bind
+    // Create user using sql query
     $stmt = $conn->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $username, $hashed_password, $email);
+    $ok = $stmt->execute();
 
-    if ($stmt->execute()) {
-        echo json_encode(
-            [
-              "result" => "Success"
-            ]
-        );
-    } else {
-        echo json_encode(
-            [
-              "result" => "Error"
-            ]
-        );
-    }
+    $stmt->close();
+
+    // Return boolean showing successful execution
+    echo json_encode(
+        ["ok" => $ok]
+    );
 
     $stmt->close();
 }
