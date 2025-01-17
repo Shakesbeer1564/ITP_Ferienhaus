@@ -1,6 +1,8 @@
 <?php
 
-include 'database_connection.php'; 
+include 'database_connection.php';
+include 'session_creation.php';
+
 $conn = create_db_connection();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -22,6 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if the given password corresponds to the password hash in the DB
     $is_valid = password_verify($inp_password, $hashed_user_password);
+
+    if ($is_valid) {
+        // Create a session and store as cookie
+        create_session($inp_username);
+    }
 
     // Return validity state
     echo json_encode(

@@ -1,6 +1,8 @@
 <?php
 
-include 'database_connection.php'; 
+include 'database_connection.php';
+include 'session_creation.php';
+
 $conn = create_db_connection();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -20,6 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ok = $stmt->execute();
 
     $stmt->close();
+
+    if ($ok) {
+        // Create a session and stores as cookie
+        create_session($username);
+    }
 
     // Return boolean showing successful execution
     echo json_encode(
