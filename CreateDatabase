@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 17. Jan 2025 um 09:08
+-- Erstellungszeit: 17. Jan 2025 um 12:24
 -- Server-Version: 10.4.28-MariaDB
 -- PHP-Version: 8.2.4
 
@@ -35,6 +35,43 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckEmail` (IN `p_Email` VARCHAR(1
     SET p_Vorhanden = (v_Count > 0);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateHaus` (IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_RegionName` VARCHAR(255), IN `p_EigentümerName` VARCHAR(255))   BEGIN
+    DECLARE v_RegionID INT;
+    DECLARE v_EigentümerID INT;
+
+    -- Check if the region already exists
+    SELECT RegionID INTO v_RegionID
+    FROM Region
+    WHERE RegionName = p_RegionName
+    LIMIT 1;
+
+    -- If region doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_RegionID IS NULL THEN
+        -- Insert the new region and get the RegionID
+        INSERT INTO Region (RegionName) VALUES (p_RegionName);
+        SET v_RegionID = LAST_INSERT_ID();
+    END IF;
+
+    -- Check if the Eigentümer already exists
+    SELECT EigentümerID INTO v_EigentümerID
+    FROM Eigentümer
+    WHERE EigentümerName = p_EigentümerName
+    LIMIT 1;
+
+    -- If Eigentümer doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_EigentümerID IS NULL THEN
+        -- Insert the new Eigentümer and get the EigentümerID
+        INSERT INTO Eigentümer (EigentümerName)
+        VALUES (p_EigentümerName);
+        SET v_EigentümerID = LAST_INSERT_ID();
+    END IF;
+
+    -- Now insert the new house record with assigned IDs
+    INSERT INTO Haus (Adresse, AnzahlZimmer, AnzahlBetten, Beschreibung, RegionID, EigentümerID, isFree)
+    VALUES (p_Adresse, p_AnzahlZimmer, p_AnzahlBetten, p_Beschreibung, v_RegionID, v_EigentümerID, TRUE);
+    
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateNutzer` (IN `p_Name` VARCHAR(100), IN `p_Email` VARCHAR(100), IN `p_Telefonnummer` VARCHAR(20), IN `p_RolleID` INT, IN `p_Passwort` VARCHAR(255))   BEGIN
 	IF NOT EmailIsValid(p_Email) THEN
         SIGNAL SQLSTATE '45000'
@@ -54,9 +91,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteNutzer` (IN `p_NutzerID` INT)
     DELETE FROM nutzer WHERE NutzerID = p_NutzerID;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getHausID` (IN `p_Adresse` VARCHAR(255), OUT `p_HausID` INT)   BEGIN
+    -- Fetch HausID based on Adresse and assign it to p_HausID
+    SELECT HausID INTO p_HausID
+    FROM haus
+    WHERE Adresse = p_Adresse
+    LIMIT 1;  -- To ensure only one value is returned, avoid multiple results
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetNutzer` (IN `p_NutzerID` INT)   BEGIN
     SELECT * FROM nutzer WHERE NutzerID = p_NutzerID;
 END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isHouseFree` (IN `p_HausID` INT, OUT `p_vorhanden` TINYINT)   BEGIN
+	DECLARE columnVAlue TINYINT;
+    
+    SELECT isFree into columnValue
+    FROM haus
+    WHERE hausID = p_HausID;
+   
+   SET p_vorhanden = IF(columnValue = 1, 1, 0);
+    
+    END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `ResetPasswort` (IN `p_NutzerID` INT, IN `p_NeuesPasswort` VARCHAR(255))   BEGIN
     UPDATE nutzer
@@ -87,6 +144,7 @@ CREATE TABLE `buchung` (
   `Enddatum` date NOT NULL,
   `Preis` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -98,6 +156,16 @@ CREATE TABLE `eigentümer` (
   `EigentümerName` varchar(100) DEFAULT NULL,
   `EigentümerAdresse` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `eigentümer`
+--
+
+INSERT INTO `eigentümer` (`EigentümerID`, `EigentümerName`, `EigentümerAdresse`) VALUES
+(1, 'TestEigentümer', 'Adresse 1, Testhausen'),
+(2, NULL, ''),
+(3, NULL, ''),
+(4, NULL, '');
 
 -- --------------------------------------------------------
 
@@ -115,6 +183,14 @@ CREATE TABLE `freizeitaktivität` (
   `OrtID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `freizeitaktivität`
+--
+
+INSERT INTO `freizeitaktivität` (`AktivitätsID`, `Name`, `Beschreibung`, `Preis`, `AnzahlTeilnehmer`, `BuchungID`, `OrtID`) VALUES
+(1, 'Nordsee-Segeltour', 'Segeln entlang der Nordseeküste', 150.00, 5, 1, NULL),
+(2, 'Bergwanderung', 'Geführte Wanderung in den Alpen', 80.00, 3, 2, NULL),
+(3, 'Weinverkostung', 'Weinprobe im Schwarzwald', 50.00, 2, 3, NULL);
 
 -- --------------------------------------------------------
 
@@ -129,10 +205,23 @@ CREATE TABLE `haus` (
   `AnzahlBetten` int(11) NOT NULL,
   `Beschreibung` text DEFAULT NULL,
   `RegionID` int(11) NOT NULL,
-  `EigentümerID` int(11) DEFAULT NULL
+  `EigentümerID` int(11) DEFAULT NULL,
+  `isFree` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `haus`
+--
 
+INSERT INTO `haus` (`HausID`, `Adresse`, `AnzahlZimmer`, `AnzahlBetten`, `Beschreibung`, `RegionID`, `EigentümerID`, `isFree`) VALUES
+(1, 'Strandweg 1 Sylt', 4, 8, 'Ein Strandhaus mit Blick auf die Nordsee', 1, NULL, 0),
+(2, 'Bergstraße 12, München', 6, 12, 'Modernes Haus in Zentrallage', 2, NULL, 1),
+(3, 'Waldweg 5, Freiburg', 3, 5, 'Gemütliches Haus in der Nähe des Schwarzwaldes', 3, NULL, 1),
+(4, 'Strandweg 1, Sylt', 4, 8, 'Ein Strandhaus mit Blick auf die Nordsee', 1, NULL, 1),
+(5, 'Bergstraße 12, München', 6, 12, 'Modernes Haus in Zentrallage', 2, NULL, 1),
+(6, 'Waldweg 5, Freiburg', 3, 5, 'Gemütliches Haus in der Nähe des Schwarzwaldes', 3, NULL, 1),
+(7, 'Strandweg 2, Sylt', 2, 1, 'test', 1, 3, 1),
+(8, 'Strandweg 3, Sylt', 2, 1, 'test', 7, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -147,7 +236,14 @@ CREATE TABLE `mietvertrag` (
   `Vertragsdetails` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `mietvertrag`
+--
 
+INSERT INTO `mietvertrag` (`VertragID`, `BuchungID`, `Vertragsdatum`, `Vertragsdetails`) VALUES
+(1, 1, '2025-01-20', 'Standardvertrag für Ferienhaus Sylt.'),
+(2, 2, '2025-02-28', 'Standardvertrag für Ferienhaus München.'),
+(3, 3, '2025-03-30', 'Standardvertrag für Ferienhaus Freiburg.');
 
 -- --------------------------------------------------------
 
@@ -162,7 +258,17 @@ CREATE TABLE `mängelanzeige` (
   `Beschreibung` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `mängelanzeige`
+--
 
+INSERT INTO `mängelanzeige` (`MangelID`, `HausID`, `MeldeDatum`, `Beschreibung`) VALUES
+(1, 1, '2025-01-15', 'Undichte Fenster'),
+(2, 2, '2025-01-10', 'Heizung defekt'),
+(3, 3, '2025-01-08', 'Wasserschaden im Badezimmer'),
+(4, 1, '2025-01-15', 'Undichte Fenster'),
+(5, 2, '2025-01-10', 'Heizung defekt'),
+(6, 3, '2025-01-08', 'Wasserschaden im Badezimmer');
 
 -- --------------------------------------------------------
 
@@ -179,6 +285,15 @@ CREATE TABLE `nutzer` (
   `Passwort` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `nutzer`
+--
+
+INSERT INTO `nutzer` (`NutzerID`, `Name`, `Email`, `Telefonnummer`, `RolleID`, `Passwort`) VALUES
+(8, 'test', 'abs@abc.de', '2093', 1, 'passwort123'),
+(9, 'Test', 'test@test.de', '01293', 1, 'passwort');
+
+-- --------------------------------------------------------
 
 --
 -- Tabellenstruktur für Tabelle `ort`
@@ -190,6 +305,17 @@ CREATE TABLE `ort` (
   `OrtName` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `ort`
+--
+
+INSERT INTO `ort` (`OrtID`, `RegionID`, `OrtName`) VALUES
+(1, 1, 'Sylt'),
+(2, 2, 'München'),
+(3, 3, 'Freiburg'),
+(4, 1, 'Sylt'),
+(5, 2, 'München'),
+(6, 3, 'Freiburg');
 
 -- --------------------------------------------------------
 
@@ -204,7 +330,14 @@ CREATE TABLE `rechnung` (
   `Betrag` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `rechnung`
+--
 
+INSERT INTO `rechnung` (`RechnungID`, `BuchungID`, `Rechnungsdatum`, `Betrag`) VALUES
+(1, 1, '2025-01-25', 1350.00),
+(2, 2, '2025-03-01', 1580.00),
+(3, 3, '2025-04-05', 1050.00);
 
 -- --------------------------------------------------------
 
@@ -217,6 +350,18 @@ CREATE TABLE `region` (
   `RegionName` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `region`
+--
+
+INSERT INTO `region` (`RegionID`, `RegionName`) VALUES
+(1, 'Nordsee'),
+(2, 'Bayern'),
+(3, 'Schwarzwald'),
+(4, 'Nordsee'),
+(5, 'Bayern'),
+(6, 'Schwarzwald'),
+(7, '');
 
 -- --------------------------------------------------------
 
@@ -229,6 +374,20 @@ CREATE TABLE `rolle` (
   `NameRolle` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Daten für Tabelle `rolle`
+--
+
+INSERT INTO `rolle` (`RolleID`, `NameRolle`) VALUES
+(1, 'Admin'),
+(2, 'Registriert'),
+(3, 'Gast'),
+(4, 'Admin'),
+(5, 'Registriert'),
+(6, 'Gast'),
+(7, 'Admin'),
+(8, 'Registriert'),
+(9, 'Gast');
 
 --
 -- Indizes der exportierten Tabellen
@@ -237,11 +396,10 @@ CREATE TABLE `rolle` (
 --
 -- Indizes für die Tabelle `buchung`
 --
-
 ALTER TABLE `buchung`
   ADD PRIMARY KEY (`BuchungID`),
-  ADD KEY `NutzerID` (`NutzerID`),
-  ADD KEY `HausID` (`HausID`);
+  ADD KEY `HausID` (`HausID`),
+  ADD KEY `buchung_ibfk_1` (`NutzerID`);
 
 --
 -- Indizes für die Tabelle `eigentümer`
@@ -326,7 +484,7 @@ ALTER TABLE `buchung`
 -- AUTO_INCREMENT für Tabelle `eigentümer`
 --
 ALTER TABLE `eigentümer`
-  MODIFY `EigentümerID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `EigentümerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `freizeitaktivität`
@@ -338,7 +496,7 @@ ALTER TABLE `freizeitaktivität`
 -- AUTO_INCREMENT für Tabelle `haus`
 --
 ALTER TABLE `haus`
-  MODIFY `HausID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `HausID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT für Tabelle `mietvertrag`
@@ -356,7 +514,7 @@ ALTER TABLE `mängelanzeige`
 -- AUTO_INCREMENT für Tabelle `nutzer`
 --
 ALTER TABLE `nutzer`
-  MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT für Tabelle `ort`
@@ -374,7 +532,7 @@ ALTER TABLE `rechnung`
 -- AUTO_INCREMENT für Tabelle `region`
 --
 ALTER TABLE `region`
-  MODIFY `RegionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `RegionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT für Tabelle `rolle`
@@ -390,7 +548,7 @@ ALTER TABLE `rolle`
 -- Constraints der Tabelle `buchung`
 --
 ALTER TABLE `buchung`
-  ADD CONSTRAINT `buchung_ibfk_1` FOREIGN KEY (`NutzerID`) REFERENCES `nutzer` (`NutzerID`),
+  ADD CONSTRAINT `buchung_ibfk_1` FOREIGN KEY (`NutzerID`) REFERENCES `nutzer` (`NutzerID`) ON DELETE CASCADE,
   ADD CONSTRAINT `buchung_ibfk_2` FOREIGN KEY (`HausID`) REFERENCES `haus` (`HausID`);
 
 --
