@@ -14,7 +14,12 @@ function create_session($username)
     $stmt->bind_result($role_id);
     $stmt->fetch();
 
+    // Set cookie expiration
+    session_set_cookie_params(SESSION_TIMEOUT);
+    // Start the session
     session_start();
+    // Regenerate the session id for improved security
+    session_regenerate_id(true);
 
     // Store session variables
     $_SESSION['username'] = $username;
