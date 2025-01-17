@@ -1,0 +1,443 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Erstellungszeit: 17. Jan 2025 um 09:08
+-- Server-Version: 10.4.28-MariaDB
+-- PHP-Version: 8.2.4
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Datenbank: `ferienhausverwaltung`
+--
+
+DELIMITER $$
+--
+-- Prozeduren
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckEmail` (IN `p_Email` VARCHAR(100), OUT `p_Vorhanden` BOOLEAN)   BEGIN
+    DECLARE v_Count INT;
+
+    SELECT COUNT(*) INTO v_Count
+    FROM nutzer
+    WHERE Email = p_Email;
+
+    SET p_Vorhanden = (v_Count > 0);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateNutzer` (IN `p_Name` VARCHAR(100), IN `p_Email` VARCHAR(100), IN `p_Telefonnummer` VARCHAR(20), IN `p_RolleID` INT, IN `p_Passwort` VARCHAR(255))   BEGIN
+	IF NOT EmailIsValid(p_Email) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM nutzer WHERE Email = p_Email) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Die E-Mail-Adresse ist bereits registriert.';
+    END IF;
+
+    INSERT INTO nutzer (Name, Email, Telefonnummer, RolleID, Passwort)
+    VALUES (p_Name, p_Email, p_Telefonnummer, p_RolleID, p_Passwort);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteNutzer` (IN `p_NutzerID` INT)   BEGIN
+    DELETE FROM nutzer WHERE NutzerID = p_NutzerID;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetNutzer` (IN `p_NutzerID` INT)   BEGIN
+    SELECT * FROM nutzer WHERE NutzerID = p_NutzerID;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ResetPasswort` (IN `p_NutzerID` INT, IN `p_NeuesPasswort` VARCHAR(255))   BEGIN
+    UPDATE nutzer
+    SET Passwort = p_NeuesPasswort
+    WHERE NutzerID = p_NutzerID;
+END$$
+
+--
+-- Funktionen
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `EmailIsValid` (`p_Email` VARCHAR(100)) RETURNS TINYINT(1)  BEGIN
+    RETURN p_Email REGEXP '^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9._-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\\.[a-zA-Z]{2,63}$';
+END$$
+
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `buchung`
+--
+
+CREATE TABLE `buchung` (
+  `BuchungID` int(11) NOT NULL,
+  `NutzerID` int(11) NOT NULL,
+  `HausID` int(11) NOT NULL,
+  `Startdatum` date NOT NULL,
+  `Enddatum` date NOT NULL,
+  `Preis` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `eigentümer`
+--
+
+CREATE TABLE `eigentümer` (
+  `EigentümerID` int(11) NOT NULL,
+  `EigentümerName` varchar(100) DEFAULT NULL,
+  `EigentümerAdresse` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `freizeitaktivität`
+--
+
+CREATE TABLE `freizeitaktivität` (
+  `AktivitätsID` int(11) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  `Beschreibung` text DEFAULT NULL,
+  `Preis` decimal(10,2) NOT NULL,
+  `AnzahlTeilnehmer` int(11) DEFAULT NULL,
+  `BuchungID` int(11) DEFAULT NULL,
+  `OrtID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `haus`
+--
+
+CREATE TABLE `haus` (
+  `HausID` int(11) NOT NULL,
+  `Adresse` varchar(255) NOT NULL,
+  `AnzahlZimmer` int(11) NOT NULL,
+  `AnzahlBetten` int(11) NOT NULL,
+  `Beschreibung` text DEFAULT NULL,
+  `RegionID` int(11) NOT NULL,
+  `EigentümerID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `mietvertrag`
+--
+
+CREATE TABLE `mietvertrag` (
+  `VertragID` int(11) NOT NULL,
+  `BuchungID` int(11) NOT NULL,
+  `Vertragsdatum` date NOT NULL,
+  `Vertragsdetails` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `mängelanzeige`
+--
+
+CREATE TABLE `mängelanzeige` (
+  `MangelID` int(11) NOT NULL,
+  `HausID` int(11) NOT NULL,
+  `MeldeDatum` date NOT NULL,
+  `Beschreibung` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `nutzer`
+--
+
+CREATE TABLE `nutzer` (
+  `NutzerID` int(11) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Telefonnummer` varchar(20) DEFAULT NULL,
+  `RolleID` int(11) NOT NULL,
+  `Passwort` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Tabellenstruktur für Tabelle `ort`
+--
+
+CREATE TABLE `ort` (
+  `OrtID` int(11) NOT NULL,
+  `RegionID` int(11) NOT NULL,
+  `OrtName` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `rechnung`
+--
+
+CREATE TABLE `rechnung` (
+  `RechnungID` int(11) NOT NULL,
+  `BuchungID` int(11) NOT NULL,
+  `Rechnungsdatum` date NOT NULL,
+  `Betrag` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `region`
+--
+
+CREATE TABLE `region` (
+  `RegionID` int(11) NOT NULL,
+  `RegionName` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `rolle`
+--
+
+CREATE TABLE `rolle` (
+  `RolleID` int(11) NOT NULL,
+  `NameRolle` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Indizes der exportierten Tabellen
+--
+
+--
+-- Indizes für die Tabelle `buchung`
+--
+
+ALTER TABLE `buchung`
+  ADD PRIMARY KEY (`BuchungID`),
+  ADD KEY `NutzerID` (`NutzerID`),
+  ADD KEY `HausID` (`HausID`);
+
+--
+-- Indizes für die Tabelle `eigentümer`
+--
+ALTER TABLE `eigentümer`
+  ADD PRIMARY KEY (`EigentümerID`);
+
+--
+-- Indizes für die Tabelle `freizeitaktivität`
+--
+ALTER TABLE `freizeitaktivität`
+  ADD PRIMARY KEY (`AktivitätsID`),
+  ADD KEY `BuchungID` (`BuchungID`),
+  ADD KEY `OrtID` (`OrtID`);
+
+--
+-- Indizes für die Tabelle `haus`
+--
+ALTER TABLE `haus`
+  ADD PRIMARY KEY (`HausID`),
+  ADD KEY `RegionID` (`RegionID`),
+  ADD KEY `EigentümerID` (`EigentümerID`);
+
+--
+-- Indizes für die Tabelle `mietvertrag`
+--
+ALTER TABLE `mietvertrag`
+  ADD PRIMARY KEY (`VertragID`),
+  ADD KEY `BuchungID` (`BuchungID`);
+
+--
+-- Indizes für die Tabelle `mängelanzeige`
+--
+ALTER TABLE `mängelanzeige`
+  ADD PRIMARY KEY (`MangelID`),
+  ADD KEY `HausID` (`HausID`);
+
+--
+-- Indizes für die Tabelle `nutzer`
+--
+ALTER TABLE `nutzer`
+  ADD PRIMARY KEY (`NutzerID`),
+  ADD KEY `RolleID` (`RolleID`);
+
+--
+-- Indizes für die Tabelle `ort`
+--
+ALTER TABLE `ort`
+  ADD PRIMARY KEY (`OrtID`),
+  ADD KEY `RegionID` (`RegionID`);
+
+--
+-- Indizes für die Tabelle `rechnung`
+--
+ALTER TABLE `rechnung`
+  ADD PRIMARY KEY (`RechnungID`),
+  ADD KEY `BuchungID` (`BuchungID`);
+
+--
+-- Indizes für die Tabelle `region`
+--
+ALTER TABLE `region`
+  ADD PRIMARY KEY (`RegionID`);
+
+--
+-- Indizes für die Tabelle `rolle`
+--
+ALTER TABLE `rolle`
+  ADD PRIMARY KEY (`RolleID`);
+
+--
+-- AUTO_INCREMENT für exportierte Tabellen
+--
+
+--
+-- AUTO_INCREMENT für Tabelle `buchung`
+--
+ALTER TABLE `buchung`
+  MODIFY `BuchungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT für Tabelle `eigentümer`
+--
+ALTER TABLE `eigentümer`
+  MODIFY `EigentümerID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT für Tabelle `freizeitaktivität`
+--
+ALTER TABLE `freizeitaktivität`
+  MODIFY `AktivitätsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT für Tabelle `haus`
+--
+ALTER TABLE `haus`
+  MODIFY `HausID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `mietvertrag`
+--
+ALTER TABLE `mietvertrag`
+  MODIFY `VertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT für Tabelle `mängelanzeige`
+--
+ALTER TABLE `mängelanzeige`
+  MODIFY `MangelID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `nutzer`
+--
+ALTER TABLE `nutzer`
+  MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT für Tabelle `ort`
+--
+ALTER TABLE `ort`
+  MODIFY `OrtID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `rechnung`
+--
+ALTER TABLE `rechnung`
+  MODIFY `RechnungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT für Tabelle `region`
+--
+ALTER TABLE `region`
+  MODIFY `RegionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `rolle`
+--
+ALTER TABLE `rolle`
+  MODIFY `RolleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- Constraints der exportierten Tabellen
+--
+
+--
+-- Constraints der Tabelle `buchung`
+--
+ALTER TABLE `buchung`
+  ADD CONSTRAINT `buchung_ibfk_1` FOREIGN KEY (`NutzerID`) REFERENCES `nutzer` (`NutzerID`),
+  ADD CONSTRAINT `buchung_ibfk_2` FOREIGN KEY (`HausID`) REFERENCES `haus` (`HausID`);
+
+--
+-- Constraints der Tabelle `freizeitaktivität`
+--
+ALTER TABLE `freizeitaktivität`
+  ADD CONSTRAINT `freizeitaktivität_ibfk_1` FOREIGN KEY (`BuchungID`) REFERENCES `buchung` (`BuchungID`),
+  ADD CONSTRAINT `freizeitaktivität_ibfk_2` FOREIGN KEY (`OrtID`) REFERENCES `ort` (`OrtID`);
+
+--
+-- Constraints der Tabelle `haus`
+--
+ALTER TABLE `haus`
+  ADD CONSTRAINT `haus_ibfk_1` FOREIGN KEY (`RegionID`) REFERENCES `region` (`RegionID`),
+  ADD CONSTRAINT `haus_ibfk_2` FOREIGN KEY (`EigentümerID`) REFERENCES `eigentümer` (`EigentümerID`);
+
+--
+-- Constraints der Tabelle `mietvertrag`
+--
+ALTER TABLE `mietvertrag`
+  ADD CONSTRAINT `mietvertrag_ibfk_1` FOREIGN KEY (`BuchungID`) REFERENCES `buchung` (`BuchungID`);
+
+--
+-- Constraints der Tabelle `mängelanzeige`
+--
+ALTER TABLE `mängelanzeige`
+  ADD CONSTRAINT `mängelanzeige_ibfk_1` FOREIGN KEY (`HausID`) REFERENCES `haus` (`HausID`);
+
+--
+-- Constraints der Tabelle `nutzer`
+--
+ALTER TABLE `nutzer`
+  ADD CONSTRAINT `nutzer_ibfk_1` FOREIGN KEY (`RolleID`) REFERENCES `rolle` (`RolleID`);
+
+--
+-- Constraints der Tabelle `ort`
+--
+ALTER TABLE `ort`
+  ADD CONSTRAINT `ort_ibfk_1` FOREIGN KEY (`RegionID`) REFERENCES `region` (`RegionID`);
+
+--
+-- Constraints der Tabelle `rechnung`
+--
+ALTER TABLE `rechnung`
+  ADD CONSTRAINT `rechnung_ibfk_1` FOREIGN KEY (`BuchungID`) REFERENCES `buchung` (`BuchungID`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
