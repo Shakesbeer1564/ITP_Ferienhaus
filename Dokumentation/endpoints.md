@@ -4,6 +4,8 @@ Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird de
 
 ## Registrierung
 
+Erstellt den User in der DB und erstellt eine Session mit einem Cookie.
+
 ### Method: `POST`
 
 ### File: `register.php`
@@ -27,9 +29,11 @@ Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird de
 
 ## Anmeldedaten verifizieren
 
+Prüft die Anmeldedaten und erstellt eine Session.
+
 ### Method: `POST`
 
-### File: `check_credentials.php`
+### File: `login.php`
 
 ### Body: 
 ```JSON
