@@ -2,12 +2,18 @@ html, body{
   margin: 0;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* App-bar styling */
 .app-bar-container{
   display: flex;
   flex-flow: row wrap;
   width: 100%;
-  height: 100%;
+  height: 60px;
   background-color: rgb(234, 234, 234);
   align-items: center;
   justify-content: space-between;
@@ -52,28 +58,23 @@ html, body{
   padding-right: 3px;
 }
 
-.app-bar-container .overview-container .arrow{ /*Arrow container*/
-  display: flex;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(9, 9, 237, 0.685);
-  padding-left: 5px;
-  padding-right: 5px;
-  position: relative;
-  height: 35px;
-  width: 100%;
+.arrow{
+  margin-left: 10px;
+  height: 100%;
+  border-left: 1px solid #d6d6d6;
   cursor: pointer;
 }
 
-.app-bar-container .overview-container .arrow-implement{ /*Arrow down*/
+.arrow-implement{
   width: 0;
   height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top: 10px solid white;
+  margin: 10px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid black;
+  display: inline-block;
 }
-
+  
 .app-bar-container .buttons{
   margin-left: auto;
   margin-right: 15px;
@@ -102,35 +103,132 @@ html, body{
   background-color: rgb(198, 198, 198);
 }
 
-/* Slider for pictures */
+/* !Karussell-Container FUNKTIONIERT NOCH NICHT !!! */
 .carousel {
   width: 80%;
   max-width: 800px;
-  position: relative;
   overflow: hidden;
-  border-radius: 10px;
+  position: relative;
+  margin: 20px auto; /* Zentrierung */
 }
 
+/* Container für alle Bilder */
 .carousel-images {
   display: flex;
-  transition: transform 1s ease-in-out;
+  width: 600%; /* 6 Bilder nebeneinander, also 6 * 100% */
+  animation: slide 36s infinite linear; /* 36s für alle Bilder, unendlich wiederholen */
 }
 
+/* Jedes Bild im Karussell */
 .carousel-image {
-  min-width: 100%;
-  height: auto;
+  width: 100%; /* Jedes Bild nimmt die volle Breite des Containers ein */
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #8bc34a;
+  font-size: 50px;
+  color: white;
+  font-weight: bold;
 }
 
+/* Animation für den kontinuierlichen Bildwechsel */
 @keyframes slide {
-  0% {
-      transform: translateX(0);
-  }
-  100% {
-      transform: translateX(-100%);
-  }
+  0% { transform: translateX(0); }           /* Bild 1 sichtbar */
+  16.66% { transform: translateX(-100%); }    /* Bild 2 sichtbar */
+  33.33% { transform: translateX(-200%); }    /* Bild 3 sichtbar */
+  50% { transform: translateX(-300%); }       /* Bild 4 sichtbar */
+  66.66% { transform: translateX(-400%); }    /* Bild 5 sichtbar */
+  83.33% { transform: translateX(-500%); }    /* Bild 6 sichtbar */
+  100% { transform: translateX(-600%); }      /* Zurück zu Bild 1 */
 }
 
-/* Animation für den Bildwechsel */
-.carousel {
-  animation: slide 30s infinite;
+/* Filterbar for rooms booking */
+.container-filterbar{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: rgb(234, 234, 234);
+}
+
+.heading{
+  margin-right: auto;
+}
+
+.filter{
+  display: flex;
+  border: 1px solid #e3e3e3;
+  border-radius: 3px;
+  width: fit-content;
+  background-color: #cacaca;
+  margin: 2px;
+  height: 30px;
+  position: relative;
+}
+
+.filter .filter-title{
+  display: flex;
+  margin-right: 7px;
+  margin-bottom: 3px;
+  margin-left: 7px;
+  padding-right: 5px;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #e3e3e3;
+  height: 100%;
+}
+
+.filter .result{
+  margin: auto;
+  display: inline-block;
+}
+
+.filter .result input:disabled{
+  height: 100%;
+  border: 1px solid transparent;
+  color: #000000;
+  text-align: center;
+  background-color: transparent;
+}
+
+.filter .result .dropdown-container{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: none;
+  background-color: white;
+  border: 1px solid #d6d6d6;
+  border-radius: 3px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.filter .result .dropdown-container ul {
+  margin: 0;
+  padding: 0;
+}
+
+.filter .result .dropdown-container ul li{
+  padding: 10px;
+  cursor: pointer;
+  list-style: none;
+  list-style-type: none;
+}
+
+.filter .result .dropdown-container ul li:hover{
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+li::marker{
+  content: '';
+}
+
+.filter .result .dropdown-container ul li a{
+  color: #333;
+  text-decoration: none;
+  display: block;
+  width: 100%;
 }

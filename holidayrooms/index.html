@@ -12,7 +12,7 @@
   <button id="test-click">Test Click</button>
   <ul id="testList">
   </ul> -->
-
+  
   <!-- app bar -->
   <div class="app-bar-container">
     <div class="heading">
@@ -34,8 +34,8 @@
     </div>
   </div>
 
-  <!-- Slider -->
-  <div class="carousel">
+  <!-- !Slider funktioniert noch nicht -->
+  <!-- <div class="carousel">
     <div class="carousel-images">
       <img src="./assets/16340d92-59e5-4fd6-b880-088f5b7a7383.jpg" alt="Bild 1" class="carousel-image">
       <img src="./assets/21-vorsee-umlaufende-sonnenterrasse-und-umzaeunter-garten-1920x1080.jpg" alt="Bild 2" class="carousel-image">
@@ -44,6 +44,64 @@
       <img src="./assets/b87a2203-aafb-4329-91d4-5acd072cdab4.jpg" alt="Bild 5" class="carousel-image">
       <img src="./assets/ferienhaus-suedschweden-vallesborg.jpg" alt="Bild 6" class="carousel-image">
     </div>
+  </div> -->
+
+  <div class="container-filterbar">
+    <div class="heading">
+      <h3>Rooms booking</h3>
+    </div>
+
+    <!--#region place_filter -->
+    <div class="filter">
+      <div class="filter-title">
+        <span>Ort</span>
+      </div>
+      <div class="result">
+        <input type="text" disabled="true" value="TestOrt"/>
+        <ul id="dropdown-place" class="dropdown-container">
+          <li>
+            <a>Place 1</a>
+          </li>
+          <li>
+            <a>Place 2</a>
+          </li>
+          <li>
+            <a>Place 3</a>
+          </li>
+        </ul>
+      </div>
+      <div id="place_filter" class="arrow">
+        <div class="arrow-implement">
+        </div>
+      </div>
+    </div>
+    <!--#endregion place_filter-->
+
+    <!--#region region_filter -->
+    <div class="filter">
+      <div class="filter-title">
+        <span>Region</span>
+      </div>
+      <div class="result">
+        <input type="text" disabled="true" value="TestRegion"/>
+        <ul id="dropdown_region" class="dropdown-container">
+          <li>
+            <a>Option 1</a>
+          </li>
+          <li>
+            <a>Option 2</a>
+          </li>
+          <li>
+            <a>Option 3</a>
+          </li>
+        </ul>
+      </div>
+      <div id="region_filter" class="arrow">
+        <div class="arrow-implement">
+        </div>
+      </div>
+    </div>
+    <!--#endregion region_filter-->
   </div>
 </body>
 </html>

@@ -17,3 +17,33 @@ import { HTTPService } from "./http-service.js";
 //   });
 // }
 
+function initializeData(){
+
+}
+
+function loadPlaces(){
+
+}
+
+function loadRegions(){
+
+}
+
+function loadRooms(){
+
+}
+
+function loadActivities(){
+
+}
+
+document.getElementById('place_filter').addEventListener('click', () => {
+  const dropDown = document.getElementById('dropdown-place');
+  dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
+});
+
+document.getElementById('region_filter').addEventListener('click', () => {
+  const dropDown = document.getElementById('dropdown_region');
+  console.log(dropDown);
+  dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
+})
