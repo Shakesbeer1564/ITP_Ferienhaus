@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Create user using sql query
-    $stmt = $conn->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO nutzer (name, passwort, email) VALUES (?, ?, ?)");
     $stmt->bind_param("sss", $username, $hashed_password, $email);
     $ok = $stmt->execute();
 

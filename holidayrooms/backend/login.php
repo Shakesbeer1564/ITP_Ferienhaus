@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $inp_password = $data["password"];
 
     // Get the password hash for the given user from the DB
-    $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT passwort FROM nutzer WHERE name = ?");
     $stmt->bind_param("s", $inp_username);
     $stmt->execute();
     $stmt->bind_result($hashed_user_password);
