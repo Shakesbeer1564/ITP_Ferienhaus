@@ -1,0 +1,260 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AddNutzer`(
+    IN p_Name VARCHAR(255),
+    IN p_Email VARCHAR(255),
+    IN p_Telefonnummer VARCHAR(20),
+    IN p_RolleID INT,
+    IN p_Passwort VARCHAR(255)
+)
+BEGIN
+    -- Überprüfen der E-Mail-Gültigkeit
+    IF NOT emailIsValid(p_Email) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ungültige E-Mail-Adresse.';
+    END IF;
+
+    -- Einfügen des neuen Nutzers
+    INSERT INTO nutzer (Name, Email, Telefonnummer, RolleID, Passwort)
+    VALUES (p_Name, p_Email, p_Telefonnummer, p_RolleID, p_Passwort);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AddVacationHome`(IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_RegionID` INT, IN `p_EigentuemerID` INT, IN `p_isFree` BOOLEAN)
+BEGIN
+    INSERT INTO haus (Adresse, AnzahlZimmer, AnzahlBetten, Beschreibung, RegionID, EigentuemerID, isFree)
+    VALUES (p_Adresse, p_AnzahlZimmer, p_AnzahlBetten, p_Beschreibung, p_RegionID, p_EigentuemerID, p_isFree);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CheckEmail`(
+    IN p_Email VARCHAR(100),
+    OUT p_Vorhanden BOOLEAN
+)
+BEGIN
+    DECLARE v_Count INT;
+
+    SELECT COUNT(*) INTO v_Count
+    FROM nutzer
+    WHERE Email = p_Email;
+
+    SET p_Vorhanden = (v_Count > 0);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateBuchung`(IN `p_nutzerID` INT, IN `p_HausID` INT, IN `p_StartDatum` DATE, IN `p_EndDatum` DATE, IN `p_Preis` DECIMAL(10,2))
+BEGIN
+    -- Überprüfen, ob der Nutzer existiert
+    IF NOT EXISTS (SELECT 1 FROM nutzer WHERE NutzerID = p_nutzerID) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nutzer existiert nicht.';
+    END IF;
+
+    -- Überprüfen, ob das Haus existiert
+    IF NOT EXISTS (SELECT 1 FROM haus WHERE HausID = p_HausID) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Haus existiert nicht.';
+    END IF;
+
+    -- Überprüfen, ob das Haus im angegebenen Zeitraum verfügbar ist
+    IF EXISTS (
+        SELECT 1
+        FROM buchung
+        WHERE HausID = p_HausID
+          AND (
+              (p_StartDatum BETWEEN StartDatum AND EndDatum)
+              OR
+              (p_EndDatum BETWEEN StartDatum AND EndDatum)
+              OR
+              (StartDatum BETWEEN p_StartDatum AND p_EndDatum)
+          )
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Haus ist im angegebenen Zeitraum nicht verfügbar.';
+    END IF;
+
+    -- Einfügen der neuen Buchung
+    INSERT INTO buchung (NutzerID, HausID, StartDatum, EndDatum, Preis)
+    VALUES (p_nutzerID, p_HausID, p_StartDatum, p_EndDatum, p_Preis);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateHaus`(IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_RegionName` VARCHAR(255), IN `p_EigentümerName` VARCHAR(255))
+BEGIN
+    DECLARE v_RegionID INT;
+    DECLARE v_EigentümerID INT;
+
+    -- Check if the region already exists
+    SELECT RegionID INTO v_RegionID
+    FROM Region
+    WHERE RegionName = p_RegionName
+    LIMIT 1;
+
+    -- If region doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_RegionID IS NULL THEN
+        -- Insert the new region and get the RegionID
+        INSERT INTO Region (RegionName) VALUES (p_RegionName);
+        SET v_RegionID = LAST_INSERT_ID();
+    END IF;
+
+    -- Check if the Eigentümer already exists
+    SELECT EigentümerID INTO v_EigentümerID
+    FROM Eigentümer
+    WHERE EigentümerName = p_EigentümerName
+    LIMIT 1;
+
+    -- If Eigentümer doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_EigentümerID IS NULL THEN
+        -- Insert the new Eigentümer and get the EigentümerID
+        INSERT INTO Eigentümer (EigentümerName)
+        VALUES (p_EigentümerName);
+        SET v_EigentümerID = LAST_INSERT_ID();
+    END IF;
+
+    -- Now insert the new house record with assigned IDs
+    INSERT INTO Haus (Adresse, AnzahlZimmer, AnzahlBetten, Beschreibung, RegionID, EigentümerID, isFree)
+    VALUES (p_Adresse, p_AnzahlZimmer, p_AnzahlBetten, p_Beschreibung, v_RegionID, v_EigentümerID, TRUE);
+    
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateHaus`(IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_RegionName` VARCHAR(255), IN `p_EigentümerName` VARCHAR(255))
+BEGIN
+    DECLARE v_RegionID INT;
+    DECLARE v_EigentümerID INT;
+
+    -- Check if the region already exists
+    SELECT RegionID INTO v_RegionID
+    FROM Region
+    WHERE RegionName = p_RegionName
+    LIMIT 1;
+
+    -- If region doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_RegionID IS NULL THEN
+        -- Insert the new region and get the RegionID
+        INSERT INTO Region (RegionName) VALUES (p_RegionName);
+        SET v_RegionID = LAST_INSERT_ID();
+    END IF;
+
+    -- Check if the Eigentümer already exists
+    SELECT EigentümerID INTO v_EigentümerID
+    FROM Eigentümer
+    WHERE EigentümerName = p_EigentümerName
+    LIMIT 1;
+
+    -- If Eigentümer doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_EigentümerID IS NULL THEN
+        -- Insert the new Eigentümer and get the EigentümerID
+        INSERT INTO Eigentümer (EigentümerName)
+        VALUES (p_EigentümerName);
+        SET v_EigentümerID = LAST_INSERT_ID();
+    END IF;
+
+    -- Now insert the new house record with assigned IDs
+    INSERT INTO Haus (Adresse, AnzahlZimmer, AnzahlBetten, Beschreibung, RegionID, EigentümerID, isFree)
+    VALUES (p_Adresse, p_AnzahlZimmer, p_AnzahlBetten, p_Beschreibung, v_RegionID, v_EigentümerID, TRUE);
+    
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateNutzer`(IN `p_Name` VARCHAR(100), IN `p_Email` VARCHAR(100), IN `p_Telefonnummer` VARCHAR(20), IN `p_RolleID` INT, IN `p_Passwort` VARCHAR(255))
+BEGIN
+	IF NOT EmailIsValid(p_Email) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM nutzer WHERE Email = p_Email) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Die E-Mail-Adresse ist bereits registriert.';
+    END IF;
+
+    INSERT INTO nutzer (Name, Email, Telefonnummer, RolleID, Passwort)
+    VALUES (p_Name, p_Email, p_Telefonnummer, p_RolleID, p_Passwort);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `EmailIsValid`(p_Email VARCHAR(100)) RETURNS tinyint(1)
+BEGIN
+    RETURN p_Email REGEXP '^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9._-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\\.[a-zA-Z]{2,63}$';
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBuchungbyHaus`(in p_HausID int)
+SELECT * FROM buchung WHERE HausID = p_HausID$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBuchungbyNutzer`(in p_nutzerID int)
+SELECT * FROM buchung WHERE NutzerID = p_nutzerID$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetHausVon`(IN `p_eigentümerID` INT)
+BEGIN
+    SELECT * FROM haus WHERE p_eigentümerID = eigentümerID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetNutzer`(IN `p_NutzerID` INT)
+BEGIN
+    SELECT * FROM nutzer WHERE NutzerID = p_NutzerID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ResetPasswort`(IN `p_NutzerID` INT, IN `p_NeuesPasswort` VARCHAR(255))
+BEGIN
+    UPDATE nutzer
+    SET Passwort = p_NeuesPasswort
+    WHERE NutzerID = p_NutzerID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUser`(IN `p_UserID` INT, IN `p_NewName` VARCHAR(255), IN `p_NewEmail` VARCHAR(255), IN `p_NewPhone` VARCHAR(20), IN `p_NewRoleID` INT)
+BEGIN
+ IF NOT EmailIsValid(p_NewEmail) THEN
+ 	SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Invalid Email adress.';
+ ELSE
+    UPDATE Nutzer
+    SET
+        Name = p_NewName,
+        Email = p_NewEmail,
+        Telefonnummer = p_NewPhone,
+        RolleID = p_NewRoleID
+    WHERE NutzerID = p_UserID;
+  END if;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getHausID`(IN p_Adresse VARCHAR(255), OUT p_HausID INT)
+BEGIN
+    -- Fetch HausID based on Adresse and assign it to p_HausID
+    SELECT HausID INTO p_HausID
+    FROM haus
+    WHERE Adresse = p_Adresse
+    LIMIT 1;  -- To ensure only one value is returned, avoid multiple results
+
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `isHouseFree`(IN `p_HausID` INT, OUT `p_vorhanden` TINYINT)
+BEGIN
+	DECLARE columnVAlue TINYINT;
+    
+    SELECT isFree into columnValue
+    FROM haus
+    WHERE hausID = p_HausID;
+   
+   SET p_vorhanden = IF(columnValue = 1, 1, 0);
+    
+    END$$
+DELIMITER ;
