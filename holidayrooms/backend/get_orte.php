@@ -1,0 +1,44 @@
+<?php
+
+include_once 'database_connection.php';
+include_once 'permission_check.php';
+include_once 'session_check.php';
+include_once 'search.php';
+
+$conn = create_db_connection();
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+
+    if (!is_session_set()) {
+        echo json_encode(
+            [
+                "accessAllowed" => false,
+                "reason" => "No session"
+            ]
+        );
+        exit;
+    }
+
+    $role_id = $_SESSION["role"];
+    echo $_SESSION["username"];
+    echo $_SESSION["role"];
+
+    if (!has_permission($role_id)) {
+        echo json_encode(
+            [
+                "accessAllowed" => false,
+                "reason" => "Role from session has insuficient permission"
+            ]
+        );
+        exit;
+    }
+
+
+    $search_query = $_GET["query"];
+    $orte = search_orte($search_query);
+
+    echo json_encode(
+        $orte
+    );
+    exit;
+}
