@@ -245,6 +245,17 @@ li::marker{
   height: 50%;
 }
 
+.reg-dialog{
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 25%;
+  height: 70%;
+}
+
 /* Dark background when login or registration will be displayed */
 .dark-background{
   display: none;

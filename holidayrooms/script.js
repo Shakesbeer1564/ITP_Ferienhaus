@@ -88,3 +88,9 @@ document.querySelector('#open_Login').addEventListener('click', () => {
   document.getElementById('login_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
+
+// load registration dialog
+document.querySelector('#open_registration').addEventListener('click', () => {
+  document.getElementById('reg_dialog').style.display = 'block';
+  document.getElementById("dark_background").style.display = 'block';
+})

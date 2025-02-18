@@ -9,6 +9,7 @@
   height: 70%;
   border: 1px solid black;
   border-radius: 3px;
+  box-shadow: 0px 0px 3px white;
   display: block;
   background-color: rgb(247, 247, 247);
 }
