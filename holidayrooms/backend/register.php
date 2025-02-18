@@ -2,6 +2,7 @@
 
 include_once 'database_connection.php';
 include_once 'session_creation.php';
+include_once 'mail_check.php';
 
 $conn = create_db_connection();
 
@@ -14,6 +15,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $data["phone"];
     $role_id = $data["role"];
     $password = $data["password"];
+
+
+    if (is_mail_taken($email)) {
+        echo json_encode(
+            [
+                "ok" => false,
+                "reason" => "Mail is already taken"
+            ]
+        );
+        exit;
+    }
 
     // Hash the password for security
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
