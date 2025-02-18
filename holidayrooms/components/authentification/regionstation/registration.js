@@ -18,11 +18,7 @@ document.getElementById('register').addEventListener('click', async () => {
     try {
       const data = await HTTPService.postData('register.php', jsonData);
 
-      // TODO: Schauen was wir zurückbekommen
       if(!!data){
-        // TODO: Cookie-Handling
-
-        // Close dialog
         closeDialog();
       }
     } catch (error) {
