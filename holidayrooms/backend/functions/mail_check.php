@@ -1,6 +1,6 @@
 <?php
 
-include_once 'database_connection.php';
+include_once '../functions/database_connection.php';
 
 function is_mail_taken($mail): bool
 {

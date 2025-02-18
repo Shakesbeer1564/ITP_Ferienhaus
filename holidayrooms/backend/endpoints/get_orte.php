@@ -1,9 +1,9 @@
 <?php
 
-include_once 'database_connection.php';
-include_once 'permission_check.php';
-include_once 'session_check.php';
-include_once 'search.php';
+include_once '../functions/database_connection.php';
+include_once '../functions/permission_check.php';
+include_once '../functions/session_check.php';
+include_once '../functions/search.php';
 
 $conn = create_db_connection();
 

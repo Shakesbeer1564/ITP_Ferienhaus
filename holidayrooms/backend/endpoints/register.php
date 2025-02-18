@@ -1,8 +1,8 @@
 <?php
 
-include_once 'database_connection.php';
-include_once 'session_creation.php';
-include_once 'mail_check.php';
+include_once '../functions/database_connection.php';
+include_once '../functions/session_creation.php';
+include_once '../functions/mail_check.php';
 
 $conn = create_db_connection();
 
