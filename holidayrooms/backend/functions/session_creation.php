@@ -1,7 +1,7 @@
 <?php
 
 include_once "../functions/database_connection.php";
-include_once "config.php";
+include_once "../config.php";
 
 function create_session($username)
 {
