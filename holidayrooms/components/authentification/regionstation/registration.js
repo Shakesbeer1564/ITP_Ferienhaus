@@ -47,6 +47,7 @@ function telValidation(tel){
 }
 
 function closeDialog(){
+  document.getElementById('reg_form').reset();
   document.getElementById("dark_background").style.display = 'none';
   document.getElementById("reg_dialog").style.display = 'none'; 
 }
