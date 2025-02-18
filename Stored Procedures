@@ -1,4 +1,16 @@
 DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserIDFromEmail`(IN `p_email` VARCHAR(100))
+BEGIN
+   
+    SELECT NutzerID 
+    FROM nutzer
+    WHERE Email = p_email
+    LIMIT 1;
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `AddMaengelanzeige`(IN `p_HausID` INT, IN `p_Beschreibung` TEXT)
 BEGIN
     INSERT INTO mängelanzeige (HausID, MeldeDatum, Beschreibung)
