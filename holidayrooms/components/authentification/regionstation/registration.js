@@ -12,8 +12,7 @@ document.getElementById('register').addEventListener('click', async () => {
     const jsonData = JSON.stringify({
       username: username,
       password: password,
-      email: email,
-      role: 'User'
+      email: email
     });
 
     try {
