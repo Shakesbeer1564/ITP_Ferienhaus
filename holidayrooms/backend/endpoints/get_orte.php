@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     echo $_SESSION["username"];
     echo $_SESSION["role"];
 
-    if (!has_permission($role_id)) {
+    if (!has_permission(ROLE_GUEST)) {
         echo json_encode(
             [
                 "accessAllowed" => false,

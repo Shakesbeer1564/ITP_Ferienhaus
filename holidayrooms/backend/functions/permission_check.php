@@ -1,6 +1,6 @@
 <?php
 
-function has_permission($roleId)
+function has_permission($role_Id)
 {
     if (!isset($_SESSION)) {
         session_start();
@@ -14,7 +14,7 @@ function has_permission($roleId)
         return false;
     }
 
-    if ($_SESSION["role"] < $roleId) {
+    if ($_SESSION["role"] > $role_Id) {
         return false;
     }
 
