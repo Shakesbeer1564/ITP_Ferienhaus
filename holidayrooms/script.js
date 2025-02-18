@@ -17,8 +17,23 @@ import { HTTPService } from "./http-service.js";
 //   });
 // }
 
+initializeData();
 
 //#region initialize_Data
+function initializeData(){
+  initialiseComponents();
+}
+
+function initialiseComponents(){
+  // Login-component
+  loadComponent('./components/authentification/login/login.html', 'login_dialog', 
+    './components/authentification/login/login.css', './components/authentification/login/login.js');
+  
+  // Registration-component
+  loadComponent('./components/authentification/regionstation/registration.html', 'reg_dialog',
+    './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
+}
+//#endregion initialize_Data
 
 //#region helper_functions_dialog
 function loadComponent(url, containerId, cssFile, jsFile){
@@ -70,8 +85,6 @@ document.getElementById('region_filter').addEventListener('click', () => {
 
 // load login dialog
 document.querySelector('#open_Login').addEventListener('click', () => {
-  loadComponent('./components/authentification/login/login.html', 'login_dialog', 
-    './components/authentification/login/login.css', './components/authentification/login/login.js');
-
-  document.getElementById("dark_background").style.display = "block";
+  document.getElementById('login_dialog').style.display = 'block';
+  document.getElementById("dark_background").style.display = 'block';
 })

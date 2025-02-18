@@ -1,5 +1,10 @@
 @import url('../../../style.css'); /* Be sure the styles.css loads first */
 
+:root{
+  --header-height: 12%;
+  --footer-height: 15%;
+}
+
 .container{
   height: 70%;
   border: 1px solid black;
@@ -12,7 +17,7 @@
   background-color: rgb(73, 148, 239);
   display: flex;  
   align-items: center;
-  height: 10%;
+  height: var(--header-height);
 }
 
 .container .heading h1{
@@ -31,7 +36,7 @@
 }
 
 .body{
-  height: calc(100% - 10% - 15%); /*Complete height minus 10% header minus 10% footer*/
+  height: calc(100% - var(--header-height) - var(--footer-height)); /*Complete height minus 10% header minus 10% footer*/
   display: flex;
   align-items: center;
   vertical-align: middle;
@@ -54,11 +59,12 @@
 }
 
 .body form input:focus{
-  border: none
+  border-bottom: 1px solid black;
+  outline: none;
 }
 
 .footer{
-  height: 15%;
+  height: var(--footer-height);
   background-color: rgb(226, 226, 226);
   border-top: 1px solid rgb(173, 173, 173);
   display: flex;
