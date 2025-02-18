@@ -96,7 +96,7 @@ Gibt die Häuser zurück, die die gegebene OrtId haben.
 
 ### Method: `GET`
 
-### File: `TODO.php`
+### File: `get_houses_by_ort.php`
 
 ### Parameter: `OrtId: number`
 
@@ -113,7 +113,7 @@ Gibt die Häuser zurück, die die gegebene RegionId haben.
 
 ### Method: `GET`
 
-### File: `TODO.php`
+### File: `get_houses_by_region.php`
 
 ### Parameter: `RegionId: number`
 
