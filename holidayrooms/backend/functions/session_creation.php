@@ -1,15 +1,15 @@
 <?php
 
-include_once "database_connection.php";
-include_once "config.php";
+include_once "../functions/database_connection.php";
+include_once "../config.php";
 
-function create_session($username)
+function create_session($email)
 {
     $conn = create_db_connection();
 
-    // Gete the roleId of the user from the DB
-    $stmt = $conn->prepare("SELECT roleId FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
+    // Get the roleId of the user from the DB
+    $stmt = $conn->prepare("SELECT RolleID FROM nutzer WHERE name = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->bind_result($role_id);
     $stmt->fetch();
@@ -22,7 +22,7 @@ function create_session($username)
     session_regenerate_id(true);
 
     // Store session variables
-    $_SESSION['username'] = $username;
+    $_SESSION['email'] = $email;
     $_SESSION['role'] = $role_id;
 
     return session_id();
