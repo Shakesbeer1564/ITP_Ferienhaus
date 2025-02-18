@@ -25,7 +25,7 @@ function search(string $procedure, string $query): array
     return $entries;
 }
 
-function search_orte(string $query): array
+function search_cities(string $query): array
 {
     return search("SearchOrte", $query);
 }

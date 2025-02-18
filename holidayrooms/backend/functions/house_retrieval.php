@@ -2,7 +2,7 @@
 
 include_once 'database_connection.php';
 
-function retrieve_houses_by_ort(int $ort_id): array
+function retrieve_houses(int $): array
 {
     $conn = create_db_connection();
 

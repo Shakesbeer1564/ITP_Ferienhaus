@@ -6,7 +6,7 @@ function is_session_set()
         session_start();
     }
 
-    if (!isset($_SESSION) || !isset($_SESSION["username"])) {
+    if (!isset($_SESSION) || !isset($_SESSION["email"])) {
         return false;
     }
 

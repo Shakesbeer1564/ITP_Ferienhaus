@@ -10,12 +10,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
 
-    $inp_username = $data["username"];
+    $inp_mail = $data["email"];
     $inp_password = $data["password"];
 
     // Get the password hash for the given user from the DB
-    $stmt = $conn->prepare("SELECT passwort FROM nutzer WHERE name = ?");
-    $stmt->bind_param("s", $inp_username);
+    $stmt = $conn->prepare("SELECT passwort FROM nutzer WHERE email = ?");
+    $stmt->bind_param("s", $inp_mail);
     $stmt->execute();
     $stmt->bind_result($hashed_user_password);
     $stmt->fetch();
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($is_valid) {
         // Create a session and store as cookie
-        create_session($inp_username);
+        create_session($inp_mail);
     }
 
     // Return validity state

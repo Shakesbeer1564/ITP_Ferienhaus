@@ -1,8 +1,9 @@
 <?php
 
-include_once '../functions/session_check.php';
+include_once '../functions/database_connection.php';
 include_once '../functions/permission_check.php';
-include_once '../functions/house_retrieval.php';
+include_once '../functions/session_check.php';
+include_once '../functions/search.php';
 
 $conn = create_db_connection();
 
@@ -19,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
     $role_id = $_SESSION["role"];
-    echo $_SESSION["username"];
+    echo $_SESSION["email"];
     echo $_SESSION["role"];
 
     if (!has_permission(ROLE_GUEST)) {
@@ -33,11 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 
 
-    $region_id = $_GET["regionId"];
-    $houses = retrieve_houses_by_region($region_id);
+    $search_query = $_GET["query"];
+    $cities = search_cities($search_query);
 
     echo json_encode(
-        $houses
+        $cities
     );
     exit;
 }

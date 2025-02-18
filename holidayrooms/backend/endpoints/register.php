@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Create user using sql query
-    $stmt = $conn->prepare("CALL AddNutzer(?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("CALL AddUser(?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $username, $email, $phone, $role_id, $hashed_password);
 
     try {
@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($ok) {
         // Create a session and stores as cookie
-        create_session($username);
+        create_session($email);
     }
 
     // Return boolean showing successful execution
