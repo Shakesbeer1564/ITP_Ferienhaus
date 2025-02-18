@@ -50,3 +50,75 @@ Prüft die Anmeldedaten und erstellt eine Session.
 }
 ```
 ---
+
+
+## Suche nach Region
+
+Sucht nach Regionen mit dem gegebenen Query-string und gibt diese zurück.
+
+TODO procedure not implemented
+
+### Method: `GET`
+
+### File: `get_regions.php`
+
+### Parameter: `"query": string`
+
+### Response:
+```JSON
+regions: Region[]
+```
+---
+
+
+## Suche nach Ort
+
+Sucht nach Orten mit dem gegebenen Query-string und gibt diese zurück.
+
+TODO procedure not implemented
+
+### Method: `GET`
+
+### File: `get_orte.php`
+
+### Parameter: `"query": string`
+
+### Response:
+```JSON
+orte: Ort[]
+```
+---
+
+
+## Häuser von einem Ort bekommen
+
+Gibt die Häuser zurück, die die gegebene OrtId haben.
+
+### Method: `GET`
+
+### File: `TODO.php`
+
+### Parameter: `OrtId: number`
+
+### Response:
+```JSON
+häuser: Haus[]
+```
+---
+
+
+## Häuser aus einer Region bekommen
+
+Gibt die Häuser zurück, die die gegebene RegionId haben.
+
+### Method: `GET`
+
+### File: `TODO.php`
+
+### Parameter: `RegionId: number`
+
+### Response:
+```JSON
+häuser: Haus[]
+```
+---
