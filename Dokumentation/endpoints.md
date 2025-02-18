@@ -20,8 +20,9 @@ Wenn die Email nicht gültig ist oder sie schon in Verwendung, wird ein Fehler z
 ```JSON
 {
     "username": "string",
-    "password": "string",
-    "email": "string"
+    "email": "string",
+    "phone": "string",
+    "password": "string"
 }
 ```
 ### Response:
