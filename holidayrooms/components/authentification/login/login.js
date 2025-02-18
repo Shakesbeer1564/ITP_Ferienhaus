@@ -19,7 +19,7 @@ document.querySelector('#sign_in').addEventListener('click', async () => {
     const data = await HTTPService.postData('login.php', dataJson);
 
     if(data.username === username && data.password === password){
-      // document.cookie = `username=${data.username}; expires=...`
+      // TODO: Cookie-Handling
 
       // Close the dialog after login was successfull
       closeDialog();

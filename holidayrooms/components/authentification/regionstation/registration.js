@@ -21,7 +21,7 @@ document.getElementById('register').addEventListener('click', async () => {
 
       // TODO: Schauen was wir zurückbekommen
       if(!!data){
-        // TODO: Cookie-handling
+        // TODO: Cookie-Handling
 
         // Close dialog
         closeDialog();
