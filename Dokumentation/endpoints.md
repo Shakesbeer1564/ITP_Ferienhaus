@@ -6,9 +6,15 @@ Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird de
 
 Erstellt den User in der DB und erstellt eine Session mit einem Cookie.
 
+Durch den Session-Cookie kann der Nutzer im Backend identifiziert werden.
+
+Wenn die Email nicht gültig ist oder sie schon in Verwendung, wird ein Fehler zurückgegeben und keine Session erstellt.
+
 ### Method: `POST`
 
 ### File: `register.php`
+
+### Required Role: `Gast`
 
 ### Body: 
 ```JSON
@@ -29,16 +35,22 @@ Erstellt den User in der DB und erstellt eine Session mit einem Cookie.
 
 ## Login
 
-Prüft die Anmeldedaten und erstellt eine Session.
+Prüft die gegebenen Anmeldedaten und erstellt eine Session mit einem Cookie.
+
+Durch den Session-Cookie kann der Nutzer im Backend identifiziert werden.
+
+Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurückgegeben.
 
 ### Method: `POST`
 
 ### File: `login.php`
 
+### Required Role: `Gast`
+
 ### Body: 
 ```JSON
 {
-    "username": "string",
+    "email": "string",
     "password": "string"
 }
 ```
@@ -52,73 +64,106 @@ Prüft die Anmeldedaten und erstellt eine Session.
 ---
 
 
-## Suche nach Region
+## Suche nach Ferienhaus
 
-Sucht nach Regionen mit dem gegebenen Query-string und gibt diese zurück.
-
-TODO procedure not implemented
+Sucht mit dem gegebenen Query-String Ferienhäuser. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
 
 ### Method: `GET`
 
-### File: `get_regions.php`
+### File: `get_houses.php`
+
+### Required Role: `Gast`
 
 ### Parameter: `"query": string`
 
 ### Response:
 ```JSON
-regions: Region[]
+houses: House[]
 ```
 ---
 
 
-## Suche nach Ort
+## Suche nach Freizeitaktivität
 
-Sucht nach Orten mit dem gegebenen Query-string und gibt diese zurück.
-
-TODO procedure not implemented
+Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Aktivitäten genommen, dessen Ort (City) den Query-String beinhaltet. 
 
 ### Method: `GET`
 
-### File: `get_orte.php`
+### File: `get_activities.php`
+
+### Required Role: `Gast`
 
 ### Parameter: `"query": string`
 
 ### Response:
 ```JSON
-orte: Ort[]
+activities: Activity[]
 ```
 ---
 
 
-## Häuser von einem Ort bekommen
+## Buchung Ferienhaus
 
-Gibt die Häuser zurück, die die gegebene OrtId haben.
+Erstellt eine Buchung in der Datenbank für das Haus mit der gegebenen ID in dem gegebenen Zeitraum (Start- und Enddatum).
 
-### Method: `GET`
+Der Nutzer wird aus der Session genommen.
+Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
-### File: `get_houses_by_ort.php`
+### Method: `POST`
 
-### Parameter: `OrtId: number`
+### File: `book_house.php`
 
-### Response:
+### Required Role: `Registriert`
+
+### Body
 ```JSON
-häuser: Haus[]
+{
+    "houseId": number,
+    "startDate": Date,
+    "endDate": Date
+}
 ```
----
 
-
-## Häuser aus einer Region bekommen
-
-Gibt die Häuser zurück, die die gegebene RegionId haben.
-
-### Method: `GET`
-
-### File: `get_houses_by_region.php`
-
-### Parameter: `RegionId: number`
-
-### Response:
+### Response
 ```JSON
-häuser: Haus[]
+{
+    "ok": boolean
+}
 ```
 ---
+
+
+## Buchung Aktivität
+TODO Beschreibung hinzufügen
+---
+
+
+## Mängelbestand melden
+
+Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Beschreibung. Außerdem wird das Meldedatum gespeichert.
+
+### Method: `POST`
+
+### File: TODO not implemented
+
+### Required Role: `Registriert`
+
+### Body
+```JSON
+{
+    "houseId": number,
+    "description": "string"
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+---
+
+
+
+# TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen
