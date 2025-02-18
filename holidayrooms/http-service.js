@@ -74,4 +74,4 @@ class HttpService{
   }
 }
 
-export const HTTPService = new HttpService('./backend');
+export const HTTPService = new HttpService('./backend/endpoints');
