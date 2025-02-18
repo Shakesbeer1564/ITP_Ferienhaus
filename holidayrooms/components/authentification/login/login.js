@@ -7,7 +7,7 @@ document.getElementById('close_dialog').addEventListener('click', () => {
 
 // sign in button
 document.querySelector('#sign_in').addEventListener('click', async () => {
-  const username = document.getElementById('username').value;
+  const username = document.getElementById('log_email').value;
   const password = document.getElementById('password').value;
   
   try {
@@ -18,10 +18,7 @@ document.querySelector('#sign_in').addEventListener('click', async () => {
 
     const data = await HTTPService.postData('login.php', dataJson);
 
-    if(data.username === username && data.password === password){
-      // TODO: Cookie-Handling
-
-      // Close the dialog after login was successfull
+    if(!!data){
       closeDialog();
     }
   } catch (error) {
