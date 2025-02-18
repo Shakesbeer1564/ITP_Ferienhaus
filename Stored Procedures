@@ -1,11 +1,13 @@
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `AddNutzer`(
-    IN p_Name VARCHAR(255),
-    IN p_Email VARCHAR(255),
-    IN p_Telefonnummer VARCHAR(20),
-    IN p_RolleID INT,
-    IN p_Passwort VARCHAR(255)
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AddMaengelanzeige`(IN `p_HausID` INT, IN `p_Beschreibung` TEXT)
+BEGIN
+    INSERT INTO mängelanzeige (HausID, MeldeDatum, Beschreibung)
+    VALUES (p_HausID, NOW(), p_Beschreibung);
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AddUser`(IN `p_Name` VARCHAR(255), IN `p_Email` VARCHAR(255), IN `p_Telefonnummer` VARCHAR(20), IN `p_RolleID` INT, IN `p_Passwort` VARCHAR(255))
 BEGIN
     -- Überprüfen der E-Mail-Gültigkeit
     IF NOT emailIsValid(p_Email) THEN
@@ -43,7 +45,7 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateBuchung`(IN `p_nutzerID` INT, IN `p_HausID` INT, IN `p_StartDatum` DATE, IN `p_EndDatum` DATE, IN `p_Preis` DECIMAL(10,2))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateBooking`(IN `p_nutzerID` INT, IN `p_HausID` INT, IN `p_StartDatum` DATE, IN `p_EndDatum` DATE, IN `p_Preis` DECIMAL(10,2))
 BEGIN
     -- Überprüfen, ob der Nutzer existiert
     IF NOT EXISTS (SELECT 1 FROM nutzer WHERE NutzerID = p_nutzerID) THEN
@@ -74,91 +76,16 @@ BEGIN
     -- Einfügen der neuen Buchung
     INSERT INTO buchung (NutzerID, HausID, StartDatum, EndDatum, Preis)
     VALUES (p_nutzerID, p_HausID, p_StartDatum, p_EndDatum, p_Preis);
-END$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateHaus`(IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_RegionName` VARCHAR(255), IN `p_EigentümerName` VARCHAR(255))
-BEGIN
-    DECLARE v_RegionID INT;
-    DECLARE v_EigentümerID INT;
-
-    -- Check if the region already exists
-    SELECT RegionID INTO v_RegionID
-    FROM Region
-    WHERE RegionName = p_RegionName
-    LIMIT 1;
-
-    -- If region doesn't exist, ask for user input (inserting manually here as an example)
-    IF v_RegionID IS NULL THEN
-        -- Insert the new region and get the RegionID
-        INSERT INTO Region (RegionName) VALUES (p_RegionName);
-        SET v_RegionID = LAST_INSERT_ID();
-    END IF;
-
-    -- Check if the Eigentümer already exists
-    SELECT EigentümerID INTO v_EigentümerID
-    FROM Eigentümer
-    WHERE EigentümerName = p_EigentümerName
-    LIMIT 1;
-
-    -- If Eigentümer doesn't exist, ask for user input (inserting manually here as an example)
-    IF v_EigentümerID IS NULL THEN
-        -- Insert the new Eigentümer and get the EigentümerID
-        INSERT INTO Eigentümer (EigentümerName)
-        VALUES (p_EigentümerName);
-        SET v_EigentümerID = LAST_INSERT_ID();
-    END IF;
-
-    -- Now insert the new house record with assigned IDs
-    INSERT INTO Haus (Adresse, AnzahlZimmer, AnzahlBetten, Beschreibung, RegionID, EigentümerID, isFree)
-    VALUES (p_Adresse, p_AnzahlZimmer, p_AnzahlBetten, p_Beschreibung, v_RegionID, v_EigentümerID, TRUE);
     
-END$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateHaus`(IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_RegionName` VARCHAR(255), IN `p_EigentümerName` VARCHAR(255))
-BEGIN
-    DECLARE v_RegionID INT;
-    DECLARE v_EigentümerID INT;
-
-    -- Check if the region already exists
-    SELECT RegionID INTO v_RegionID
-    FROM Region
-    WHERE RegionName = p_RegionName
-    LIMIT 1;
-
-    -- If region doesn't exist, ask for user input (inserting manually here as an example)
-    IF v_RegionID IS NULL THEN
-        -- Insert the new region and get the RegionID
-        INSERT INTO Region (RegionName) VALUES (p_RegionName);
-        SET v_RegionID = LAST_INSERT_ID();
-    END IF;
-
-    -- Check if the Eigentümer already exists
-    SELECT EigentümerID INTO v_EigentümerID
-    FROM Eigentümer
-    WHERE EigentümerName = p_EigentümerName
-    LIMIT 1;
-
-    -- If Eigentümer doesn't exist, ask for user input (inserting manually here as an example)
-    IF v_EigentümerID IS NULL THEN
-        -- Insert the new Eigentümer and get the EigentümerID
-        INSERT INTO Eigentümer (EigentümerName)
-        VALUES (p_EigentümerName);
-        SET v_EigentümerID = LAST_INSERT_ID();
-    END IF;
-
-    -- Now insert the new house record with assigned IDs
-    INSERT INTO Haus (Adresse, AnzahlZimmer, AnzahlBetten, Beschreibung, RegionID, EigentümerID, isFree)
-    VALUES (p_Adresse, p_AnzahlZimmer, p_AnzahlBetten, p_Beschreibung, v_RegionID, v_EigentümerID, TRUE);
     
+    UPDATE haus
+    SET isFree = 0
+    WHERE HausID = p_hausID;
 END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateNutzer`(IN `p_Name` VARCHAR(100), IN `p_Email` VARCHAR(100), IN `p_Telefonnummer` VARCHAR(20), IN `p_RolleID` INT, IN `p_Passwort` VARCHAR(255))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateUser`(IN `p_Name` VARCHAR(100), IN `p_Email` VARCHAR(100), IN `p_Telefonnummer` VARCHAR(20), IN `p_RolleID` INT, IN `p_Passwort` VARCHAR(255))
 BEGIN
 	IF NOT EmailIsValid(p_Email) THEN
         SIGNAL SQLSTATE '45000'
@@ -176,6 +103,60 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateVacationHome`(IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_RegionName` VARCHAR(255), IN `p_EigentümerName` VARCHAR(255))
+BEGIN
+    DECLARE v_RegionID INT;
+    DECLARE v_EigentümerID INT;
+
+    -- Check if the region already exists
+    SELECT RegionID INTO v_RegionID
+    FROM Region
+    WHERE RegionName = p_RegionName
+    LIMIT 1;
+
+    -- If region doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_RegionID IS NULL THEN
+        -- Insert the new region and get the RegionID
+        INSERT INTO Region (RegionName) VALUES (p_RegionName);
+        SET v_RegionID = LAST_INSERT_ID();
+    END IF;
+
+    -- Check if the Eigentümer already exists
+    SELECT EigentümerID INTO v_EigentümerID
+    FROM Eigentümer
+    WHERE EigentümerName = p_EigentümerName
+    LIMIT 1;
+
+    -- If Eigentümer doesn't exist, ask for user input (inserting manually here as an example)
+    IF v_EigentümerID IS NULL THEN
+        -- Insert the new Eigentümer and get the EigentümerID
+        INSERT INTO Eigentümer (EigentümerName)
+        VALUES (p_EigentümerName);
+        SET v_EigentümerID = LAST_INSERT_ID();
+    END IF;
+
+    -- Now insert the new house record with assigned IDs
+    INSERT INTO Haus (Adresse, AnzahlZimmer, AnzahlBetten, Beschreibung, RegionID, EigentümerID, isFree)
+    VALUES (p_Adresse, p_AnzahlZimmer, p_AnzahlBetten, p_Beschreibung, v_RegionID, v_EigentümerID, TRUE);
+    
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteHome`(IN `p_HausID` INT)
+BEGIN
+    DELETE FROM Haus WHERE HausID = p_HausID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteUser`(IN `p_NutzerID` INT)
+BEGIN
+    DELETE FROM nutzer WHERE NutzerID = p_NutzerID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
 CREATE DEFINER=`root`@`localhost` FUNCTION `EmailIsValid`(p_Email VARCHAR(100)) RETURNS tinyint(1)
 BEGIN
     RETURN p_Email REGEXP '^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9._-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\\.[a-zA-Z]{2,63}$';
@@ -183,24 +164,46 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBuchungbyHaus`(in p_HausID int)
-SELECT * FROM buchung WHERE HausID = p_HausID$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBuchungbyNutzer`(in p_nutzerID int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBookingByUser`(IN `p_nutzerID` INT)
 SELECT * FROM buchung WHERE NutzerID = p_nutzerID$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetHausVon`(IN `p_eigentümerID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBookingbyHome`(IN `p_HausID` INT)
+SELECT * FROM buchung WHERE HausID = p_HausID$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetCityIDByName`(IN `input_name` VARCHAR(100))
+BEGIN
+    SELECT ortID 
+    FROM ort 
+    WHERE OrtName LIKE CONCAT('%', input_name, '%') 
+    LIMIT 1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetHomeFromOwner`(IN `p_eigentümerID` INT)
 BEGIN
     SELECT * FROM haus WHERE p_eigentümerID = eigentümerID;
 END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetNutzer`(IN `p_NutzerID` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetRegionIDByName`(
+    IN p_input_name VARCHAR(100)
+)
+BEGIN
+    SELECT RegionID 
+    FROM region 
+    WHERE RegionName LIKE CONCAT('%', p_input_name, '%') 
+    LIMIT 1;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUser`(IN `p_NutzerID` INT)
 BEGIN
     SELECT * FROM nutzer WHERE NutzerID = p_NutzerID;
 END$$
@@ -212,6 +215,66 @@ BEGIN
     UPDATE nutzer
     SET Passwort = p_NeuesPasswort
     WHERE NutzerID = p_NutzerID;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SearchHomes`(IN `p_location_name` VARCHAR(100), IN `p_anzahlZimmer` INT, IN `p_anzahlBetten` INT, IN `p_startDatum` DATE, IN `p_endDatum` DATE)
+BEGIN
+    SELECT *
+    FROM haus h
+    WHERE 
+    (
+        -- 1) LOCATION FILTER (Region or Ort):
+        -- If p_location_name is empty, skip; else match region/ort (case-insensitive).
+        p_location_name IS NULL
+        OR p_location_name = ''
+        OR h.RegionID IN (
+            SELECT RegionID FROM region
+            WHERE LOWER(RegionName) LIKE LOWER(CONCAT('%', p_location_name, '%'))
+        )
+        OR h.RegionID IN (
+            SELECT RegionID FROM ort
+            WHERE LOWER(OrtName) LIKE LOWER(CONCAT('%', p_location_name, '%'))
+        )
+    )
+    AND
+    (
+        -- 2) ROOMS/BEDS FILTER:
+        -- If both p_anzahlZimmer & p_anzahlBetten = 0, skip filter (return all).
+        -- Otherwise, apply whichever is non-zero.
+        
+        -- "No filter" scenario:
+        (p_anzahlZimmer = 0 AND p_anzahlBetten = 0)
+        
+        -- Only beds filter:
+        OR (p_anzahlZimmer = 0 AND p_anzahlBetten > 0 AND h.AnzahlBetten >= p_anzahlBetten)
+        
+        -- Only rooms filter:
+        OR (p_anzahlBetten = 0 AND p_anzahlZimmer > 0 AND h.AnzahlZimmer >= p_anzahlZimmer)
+        
+        -- Both rooms & beds:
+        OR (
+            p_anzahlZimmer > 0 
+            AND p_anzahlBetten > 0
+            AND h.AnzahlZimmer >= p_anzahlZimmer
+            AND h.AnzahlBetten >= p_anzahlBetten
+        )
+    )
+    AND
+    (
+        -- 3) DATE FILTER (Availability):
+        -- If p_startDatum or p_endDatum is NULL, skip filter.
+        -- Otherwise, exclude houses booked in the given range.
+        
+        p_startDatum IS NULL 
+        OR p_endDatum IS NULL
+        OR h.HausID NOT IN (
+            SELECT b.HausID 
+            FROM buchung b
+            WHERE (b.Startdatum <= p_endDatum AND b.Enddatum >= p_startDatum)
+        )
+    );
 END$$
 DELIMITER ;
 
@@ -234,15 +297,35 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getHausID`(IN p_Adresse VARCHAR(255), OUT p_HausID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getActivitys`(IN `p_OrtID` INT)
+SELECT * FROM freizeitaktivität WHERE OrtID = p_OrtID$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCityFromRegion`(IN `p_regionID` INT)
+SELECT Distinct OrtName FROM ort Where regionID = p_regionID$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getHomeID`(IN `p_Adresse` VARCHAR(255), OUT `p_HausID` INT)
 BEGIN
-    -- Fetch HausID based on Adresse and assign it to p_HausID
+    
     SELECT HausID INTO p_HausID
     FROM haus
     WHERE Adresse = p_Adresse
-    LIMIT 1;  -- To ensure only one value is returned, avoid multiple results
+    LIMIT 1; 
 
 END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMaengelanzeige`(in p_mangelID int)
+SELECT * FROM mängelanzeige WHERE mangelID = p_mangelID$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMaengelanzeigeforHome`(IN `p_HausID` INT)
+SELECT * FROM mängelanzeige where hausID = p_HausID$$
 DELIMITER ;
 
 DELIMITER $$
