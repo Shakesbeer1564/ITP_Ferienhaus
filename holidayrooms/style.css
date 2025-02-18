@@ -232,3 +232,28 @@ li::marker{
   display: block;
   width: 100%;
 }
+
+/* Login Dialog */
+.login-dialog{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 50%;
+  height: 50%;
+}
+
+/* Dark background when login or registration will be displayed */
+.dark-background{
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8); /* Halbtransparentes Overlay */
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
