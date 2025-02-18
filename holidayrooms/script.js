@@ -19,27 +19,6 @@ import { HTTPService } from "./http-service.js";
 
 
 //#region initialize_Data
-function initializeData(){
-
-}
-
-function loadPlaces(){
-
-}
-
-function loadRegions(){
-
-}
-
-function loadRooms(){
-
-}
-
-function loadActivities(){
-
-}
-//#endregion initializeData
-
 
 //#region helper_functions_dialog
 function loadComponent(url, containerId, cssFile, jsFile){
@@ -63,6 +42,7 @@ function loadScript(src){
   script.src = `${src}?v=${new Date().getTime()}`;
   script.id = src;
   script.defer = true;
+  script.type = 'module';
   document.body.appendChild(script);
 }
 

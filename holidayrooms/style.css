@@ -240,8 +240,8 @@ li::marker{
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  width: 50%;
-  height: 50%;
+  width: 30%;
+  height: 50%
 }
 
 /* Dark background when login or registration will be displayed */
