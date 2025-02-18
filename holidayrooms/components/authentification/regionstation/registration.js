@@ -9,11 +9,11 @@ document.getElementById('register').addEventListener('click', async () => {
   const tel = document.getElementById('reg_tel').value;
 
   if(username !== '' && password !== '' && emailValidation(email) && telValidation(tel)){
-    const jsonData = JSON.stringify({
+    const jsonData = {
       username: username,
       password: password,
       email: email
-    });
+    };
 
     try {
       const data = await HTTPService.postData('register.php', jsonData);
