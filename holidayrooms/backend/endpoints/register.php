@@ -13,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $data["username"];
     $email = $data["email"];
     $phone = $data["phone"];
-    $role_id = $data["role"];
     $password = $data["password"];
 
 
@@ -31,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Create user using sql query
-    $stmt = $conn->prepare("CALL AddUser(?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $username, $email, $phone, $role_id, $hashed_password);
+    $stmt = $conn->prepare("CALL AddUser(?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $username, $email, $phone, $hashed_password);
 
     try {
         $ok = $stmt->execute();
