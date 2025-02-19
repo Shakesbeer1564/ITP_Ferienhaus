@@ -3,7 +3,6 @@
 include_once '../functions/database_connection.php';
 include_once '../functions/user_id_retrieval.php';
 include_once '../functions/session_check.php';
-include_once '../functions/price_fetch.php';
 include_once '../functions/http_communication.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,8 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user_id == null) {
         send_http_status(401, "Session invalid: User does not exist");
     }
-
-    $price = calculate_booking_price($start_date, $end_date, $house_id);
 
     $conn = create_db_connection();
 
