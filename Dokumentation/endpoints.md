@@ -141,7 +141,8 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 {
     "houseId": number,
     "startDate": Date,
-    "endDate": Date
+    "endDate": Date,
+    "activities": number[] // the IDs of the selected activities
 }
 ```
 

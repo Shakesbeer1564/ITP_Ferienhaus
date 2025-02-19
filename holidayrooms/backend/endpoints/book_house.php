@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $house_id = $data["houseId"];
     $inp_start_date = $data["startDate"];
     $inp_end_date = $data["endDate"];
+    $activies = $data["activities"];
 
     $start_date = new DateTime($inp_start_date);
     $end_date = new DateTime($inp_end_date);
@@ -30,13 +31,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $start_date_str = $start_date->format('Y-m-d H:i:s');
     $end_date_str = $end_date->format('Y-m-d H:i:s');
+    $activies_str = implode(",", $activies);
 
     $stmt = $conn->prepare("CALL CreateBooking(?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $user_id, $house_id, $start_date_str, $end_date_str, $price);
+
+    $stmt->bind_param("sssss", $user_id, $house_id, $start_date_str, $end_date_str, $activies_str);
     $stmt->execute();
     $stmt->close();
 
     $conn->close();
 
-    send_data(["ok" => $ok]);
+    send_data(["ok" => true]);
 }
