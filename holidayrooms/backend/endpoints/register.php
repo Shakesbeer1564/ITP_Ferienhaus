@@ -3,6 +3,7 @@
 include_once '../functions/database_connection.php';
 include_once '../functions/session_creation.php';
 include_once '../functions/mail_check.php';
+include_once '../functions/http_communication.php';
 
 $conn = create_db_connection();
 
@@ -17,13 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (is_mail_taken($email)) {
-        echo json_encode(
-            [
-                "ok" => false,
-                "reason" => "Mail is already taken"
-            ]
-        );
-        exit;
+        send_http_status(409, "Mail is already taken");
     }
 
     // Hash the password for security
@@ -38,13 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } catch (Exception $e) {
         // Check for custom error occuring from mail address validation
         if ($e->getCode() == 1644) {
-            echo json_encode(
-                [
-                    "ok" => false,
-                    "reason" => "Invalid mail address"
-                ]
-            );
-            exit;
+            send_http_status(400, "Invalid mail address");
         }
 
         // Rethrow exception when it is not a validation error
@@ -56,12 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($ok) {
         // Create a session and stores as cookie
         create_session($email);
+        send_data(["ok" => $ok]);
     }
 
-    // Return boolean showing successful execution
-    echo json_encode(
-        ["ok" => $ok]
-    );
+    send_http_status(500, "Something went wrong while trying to execute the database query");
 }
 
 $conn->close();

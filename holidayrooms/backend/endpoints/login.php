@@ -2,16 +2,18 @@
 
 include_once '../functions/database_connection.php';
 include_once '../functions/session_creation.php';
-
-$conn = create_db_connection();
+include_once '../functions/http_communication.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     // Read data from request body
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
 
     $inp_mail = $data["email"];
     $inp_password = $data["password"];
+
+    $conn = create_db_connection();
 
     // Get the password hash for the given user from the DB
     $stmt = $conn->prepare("SELECT passwort FROM nutzer WHERE email = ?");
@@ -22,18 +24,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
 
+    $conn->close();
+
     // Check if the given password corresponds to the password hash in the DB
     $is_valid = password_verify($inp_password, $hashed_user_password);
 
-    if ($is_valid) {
-        // Create a session and store as cookie
-        create_session($inp_mail);
+    if (!$is_valid) {
+        send_http_status(401, "Invalid credentials");
     }
 
+    // Create a session and store as cookie
+    create_session($inp_mail);
     // Return validity state
-    echo json_encode(
-        ["isValid" => $is_valid]
-    );
+    send_data([
+        "isValid" => $is_valid
+    ]);
 }
-
-$conn->close();

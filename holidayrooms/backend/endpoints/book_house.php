@@ -4,17 +4,12 @@ include_once '../functions/database_connection.php';
 include_once '../functions/user_id_retrieval.php';
 include_once '../functions/session_check.php';
 include_once '../functions/price_fetch.php';
+include_once '../functions/http_communication.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!is_session_set()) {
-        echo json_encode(
-            [
-                "accessAllowed" => false,
-                "reason" => "No session"
-            ]
-        );
-        exit;
+        send_http_status(401, "No session");
     }
 
     $json = file_get_contents('php://input');
@@ -29,13 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $user_id = get_user_id_by_mail($_SESSION["email"]);
     if ($user_id == null) {
-        echo json_encode(
-            [
-                "accessAllowed" => false,
-                "reason" => "Session invalid: User does not exist"
-            ]
-        );
-        exit;
+        send_http_status(401, "Session invalid: User does not exist");
     }
 
     $price = calculate_booking_price($start_date, $end_date, $house_id);
@@ -51,4 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 
     $conn->close();
+
+    send_data(["ok" => $ok]);
 }
