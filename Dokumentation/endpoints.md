@@ -137,9 +137,11 @@ activities: Activity[]
 ---
 
 
-## Buchung Ferienhaus
+## Buchung
 
-Erstellt eine Buchung in der Datenbank für das Haus mit der gegebenen ID in dem gegebenen Zeitraum (Start- und Enddatum).
+Erstellt eine Buchung in der Datenbank für das Haus mit der gegebenen ID in dem gegebenen Zeitraum (Start- und Enddatum) mit den Aktivitäten, deren IDs gegeben wurden.
+
+Es können auch nur Aktivitäten gebucht werden. Somit sind ID des Hauses und Zeitraum optional. 
 
 Der Nutzer wird aus der Session genommen.
 Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
@@ -153,9 +155,9 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 ### Body
 ```JSON
 {
-    "houseId": number,
-    "startDate": Date,
-    "endDate": Date,
+    "houseId": number | null,
+    "startDate": Date | null,
+    "endDate": Date | null,
     "activities": number[] // the IDs of the selected activities
 }
 ```
@@ -172,11 +174,6 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
 `401` Unauthorized: "Session invalid: User does not exist"
 
----
-
-
-## Buchung Aktivität
-TODO Beschreibung hinzufügen
 ---
 
 
