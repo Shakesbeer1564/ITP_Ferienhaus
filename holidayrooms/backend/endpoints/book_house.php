@@ -7,6 +7,8 @@ include_once '../functions/http_communication.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    http_response_code(500);
+
     if (!is_session_set()) {
         send_http_status(401, "No session");
     }

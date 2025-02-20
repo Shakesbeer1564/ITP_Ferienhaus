@@ -8,6 +8,9 @@ include_once '../functions/http_communication.php';
 $conn = create_db_connection();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    http_response_code(500);
+
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
 
@@ -42,13 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
 
-    if ($ok) {
-        // Create a session and stores as cookie
-        create_session($email);
-        send_data(["ok" => $ok]);
+    if (!$ok) {
+        send_http_status(500, "Something went wrong while trying to execute the database query");
     }
 
-    send_http_status(500, "Something went wrong while trying to execute the database query");
+    // Create a session and stores as cookie
+    create_session($email);
+    send_data(["ok" => $ok]);
 }
 
 $conn->close();

@@ -10,6 +10,8 @@ $conn = create_db_connection();
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
+    http_response_code(500);
+
     if (!is_session_set()) {
         send_http_status(401, "No session");
     }

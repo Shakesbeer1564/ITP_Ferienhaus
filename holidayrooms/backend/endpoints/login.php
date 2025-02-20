@@ -6,6 +6,8 @@ include_once '../functions/http_communication.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    http_response_code(500);
+
     // Read data from request body
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
