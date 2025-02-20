@@ -1,6 +1,8 @@
 # Endpoints
 
-Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird der HTTP Methoden Typ angegeben, die Datei des endpoints, der benötigte Request Body und die zu erwartende Response. 
+Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird der HTTP Methoden Typ angegeben, die Datei des endpoints, der benötigte Request Body und die zu erwartende Response.
+
+Jeder Endpoint, der sich mit der Datenbank verbindet, gibt einen Error `500 Internal Server Error` - "Could not connect to database: " mit der Exception-Nachricht zurück, wenn die Verbindung zur Datenbank fehl schlägt. Tritt ein unerwarteter Fehler auf, gibt der Server eine Response mit Status Code `500 Internal Server Error` und dem Fehler als HTML zurück.
 
 ## Registrierung
 
@@ -31,6 +33,14 @@ Wenn die Email nicht gültig ist oder sie schon in Verwendung, wird ein Fehler z
     "ok": boolean
 }
 ```
+
+### Errors
+`409` Conflict: "Mail is already taken"
+
+`400` Bad Request: "Invalid mail address"
+
+`500` Internal Server Error: "Something went wrong while trying to execute the database query"
+
 ---
 
 
@@ -62,6 +72,10 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
     "isValid": boolean
 }
 ```
+
+### Errors
+`401` Unauthorized: "Invalid credentials"
+
 ---
 
 
@@ -81,6 +95,12 @@ Sucht mit dem gegebenen Query-String Ferienhäuser. Dabei werden alle Häuser ge
 ```JSON
 houses: House[]
 ```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Role from session, therefore the user, has insuficient permission"
+
 ---
 
 
@@ -121,7 +141,8 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 {
     "houseId": number,
     "startDate": Date,
-    "endDate": Date
+    "endDate": Date,
+    "activities": number[] // the IDs of the selected activities
 }
 ```
 
@@ -131,6 +152,12 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
     "ok": boolean
 }
 ```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`401` Unauthorized: "Session invalid: User does not exist"
+
 ---
 
 
@@ -166,5 +193,6 @@ Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Besc
 ---
 
 
-
+---
+---
 # TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen

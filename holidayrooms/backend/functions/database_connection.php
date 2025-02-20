@@ -1,13 +1,16 @@
 <?php
 
 include_once '../config.php';
+include_once '../functions/http_communication.php';
 
 function create_db_connection()
 {
-    // Create connection
-
-    // $conn = new mysqli(SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
-    $conn = new mysqli("10.24.29.109", "dbAdmin", "passwort", DB_NAME);
+    try {
+        // Create connection
+        $conn = new mysqli(SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
+    } catch (Exception $e) {
+        send_http_status(500, "Could not connect to database: " . $e->getMessage());
+    }
 
     // Check connection
     if ($conn->connect_error) {

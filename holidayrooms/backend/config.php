@@ -1,8 +1,18 @@
 <?php
 
-define('SERVERNAME', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
+// --- Choose 'local' or 'remote' database location --- \\ 
+// define('DB_LOCATION', 'local');
+define('DB_LOCATION', 'remote');
+
+if (DB_LOCATION == 'local') {
+    define('SERVERNAME', 'localhost');
+    define('DB_USERNAME', 'root');
+    define('DB_PASSWORD', '');
+} else {
+    define('SERVERNAME', '10.24.29.109');
+    define('DB_USERNAME', 'dbAdmin');
+    define('DB_PASSWORD', 'passwort');
+}
 define('DB_NAME', 'ferienhausverwaltung');
 
 define('SESSION_TIMEOUT', 7 * 24 * 3600);
