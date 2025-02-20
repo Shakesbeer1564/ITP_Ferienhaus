@@ -212,6 +212,44 @@ Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Besc
 ---
 
 
+## Haus anbieten 
+
+Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Raumanzahl, Bettenanzahl, eine Beschreibung, die ID der Stadt, in der das Haus steht und der pro Nacht Preis angegeben werden. 
+
+### Method: `POST`
+
+### File: `add_house.php`
+
+### Required Role (backend-handled): `Vermieter`
+
+### Body
+```JSON
+{
+    "address": "string",
+    "roomCount": number,
+    "bedCount": number,
+    "description": "string",
+    "cityId": number,
+    "price": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`500` Internal Server Error: "Could not create vacation home in database"
+
+---
+
 ---
 ---
 # TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen
