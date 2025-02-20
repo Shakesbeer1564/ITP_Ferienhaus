@@ -1,4 +1,5 @@
 import { HTTPService } from "./http-service.js";
+import { Overview } from "./class/overview.js";
 
 
 //? Beispiel:
@@ -32,6 +33,23 @@ function initialiseComponents(){
   // Registration-component
   loadComponent('./components/authentification/regionstation/registration.html', 'reg_dialog',
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
+}
+
+// TODO: Häuser holen testen
+async function loadHouses(ort = '', region = ''){
+  const searchParams = {
+    ort: ort,
+    region: region
+  };
+
+  try{
+    const data = await HTTPService.getData('get_houses', searchParams);
+
+    // TODO: Häuser in das HTML hinzufügen mit der shared-card-componente
+  }
+  catch(err){
+    console.log('SOMETHING WENT WRONG WHILE GETTING THE HOUSES: ', err);
+  }
 }
 //#endregion initialize_Data
 
@@ -94,3 +112,13 @@ document.querySelector('#open_registration').addEventListener('click', () => {
   document.getElementById('reg_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
+
+
+// const test = new Overview();
+// test.addItem({
+//   '1': {
+//     key: 1,
+//     name: 'Test',
+//     beschreibung: 'Dies ist ein Test'
+//   }
+// })

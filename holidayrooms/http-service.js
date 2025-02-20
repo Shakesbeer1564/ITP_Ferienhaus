@@ -5,9 +5,14 @@ class HttpService{
     this.baseURL = baseURL
   }
 
-  async getData(endpoint){
+  async getData(endpoint, searchParams = null){
+    const url = new URL(`${this.baseURL}/${endpoint}`);
+    if(searchParams){
+      Object.keys(searchParams).forEach(key => url.searchParams.append(key, searchParams[key]));
+    }
+
     try{
-      const res = await fetch(`${this.baseURL}/${endpoint}`, {
+      const res = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

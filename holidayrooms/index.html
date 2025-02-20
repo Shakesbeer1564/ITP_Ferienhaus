@@ -6,6 +6,7 @@
   <title>Document</title>
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./script.js"></script>
+  <script defer src="./shared/card.js"></script>
 </head>
 <body>
   <!-- app bar -->
@@ -109,5 +110,89 @@
   </div>
 
   <div id="dark_background" class="dark-background"></div>
+
+  <div class="holiday-rooms-container">
+    <p-card
+      image="./assets/16340d92-59e5-4fd6-b880-088f5b7a7383.jpg" 
+      text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      button-text="Book">
+    </p-card>
+
+    <p-card
+      image="./assets/21-vorsee-umlaufende-sonnenterrasse-und-umzaeunter-garten-1920x1080.jpg" 
+      button-text="Book">
+    </p-card>
+
+    <p-card
+      image="./assets/5bdef9c5-329b-4bbf-8bf8-9057e983a72e.jpg" 
+      button-text="Book">
+    </p-card>
+
+    <p-card
+      image="./assets/dreaming-summer-image-1920x1080_48774-mm-90.jpg" 
+      button-text="Book">
+    </p-card>
+  </div>
+
+  
+
+  <!-- Activities -->
+  <div class="container-filterbar">
+    <div class="heading">
+      <h3>Activities</h3>
+    </div>
+
+    <!--#region place_filter -->
+    <!-- <div class="filter">
+      <div class="filter-title">
+        <span>Ort</span>
+      </div>
+      <div class="result">
+        <input type="text" disabled="true" value="TestOrt"/>
+        <ul id="dropdown-place" class="dropdown-container">
+          <li>
+            <a>Place 1</a>
+          </li>
+          <li>
+            <a>Place 2</a>
+          </li>
+          <li>
+            <a>Place 3</a>
+          </li>
+        </ul>
+      </div>
+      <div id="place_filter" class="arrow">
+        <div class="arrow-implement">
+        </div>
+      </div>
+    </div> -->
+    <!--#endregion place_filter-->
+
+    <!--#region region_filter -->
+    <!-- <div class="filter">
+      <div class="filter-title">
+        <span>Region</span>
+      </div>
+      <div class="result">
+        <input type="text" disabled="true" value="TestRegion"/>
+        <ul id="dropdown_region" class="dropdown-container">
+          <li>
+            <a>Option 1</a>
+          </li>
+          <li>
+            <a>Option 2</a>
+          </li>
+          <li>
+            <a>Option 3</a>
+          </li>
+        </ul>
+      </div>
+      <div id="region_filter" class="arrow">
+        <div class="arrow-implement">
+        </div>
+      </div>
+    </div> -->
+    <!--#endregion region_filter-->
+  </div>
 </body>
 </html>

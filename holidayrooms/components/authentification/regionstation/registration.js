@@ -12,7 +12,8 @@ document.getElementById('register').addEventListener('click', async () => {
     const jsonData = {
       username: username,
       password: password,
-      email: email
+      email: email,
+      phoen: tel
     };
 
     try {
