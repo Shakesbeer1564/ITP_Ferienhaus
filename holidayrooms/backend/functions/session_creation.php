@@ -8,7 +8,7 @@ function create_session($email)
     $conn = create_db_connection();
 
     // Get the roleId of the user from the DB
-    $stmt = $conn->prepare("SELECT RolleID FROM nutzer WHERE name = ?");
+    $stmt = $conn->prepare("SELECT RolleID FROM nutzer WHERE Email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->bind_result($role_id);

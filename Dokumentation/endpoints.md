@@ -16,7 +16,7 @@ Wenn die Email nicht gültig ist oder sie schon in Verwendung, wird ein Fehler z
 
 ### File: `register.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
 ### Body: 
 ```JSON
@@ -56,7 +56,7 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 
 ### File: `login.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
 ### Body: 
 ```JSON
@@ -81,15 +81,24 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 
 ## Suche nach Ferienhaus
 
-Sucht mit dem gegebenen Query-String Ferienhäuser. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
+Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
 
-### Method: `GET`
+### Method: `POST`
 
 ### File: `get_houses.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
-### Parameter: `"query": string`
+### Body
+```JSON
+{
+    "query": "string",
+    "roomCount": number,
+    "bedCount": number,
+    "startDate": Date,
+    "endDate": Date
+}
+```
 
 ### Response:
 ```JSON
@@ -106,15 +115,20 @@ houses: House[]
 
 ## Suche nach Freizeitaktivität
 
-Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Aktivitäten genommen, dessen Ort (City) den Query-String beinhaltet. 
+Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Aktivitäten genommen, die den Query-String im Namen enthalten oder dessen Ort (City) den Query-String beinhaltet. 
 
-### Method: `GET`
+### Method: `POST`
 
 ### File: `get_activities.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
-### Parameter: `"query": string`
+### Body
+```JSON
+{
+    "query": "string"
+}
+```
 
 ### Response:
 ```JSON
@@ -123,9 +137,11 @@ activities: Activity[]
 ---
 
 
-## Buchung Ferienhaus
+## Buchung
 
-Erstellt eine Buchung in der Datenbank für das Haus mit der gegebenen ID in dem gegebenen Zeitraum (Start- und Enddatum).
+Erstellt eine Buchung in der Datenbank für das Haus mit der gegebenen ID in dem gegebenen Zeitraum (Start- und Enddatum) mit den Aktivitäten, deren IDs gegeben wurden.
+
+Es können auch nur Aktivitäten gebucht werden. Somit sind ID des Hauses und Zeitraum optional. 
 
 Der Nutzer wird aus der Session genommen.
 Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
@@ -134,15 +150,15 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
 ### File: `book_house.php`
 
-### Required Role: `Registriert`
+### Required Role (backend-handled): `Registriert`
 
 ### Body
 ```JSON
 {
-    "houseId": number,
-    "startDate": Date,
-    "endDate": Date,
-    "activities": number[] // the IDs of the selected activities
+    "houseId": number | null,
+    "startDate": Date | null,
+    "endDate": Date | null,
+    "activityIds": number[]
 }
 ```
 
@@ -161,20 +177,15 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 ---
 
 
-## Buchung Aktivität
-TODO Beschreibung hinzufügen
----
-
-
 ## Mängelbestand melden
 
 Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Beschreibung. Außerdem wird das Meldedatum gespeichert.
 
 ### Method: `POST`
 
-### File: TODO not implemented
+### File: `create_complaint.php`
 
-### Required Role: `Registriert`
+### Required Role (backend-handled): `Registriert`
 
 ### Body
 ```JSON
@@ -190,8 +201,54 @@ Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Besc
     "ok": boolean
 }
 ```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`500` Internal Server Error: "Something went wrong while trying to execute the database query"
+
 ---
 
+
+## Haus anbieten 
+
+Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Raumanzahl, Bettenanzahl, eine Beschreibung, die ID der Stadt, in der das Haus steht und der pro Nacht Preis angegeben werden. 
+
+### Method: `POST`
+
+### File: `add_house.php`
+
+### Required Role (backend-handled): `Vermieter`
+
+### Body
+```JSON
+{
+    "address": "string",
+    "roomCount": number,
+    "bedCount": number,
+    "description": "string",
+    "cityId": number,
+    "price": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`500` Internal Server Error: "Could not create vacation home in database"
+
+---
 
 ---
 ---

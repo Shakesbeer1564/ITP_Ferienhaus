@@ -2,35 +2,53 @@
 
 include_once '../functions/database_connection.php';
 
-function search(string $procedure, string $query): array
+function search_homes(string $query, int $room_count, int $bed_count, DateTime $start_date, DateTime $end_date): array
+{
+    $conn = create_db_connection();
+
+    $start_date_str = $start_date->format('Y-m-d H:i:s');
+    $end_date_str = $end_date->format('Y-m-d H:i:s');
+
+    // Prepare and call the stored procedure
+    $stmt = $conn->prepare("CALL SearchHomes(?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $query, $room_count, $bed_count, $start_date_str, $end_date_str);
+    $stmt->execute();
+
+    // Get the result set
+    $result = $stmt->get_result();
+
+    $stmt->close();
+    $conn->close();
+
+    $row = $result->fetch_assoc();
+    $homes = [];
+    while ($row = $result->fetch_assoc()) {
+        $homes[] = $row;
+    }
+
+    return $homes;
+}
+
+function search_activities(string $query): array
 {
     $conn = create_db_connection();
 
     // Prepare and call the stored procedure
-    $stmt = $conn->prepare("CALL " . $procedure . "(?, @p_Matches)");
+    $stmt = $conn->prepare("CALL SearchActivities(?)");
     $stmt->bind_param("s", $query);
     $stmt->execute();
+
+    // Get the result set
+    $result = $stmt->get_result();
+
     $stmt->close();
-
-    // Retrieve the OUT parameter
-    $result = $conn->query("SELECT @p_Matches as matches");
-    $row = $result->fetch_assoc();
-    $entries = [];
-    while ($row = $result->fetch_assoc()) {
-        $entries[] = $row;
-    }
-
     $conn->close();
 
-    return $entries;
-}
+    $row = $result->fetch_assoc();
+    $activities = [];
+    while ($row = $result->fetch_assoc()) {
+        $activities[] = $row;
+    }
 
-function search_cities(string $query): array
-{
-    return search("SearchOrte", $query);
-}
-
-function search_regions(string $query): array
-{
-    return search("SearchRegions", $query);
+    return $activities;
 }

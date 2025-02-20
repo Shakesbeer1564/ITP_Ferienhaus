@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $house_id = $data["houseId"];
     $inp_start_date = $data["startDate"];
     $inp_end_date = $data["endDate"];
-    $activies = $data["activities"];
+    $activies = $data["activityIds"];
 
     $start_date = new DateTime($inp_start_date);
     $end_date = new DateTime($inp_end_date);
