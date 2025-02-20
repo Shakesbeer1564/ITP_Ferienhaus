@@ -16,7 +16,7 @@ Wenn die Email nicht gültig ist oder sie schon in Verwendung, wird ein Fehler z
 
 ### File: `register.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
 ### Body: 
 ```JSON
@@ -56,7 +56,7 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 
 ### File: `login.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
 ### Body: 
 ```JSON
@@ -87,7 +87,7 @@ Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Rä
 
 ### File: `get_houses.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
 ### Body
 ```JSON
@@ -121,7 +121,7 @@ Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Akt
 
 ### File: `get_activities.php`
 
-### Required Role: `Gast`
+### Required Role (backend-handled): `Gast`
 
 ### Body
 ```JSON
@@ -150,7 +150,7 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
 ### File: `book_house.php`
 
-### Required Role: `Registriert`
+### Required Role (backend-handled): `Registriert`
 
 ### Body
 ```JSON
@@ -183,9 +183,9 @@ Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Besc
 
 ### Method: `POST`
 
-### File: TODO not implemented
+### File: `create_complaint.php`
 
-### Required Role: `Registriert`
+### Required Role (backend-handled): `Registriert`
 
 ### Body
 ```JSON
@@ -201,6 +201,14 @@ Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Besc
     "ok": boolean
 }
 ```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`500` Internal Server Error: "Something went wrong while trying to execute the database query"
+
 ---
 
 
