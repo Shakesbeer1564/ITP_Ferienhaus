@@ -28,3 +28,27 @@ function search_homes(string $query, int $room_count, int $bed_count, DateTime $
 
     return $homes;
 }
+
+function search_activities(string $query): array
+{
+    $conn = create_db_connection();
+
+    // Prepare and call the stored procedure
+    $stmt = $conn->prepare("CALL SearchActivities(?)");
+    $stmt->bind_param("s", $query);
+    $stmt->execute();
+
+    // Get the result set
+    $result = $stmt->get_result();
+
+    $stmt->close();
+    $conn->close();
+
+    $row = $result->fetch_assoc();
+    $activities = [];
+    while ($row = $result->fetch_assoc()) {
+        $activities[] = $row;
+    }
+
+    return $activities;
+}

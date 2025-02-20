@@ -115,15 +115,20 @@ houses: House[]
 
 ## Suche nach Freizeitaktivität
 
-Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Aktivitäten genommen, dessen Ort (City) den Query-String beinhaltet. 
+Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Aktivitäten genommen, die den Query-String im Namen enthalten oder dessen Ort (City) den Query-String beinhaltet. 
 
-### Method: `GET`
+### Method: `POST`
 
 ### File: `get_activities.php`
 
 ### Required Role: `Gast`
 
-### Parameter: `"query": string`
+### Body
+```JSON
+{
+    "query": "string"
+}
+```
 
 ### Response:
 ```JSON
