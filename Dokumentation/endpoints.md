@@ -81,15 +81,24 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 
 ## Suche nach Ferienhaus
 
-Sucht mit dem gegebenen Query-String Ferienhäuser. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
+Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
 
-### Method: `GET`
+### Method: `POST`
 
 ### File: `get_houses.php`
 
 ### Required Role: `Gast`
 
-### Parameter: `"query": string`
+### Body
+```JSON
+{
+    "query": "string",
+    "roomCount": number,
+    "bedCount": number,
+    "startDate": Date,
+    "endDate": Date
+}
+```
 
 ### Response:
 ```JSON
