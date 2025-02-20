@@ -21,7 +21,7 @@ html, body{
   gap: 5px;
 }
 
-.app-bar-container .heading{
+.app-bar-container .heading-title{
   flex: 1;
   height: 100%;
   text-align: center;
@@ -31,7 +31,7 @@ html, body{
   justify-content: center;
 }
 
-.app-bar-container .heading h1{
+.app-bar-container .heading-title h1{
   letter-spacing: 10px;
 }
 
@@ -223,15 +223,25 @@ html, body{
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-li::marker{
-  content: '';
-}
-
-.filter .result .dropdown-container ul li a{
-  color: #333;
-  text-decoration: none;
+.filter .result .dropdown-container li a{
   display: block;
   width: 100%;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.filter .result .dropdown-container li a:hover{
+  background-color: #1a4b98;
+  color: white;
+}
+
+.filter .result .dropdown-container li a:active{
+  background-color: white;
+  color: black;
+}
+
+li::marker{
+  content: '';
 }
 
 /* Login Dialog */

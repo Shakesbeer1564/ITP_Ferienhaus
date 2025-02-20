@@ -1,28 +1,30 @@
-import { HTTPService } from "./http-service.js";
 import { Overview } from "./class/overview.js";
+import { HTTPService } from "./http-service.js";
 
 
 //? Beispiel:
-// button events
-// document.getElementById('test-click').addEventListener('click', loadData);
+/*button events
+document.getElementById('test-click').addEventListener('click', loadData);
 
-// async function loadData() {
-//   const data = await HTTPService.getData('data.php');
+async function loadData() {
+  const data = await HTTPService.getData('data.php');
   
-//   data.forEach(element => {
-//     const node = document.createElement('li');
-//     const text = document.createTextNode(`Name: ${element.name}, Alter: ${element.alter}`);
-//     node.appendChild(text);
+  data.forEach(element => {
+    const node = document.createElement('li');
+    const text = document.createTextNode(`Name: ${element.name}, Alter: ${element.alter}`);
+    node.appendChild(text);
 
-//     document.getElementById('testList').appendChild(node);
-//   });
-// }
+    document.getElementById('testList').appendChild(node);
+  });
+}
+  */
 
 initializeData();
 
 //#region initialize_Data
 function initializeData(){
   initialiseComponents();
+  loadHouses();
 }
 
 function initialiseComponents(){
@@ -43,7 +45,7 @@ async function loadHouses(ort = '', region = ''){
   };
 
   try{
-    const data = await HTTPService.getData('get_houses', searchParams);
+    // const data = await HTTPService.getData('get_houses', searchParams);
 
     // TODO: Häuser in das HTML hinzufügen mit der shared-card-componente
   }
@@ -89,16 +91,75 @@ function loadStyle(href){
 }
 //#endregion helper_function_dialog
 
+document.addEventListener('click', (event) => {
+  const placeDropDown = document.getElementById('dropdown_place');
+  const regionDropDown = document.getElementById('dropdown_region');
+  
+
+  if (!event.target.closest('#place_filter')) {
+    placeDropDown.style.display = 'none';
+  }
+
+  if (!event.target.closest('#reg_filter')) {
+    regionDropDown.style.display = 'none';
+  }
+
+
+  // if(!regionDropDown.contains(event.target)){
+  //   regionDropDown.style.display = 'none';
+  //   console.log('TEST2');
+  // }
+})
+
 // dropdown-handling for place-filter
 document.getElementById('place_filter').addEventListener('click', () => {
-  const dropDown = document.getElementById('dropdown-place');
+  const dropDown = document.getElementById('dropdown_place');
   dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
 });
+
+// place selection
+document.querySelectorAll('#dropdown_place a').forEach(link => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    const input = document.getElementById('place_input');
+    const selectedPlace = event.target.textContent;
+    input.value = selectedPlace;
+
+
+    // refresh houses
+    const regionValue = document.getElementById('region_input').value;
+    loadHouses(selectedPlace, regionValue ? regionValue : '');
+
+    // close dropdown
+    const dropDown = document.getElementById('dropdown_place');
+    dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
+  })
+})
 
 // dropdown-handling for region-filter
 document.getElementById('region_filter').addEventListener('click', () => {
   const dropDown = document.getElementById('dropdown_region');
   dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
+})
+
+// region selection
+document.querySelectorAll('#dropdown_region a').forEach(link => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    const input = document.getElementById('region_input');
+    const selectedRegion = event.target.textContent;
+    input.value = selectedRegion;
+
+    // refresh houses
+    const placeValue = document.getElementById('place_input').value;
+    loadHouses(placeValue ? placeValue : '', selectedRegion);
+
+    // close dropdown
+    const dropDown = document.getElementById('dropdown_region');
+    dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
+  })
 })
 
 // load login dialog
@@ -112,13 +173,3 @@ document.querySelector('#open_registration').addEventListener('click', () => {
   document.getElementById('reg_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
-
-
-// const test = new Overview();
-// test.addItem({
-//   '1': {
-//     key: 1,
-//     name: 'Test',
-//     beschreibung: 'Dies ist ein Test'
-//   }
-// })

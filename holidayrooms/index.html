@@ -11,7 +11,7 @@
 <body>
   <!-- app bar -->
   <div class="app-bar-container">
-    <div class="heading">
+    <div class="heading-title">
       <h1>Holidayrooms</h1>
     </div>
     <!-- Order overview -->
@@ -48,13 +48,13 @@
     </div>
 
     <!--#region place_filter -->
-    <div class="filter">
+    <div class="filter" id="place_filter">
       <div class="filter-title">
         <span>Ort</span>
       </div>
       <div class="result">
-        <input type="text" disabled="true" value="TestOrt"/>
-        <ul id="dropdown-place" class="dropdown-container">
+        <input id="place_input" type="text" disabled="true"/>
+        <ul id="dropdown_place" class="dropdown-container">
           <li>
             <a>Place 1</a>
           </li>
@@ -74,12 +74,12 @@
     <!--#endregion place_filter-->
 
     <!--#region region_filter -->
-    <div class="filter">
+    <div class="filter" id="reg_filter">
       <div class="filter-title">
         <span>Region</span>
       </div>
       <div class="result">
-        <input type="text" disabled="true" value="TestRegion"/>
+        <input id="region_input" type="text" disabled="true"/>
         <ul id="dropdown_region" class="dropdown-container">
           <li>
             <a>Option 1</a>
