@@ -103,12 +103,6 @@ document.addEventListener('click', (event) => {
   if (!event.target.closest('#reg_filter')) {
     regionDropDown.style.display = 'none';
   }
-
-
-  // if(!regionDropDown.contains(event.target)){
-  //   regionDropDown.style.display = 'none';
-  //   console.log('TEST2');
-  // }
 })
 
 // dropdown-handling for place-filter
@@ -130,15 +124,11 @@ document.querySelectorAll('#dropdown_place a').forEach(link => {
     // refresh houses
     const regionValue = document.getElementById('region_input').value;
     loadHouses(selectedPlace, regionValue ? regionValue : '');
-
-    // close dropdown
-    const dropDown = document.getElementById('dropdown_place');
-    dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
   })
 })
 
 // dropdown-handling for region-filter
-document.getElementById('region_filter').addEventListener('click', () => {
+document.getElementById('reg_filter').addEventListener('click', () => {
   const dropDown = document.getElementById('dropdown_region');
   dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
 })
@@ -155,10 +145,6 @@ document.querySelectorAll('#dropdown_region a').forEach(link => {
     // refresh houses
     const placeValue = document.getElementById('place_input').value;
     loadHouses(placeValue ? placeValue : '', selectedRegion);
-
-    // close dropdown
-    const dropDown = document.getElementById('dropdown_region');
-    dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
   })
 })
 

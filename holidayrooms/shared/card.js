@@ -26,7 +26,7 @@ class CardComponent extends HTMLElement{
     const button = document.createElement('button');
     button.textContent = this.getAttribute('button-text') || 'No text available';
     button.onclick = () => {
-      console.log(`Geklickt: ${this.getAttribute('text')}`);
+      console.log(`Geklickt: ${this.getAttribute('text')}`); // --> Statt dem hier die ID holen
     }
 
     // Zusammenfügen
