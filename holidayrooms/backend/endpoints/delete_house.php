@@ -44,6 +44,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Otherwise the user does not have the permission by the procedure to delete homes
             send_http_status(403, "Only the landlord and admins can delete homes");
         }
+
+        // Rethrow exception when it is not a custom error
+        throw $e;
     }
     $stmt->close();
 

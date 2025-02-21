@@ -36,6 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
             send_http_status(404, "Could not find the house with the given ID");
         }
+
+        // Rethrow exception when it is not a not found error
+        throw $e;
     }
     $stmt->close();
 
