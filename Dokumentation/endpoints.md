@@ -246,6 +246,8 @@ Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Ra
 
 `403` Forbidden: "User from session does not have the required permission"
 
+`404` Not Found: "Could not find the house with the given ID"
+
 `500` Internal Server Error: "Could not create vacation home in database"
 
 ---

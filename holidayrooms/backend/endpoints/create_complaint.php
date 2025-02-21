@@ -28,7 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $conn->prepare("CALL AddMaengelanzeige(?, ?)");
     $stmt->bind_param("ss", $house_id, $description);
-    $ok = $stmt->execute();
+    try {
+        $ok = $stmt->execute();
+    } catch (Exception $e) {
+        // Check for custom error from procedure
+        if ($e->getCode() == 1644) {
+            send_http_status(404, "Could not find the house with the given ID");
+        }
+    }
     $stmt->close();
 
     $conn->close();
