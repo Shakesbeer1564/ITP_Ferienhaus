@@ -253,7 +253,7 @@ Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Ra
 ---
 
 
-## Delete Haus
+## Haus löschen
 
 Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der Eigentümer des Hauses oder ein Admin sein.
 
@@ -287,6 +287,45 @@ Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der 
 `403` Forbidden: "Only the landlord and admins can delete homes"
 
 `500` Internal Server Error: "Could not delete vacation home from database"
+
+---
+
+
+## Mängelbestand reparieren
+
+desc
+
+### Method: `POST`
+
+### File: `repair_complaint.php`
+
+### Required Role (backend-handled): `Vermieter`
+
+### Body
+```JSON
+{
+    "complaintId": number,
+    "repairStatus": "string"
+}   
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only landlords can update complaints"
+
+`404` Not Found: "There is no complaint with the given ID"
+
+`403` Forbidden: "Only the landlord of the house of the complaint can resolve the complaint"
+
+`500` Internal Server Error: "Something went wrong while trying to update the complaint in the database"
 
 ---
 
