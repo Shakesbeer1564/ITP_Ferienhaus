@@ -250,6 +250,45 @@ Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Ra
 
 ---
 
+
+## Delete Haus
+
+Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der Eigentümer des Hauses oder ein Admin sein.
+
+### Method: `POST`
+
+### File: `delete_house.php`
+
+### Required Role (backend-handled): `Vermieter`
+
+### Body
+```JSON
+{
+    "houseId": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`404` Not Found: "No house with that id exists"
+
+`403` Forbidden: "Only the landlord and admins can delete homes"
+
+`500` Internal Server Error: "Could not delete vacation home from database"
+
+---
+
+
 ---
 ---
 # TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen
