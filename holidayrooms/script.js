@@ -1,3 +1,4 @@
+import { InputRequestHandler } from "./class/input-request-handler.js";
 import { Overview } from "./class/overview.js";
 import { HTTPService } from "./http-service.js";
 
@@ -25,6 +26,9 @@ initializeData();
 function initializeData(){
   initialiseComponents();
   loadHouses();
+
+  const inputHandler = new InputRequestHandler('.input');
+  inputHandler.request();
 }
 
 function initialiseComponents(){
@@ -55,7 +59,7 @@ async function loadHouses(ort = '', region = ''){
 }
 //#endregion initialize_Data
 
-//#region helper_functions_dialog
+//#region helper_functions_loadComponents
 function loadComponent(url, containerId, cssFile, jsFile){
   fetch(url)
     .then(res => res.text())
@@ -89,63 +93,10 @@ function loadStyle(href){
   link.id = href;
   document.head.appendChild(link);
 }
-//#endregion helper_function_dialog
+//#endregion helper_functions_loadComponents
 
-document.addEventListener('click', (event) => {
-  const placeDropDown = document.getElementById('dropdown_place');
-  const regionDropDown = document.getElementById('dropdown_region');
-  
-
-  if (!event.target.closest('#place_filter')) {
-    placeDropDown.style.display = 'none';
-  }
-
-  if (!event.target.closest('#reg_filter')) {
-    regionDropDown.style.display = 'none';
-  }
-})
-
-// dropdown-handling for place-filter
-document.getElementById('place_filter').addEventListener('click', () => {
-  const dropDown = document.getElementById('dropdown_place');
-  dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
-});
-
-// place selection
-document.querySelectorAll('#dropdown_place a').forEach(link => {
-  link.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    const input = document.getElementById('place_input');
-    const selectedPlace = event.target.textContent;
-    input.value = selectedPlace;
-
-
-    // refresh houses
-    const regionValue = document.getElementById('region_input').value;
-    loadHouses(selectedPlace, regionValue ? regionValue : '');
-  })
-})
-
-// dropdown-handling for region-filter
-document.getElementById('reg_filter').addEventListener('click', () => {
-  const dropDown = document.getElementById('dropdown_region');
-  dropDown.style.display = dropDown.style.display === 'block' ? 'none' : 'block';
-})
-
-// region selection
-document.querySelectorAll('#dropdown_region a').forEach(link => {
-  link.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    const input = document.getElementById('region_input');
-    const selectedRegion = event.target.textContent;
-    input.value = selectedRegion;
-
-    // refresh houses
-    const placeValue = document.getElementById('place_input').value;
-    loadHouses(placeValue ? placeValue : '', selectedRegion);
-  })
+document.getElementById('place_input').addEventListener('input', (event) => {
+  console.log(event.target.value);
 })
 
 // load login dialog
