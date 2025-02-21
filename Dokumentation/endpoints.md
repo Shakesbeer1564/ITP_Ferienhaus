@@ -364,6 +364,46 @@ complaints: Complaint[]
 ---
 
 
+## Rechnungen eines Users erhalten
+
+Gibt die Rechnungen des Users, dessen Email gegeben wird, zurück. Wird keine Mail angegeben, wird die aus der Session verwendet.
+
+Werden die Rechnungen eines anderen Users angefragt, muss die Rolle Admin sein.
+
+### Method: `POST`
+
+### File: `get_invoices.php`
+
+### Required Role (backend-handled): `Registered` (or higher)
+
+### Body
+```JSON
+{
+    "userEmail": "string" | null
+}   
+```
+
+### Response
+```JSON
+invoices: Invoice[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The requesting has to be at least registered"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no user with the given mail"
+
+`404` Not Found: "There is no user with the given ID"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the invoices of a user from the database"
+
+---
+
+
 ---
 ---
 # TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen
