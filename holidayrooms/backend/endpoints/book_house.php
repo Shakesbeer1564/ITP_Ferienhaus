@@ -13,6 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         send_http_status(401, "No session");
     }
 
+    if (!has_permission(ROLE_REGISTERED)) {
+        send_http_status(403, "Only registered users can book houses");
+    }
+
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
 
