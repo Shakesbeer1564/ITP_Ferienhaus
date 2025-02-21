@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         send_http_status(401, "No session");
     }
 
-    if (!has_role(ROLE_LANDLORD)) {
+    if (!has_permission(ROLE_LANDLORD)) {
         send_http_status(403, "Only landlords can update complaints");
     }
 
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check for a custom error from the procedure
         if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
             // Check if the complaint does not exist
-            if ($e->getMessage() == "Mängelanzeige does not exist.") {
+            if ($e->getMessage() == "Mängelanzeige existiert nicht.") {
                 send_http_status(404, "There is no complaint with the given ID");
             }
             // Otherwise the user does not have the permission by the procedure to resolve the complaint

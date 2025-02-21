@@ -297,7 +297,7 @@ Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung
 
 ### File: `repair_complaint.php`
 
-### Required Role (backend-handled): `Vermieter` (exactly)
+### Required Role (backend-handled): `Vermieter` (or higher)
 
 ### Body
 ```JSON
