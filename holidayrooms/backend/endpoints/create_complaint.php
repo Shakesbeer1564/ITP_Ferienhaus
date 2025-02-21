@@ -1,5 +1,6 @@
 <?php
 
+include_once '../config.php';
 include_once '../functions/database_connection.php';
 include_once '../functions/permission_check.php';
 include_once '../functions/session_check.php';
@@ -32,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ok = $stmt->execute();
     } catch (Exception $e) {
         // Check for custom error from procedure
-        if ($e->getCode() == 1644) {
+        if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
             send_http_status(404, "Could not find the house with the given ID");
         }
     }

@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ok = $stmt->execute();
     } catch (Exception $e) {
         // Check for a custom error from the procedure
-        if ($e->getCode() == 1644) {
+        if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
             // Check if the house does not exist
             if ($e->getMessage() == "Haus existiert nicht.") {
                 send_http_status(404, "No house with that id exists");

@@ -15,9 +15,11 @@ if (DB_LOCATION == 'local') {
 }
 define('DB_NAME', 'ferienhausverwaltung');
 
-define('SESSION_TIMEOUT', 7 * 24 * 3600);
-
 define('ROLE_ADMIN', 1);
 define('ROLE_LANDLORD', 2);
 define('ROLE_REGISTERED', 3);
 define('ROLE_GUEST', 4);
+
+define('CUSTOM_SQL_ERROR_CODE', 1644);
+
+define('SESSION_TIMEOUT', 7 * 24 * 3600);
