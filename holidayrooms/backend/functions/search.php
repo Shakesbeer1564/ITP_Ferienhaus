@@ -2,12 +2,16 @@
 
 include_once '../functions/database_connection.php';
 
-function search_homes(string $query, int $room_count, int $bed_count, DateTime $start_date, DateTime $end_date): array
+function search_homes(string $query, int|null $room_count, int|null $bed_count, DateTime|null $start_date, DateTime|null $end_date): array
 {
-    $conn = create_db_connection();
+    if ($room_count == null)
+        $room_count = "";
+    if ($bed_count == null)
+        $bed_count = "";
+    $start_date_str = $start_date == null ? "" : $start_date->format('Y-m-d H:i:s');
+    $end_date_str = $end_date == null ? "" : $end_date->format('Y-m-d H:i:s');
 
-    $start_date_str = $start_date->format('Y-m-d H:i:s');
-    $end_date_str = $end_date->format('Y-m-d H:i:s');
+    $conn = create_db_connection();
 
     // Prepare and call the stored procedure
     $stmt = $conn->prepare("CALL SearchHomes(?, ?, ?, ?, ?)");

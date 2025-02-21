@@ -93,10 +93,10 @@ Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Rä
 ```JSON
 {
     "query": "string",
-    "roomCount": number,
-    "bedCount": number,
-    "startDate": Date,
-    "endDate": Date
+    "roomCount": number | null,
+    "bedCount": number | null,
+    "startDate": Date | null,
+    "endDate": Date | null
 }
 ```
 
