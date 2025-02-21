@@ -11,6 +11,10 @@ function get_user_id_by_mail(string $email): int|null
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
 
+    if ($result->num_rows == 0) {
+        return null;
+    }
+
     $user_id = $row['NutzerID'];
 
     return $user_id;
@@ -24,6 +28,10 @@ function get_landlord_id_by_user_id(int $landlord_id): int|null
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
+
+    if ($result->num_rows == 0) {
+        return null;
+    }
 
     $landlord_id = $row['EigentümerID'];
 

@@ -1,6 +1,6 @@
 <?php
 
-function has_permission($role_Id)
+function has_permission($role_Id): bool
 {
     if (!isset($_SESSION)) {
         session_start();
@@ -19,4 +19,21 @@ function has_permission($role_Id)
     }
 
     return true;
+}
+
+function has_role($role_id): bool
+{
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+
+    if (!isset($_SESSION)) {
+        return false;
+    }
+
+    if (!isset($_SESSION["role"])) {
+        return false;
+    }
+
+    return $_SESSION["role"] == $role_id;
 }

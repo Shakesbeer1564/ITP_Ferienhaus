@@ -1,6 +1,7 @@
 <?php
 
 include_once '../functions/database_connection.php';
+include_once '../functions/permission_check.php';
 include_once '../functions/user_id_retrieval.php';
 include_once '../functions/session_check.php';
 include_once '../functions/http_communication.php';
@@ -11,6 +12,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!is_session_set()) {
         send_http_status(401, "No session");
+    }
+
+    if (!has_permission(ROLE_REGISTERED)) {
+        send_http_status(403, "Only registered users can book houses");
     }
 
     $json = file_get_contents('php://input');

@@ -1,5 +1,6 @@
 <?php
 
+include_once '../config.php';
 include_once '../functions/database_connection.php';
 include_once '../functions/session_creation.php';
 include_once '../functions/mail_check.php';
@@ -35,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $ok = $stmt->execute();
     } catch (Exception $e) {
         // Check for custom error occuring from mail address validation
-        if ($e->getCode() == 1644) {
+        if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
             send_http_status(400, "Invalid mail address");
         }
 

@@ -13,8 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         send_http_status(401, "No session");
     }
 
-    $role_id = $_SESSION["role"];
-
     if (!has_permission(ROLE_GUEST)) {
         send_http_status(403, "Role from session, therefore the user, has insuficient permission");
     }
@@ -28,8 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $inp_start_date = $data["startDate"];
     $inp_end_date = $data["endDate"];
 
-    $start_date = new DateTime($inp_start_date);
-    $end_date = new DateTime($inp_end_date);
+    $start_date = $inp_start_date == null ? null : new DateTime($inp_start_date);
+    $end_date = $inp_end_date == null ? null : new DateTime($inp_end_date);
 
     $homes = search_homes($search_query, $room_count, $bed_count, $start_date, $end_date);
 

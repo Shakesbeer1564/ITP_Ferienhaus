@@ -16,8 +16,6 @@ Wenn die Email nicht gültig ist oder sie schon in Verwendung, wird ein Fehler z
 
 ### File: `register.php`
 
-### Required Role (backend-handled): `Gast`
-
 ### Body: 
 ```JSON
 {
@@ -56,8 +54,6 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 
 ### File: `login.php`
 
-### Required Role (backend-handled): `Gast`
-
 ### Body: 
 ```JSON
 {
@@ -87,16 +83,16 @@ Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Rä
 
 ### File: `get_houses.php`
 
-### Required Role (backend-handled): `Gast`
+### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
 {
     "query": "string",
-    "roomCount": number,
-    "bedCount": number,
-    "startDate": Date,
-    "endDate": Date
+    "roomCount": number | null,
+    "bedCount": number | null,
+    "startDate": Date | null,
+    "endDate": Date | null
 }
 ```
 
@@ -121,7 +117,7 @@ Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Akt
 
 ### File: `get_activities.php`
 
-### Required Role (backend-handled): `Gast`
+### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
@@ -150,7 +146,7 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
 ### File: `book_house.php`
 
-### Required Role (backend-handled): `Registriert`
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
@@ -174,6 +170,8 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
 `401` Unauthorized: "Session invalid: User does not exist"
 
+`403` Forbidden: "Only registered users can book houses"
+
 ---
 
 
@@ -185,7 +183,7 @@ Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Besc
 
 ### File: `create_complaint.php`
 
-### Required Role (backend-handled): `Registriert`
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
@@ -220,7 +218,7 @@ Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Ra
 
 ### File: `add_house.php`
 
-### Required Role (backend-handled): `Vermieter`
+### Required Role (backend-handled): `Vermieter` (or higher)
 
 ### Body
 ```JSON
@@ -246,9 +244,165 @@ Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Ra
 
 `403` Forbidden: "User from session does not have the required permission"
 
+`404` Not Found: "Could not find the house with the given ID"
+
 `500` Internal Server Error: "Could not create vacation home in database"
 
 ---
+
+
+## Haus löschen
+
+Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der Eigentümer des Hauses oder ein Admin sein.
+
+### Method: `POST`
+
+### File: `delete_house.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`404` Not Found: "No house with that id exists"
+
+`403` Forbidden: "Only the landlord and admins can delete homes"
+
+`500` Internal Server Error: "Could not delete vacation home from database"
+
+---
+
+
+## Mängelbestand reparieren
+
+Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung' und 'Gelöst'.
+
+### Method: `POST`
+
+### File: `repair_complaint.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "complaintId": number,
+    "repairStatus": "string" // one of these: 'Neu', 'In Bearbeitung', 'Gelöst'
+}   
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only landlords can update complaints"
+
+`404` Not Found: "There is no complaint with the given ID"
+
+`403` Forbidden: "Only the landlord of the house of the complaint can resolve the complaint"
+
+`500` Internal Server Error: "Something went wrong while trying to update the complaint in the database"
+
+---
+
+
+## Mängelbestande eines Hauses erhalten
+
+Gibt die Mängelbestande des Hauses mit der gegebenen ID zurück. Dafür muss der Nutzer Besitzer des Hauses oder Admin sein.
+
+### Method: `POST`
+
+### File: `get_complaints.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": "string"
+}   
+```
+
+### Response
+```JSON
+complaints: Complaint[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no complaint with the given ID"
+
+`403` Forbidden: "Insufficient permission to see the complaints"
+
+`500` Internal Server Error: "Something went wrong trying to retrieve the complaints from the database"
+
+---
+
+
+## Rechnungen eines Users erhalten
+
+Gibt die Rechnungen des Users, dessen Email gegeben wird, zurück. Wird keine Mail angegeben, wird die aus der Session verwendet.
+
+Werden die Rechnungen eines anderen Users angefragt, muss die Rolle Admin sein.
+
+### Method: `POST`
+
+### File: `get_invoices.php`
+
+### Required Role (backend-handled): `Registered` (or higher)
+
+### Body
+```JSON
+{
+    "userEmail": "string" | null
+}   
+```
+
+### Response
+```JSON
+invoices: Invoice[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The requesting has to be at least registered"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no user with the given mail"
+
+`404` Not Found: "There is no user with the given ID"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the invoices of a user from the database"
+
+---
+
 
 ---
 ---

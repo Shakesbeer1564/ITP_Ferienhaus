@@ -1,5 +1,6 @@
 <?php
 
+include_once '../config.php';
 include_once '../functions/database_connection.php';
 include_once '../functions/permission_check.php';
 include_once '../functions/session_check.php';
@@ -28,7 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $conn->prepare("CALL AddMaengelanzeige(?, ?)");
     $stmt->bind_param("ss", $house_id, $description);
-    $ok = $stmt->execute();
+    try {
+        $ok = $stmt->execute();
+    } catch (Exception $e) {
+        // Check for custom error from procedure
+        if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
+            send_http_status(404, "Could not find the house with the given ID");
+        }
+
+        // Rethrow exception when it is not a not found error
+        throw $e;
+    }
     $stmt->close();
 
     $conn->close();
