@@ -328,6 +328,42 @@ Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung
 ---
 
 
+## Mängelbestande eines Hauses erhalten
+
+Gibt die Mängelbestande des Hauses mit der gegebenen ID zurück. Dafür muss der Nutzer Besitzer des Hauses oder Admin sein.
+
+### Method: `POST`
+
+### File: `get_complaints.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": "string"
+}   
+```
+
+### Response
+```JSON
+complaints: Complaint[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no complaint with the given ID"
+
+`403` Forbidden: "Insufficient permission to see the complaints"
+
+`500` Internal Server Error: "Something went wrong trying to retrieve the complaints from the database"
+
+---
+
+
 ---
 ---
 # TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen

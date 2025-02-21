@@ -13,8 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         send_http_status(401, "No session");
     }
 
-    $role_id = $_SESSION["role"];
-
     if (!has_permission(ROLE_GUEST)) {
         send_http_status(403, "Role from session, therefore the user, has insuficient permission");
     }
