@@ -16,8 +16,6 @@ Wenn die Email nicht gültig ist oder sie schon in Verwendung, wird ein Fehler z
 
 ### File: `register.php`
 
-### Required Role (backend-handled): `Gast`
-
 ### Body: 
 ```JSON
 {
@@ -56,8 +54,6 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 
 ### File: `login.php`
 
-### Required Role (backend-handled): `Gast`
-
 ### Body: 
 ```JSON
 {
@@ -87,7 +83,7 @@ Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Rä
 
 ### File: `get_houses.php`
 
-### Required Role (backend-handled): `Gast`
+### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
@@ -121,7 +117,7 @@ Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Akt
 
 ### File: `get_activities.php`
 
-### Required Role (backend-handled): `Gast`
+### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
@@ -150,7 +146,7 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
 ### File: `book_house.php`
 
-### Required Role (backend-handled): `Registriert`
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
@@ -174,6 +170,8 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
 `401` Unauthorized: "Session invalid: User does not exist"
 
+`403` Forbidden: "Only registered users can book houses"
+
 ---
 
 
@@ -185,7 +183,7 @@ Speichert einen Mängelbestand für das Haus mit der gegebenen ID mit einer Besc
 
 ### File: `create_complaint.php`
 
-### Required Role (backend-handled): `Registriert`
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
@@ -220,7 +218,7 @@ Nutzer mit der Rolle Vermieter können Häuser anbieten. Dafür muss Adresse, Ra
 
 ### File: `add_house.php`
 
-### Required Role (backend-handled): `Vermieter`
+### Required Role (backend-handled): `Vermieter` (or higher)
 
 ### Body
 ```JSON
@@ -261,7 +259,7 @@ Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der 
 
 ### File: `delete_house.php`
 
-### Required Role (backend-handled): `Vermieter`
+### Required Role (backend-handled): `Vermieter` (or higher)
 
 ### Body
 ```JSON
@@ -299,13 +297,13 @@ desc
 
 ### File: `repair_complaint.php`
 
-### Required Role (backend-handled): `Vermieter`
+### Required Role (backend-handled): `Vermieter` (exactly)
 
 ### Body
 ```JSON
 {
     "complaintId": number,
-    "repairStatus": "string"
+    "repairStatus": "string" // one of these: 'Neu', 'In Bearbeitung', 'Gelöst'
 }   
 ```
 
