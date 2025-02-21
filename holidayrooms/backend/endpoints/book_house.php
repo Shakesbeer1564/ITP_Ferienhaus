@@ -1,6 +1,7 @@
 <?php
 
 include_once '../functions/database_connection.php';
+include_once '../functions/permission_check.php';
 include_once '../functions/user_id_retrieval.php';
 include_once '../functions/session_check.php';
 include_once '../functions/http_communication.php';
