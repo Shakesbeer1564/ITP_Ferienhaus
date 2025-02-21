@@ -291,7 +291,7 @@ Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der 
 
 ## Mängelbestand reparieren
 
-desc
+Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung' und 'Gelöst'.
 
 ### Method: `POST`
 
