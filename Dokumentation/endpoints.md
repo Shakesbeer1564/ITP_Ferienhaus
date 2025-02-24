@@ -75,6 +75,96 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 ---
 
 
+## Abmelden
+
+Löscht die aktuelle Session des Users. Das funktioniert auch, wenn der User keine Session hat.
+
+### Method: `POST`
+
+### File: `sign_out.php`
+
+### Body
+```JSON
+{}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+---
+
+
+## Reset Password
+
+Changes the password hash of the user from the session. The given new password is hashed and then written into the database.
+
+### Method: `POST`
+
+### File: `reset_password.php`
+
+### Body
+```JSON
+{
+    "newPassword": "string"
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`404` Not Found: "User from session not found"
+
+`500` Internal Server Error: "Something went wrong while trying to update the password hash in the database"
+
+---
+
+
+## Delete User
+
+Deletes the user with the given ID from the database.
+
+### Method: `POST`
+
+### File: `delete_user.php`
+
+### Required Role (backend-handled): `Admin`
+
+### Body
+```JSON
+{
+    "userId": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only admins can delete users"
+
+`404` Not Found: "User with the given ID not found"
+
+`500` Internal Server Error: "Something went wrong while trying to delete the user from the database"
+
+---
+
+
 ## Suche nach Ferienhaus
 
 Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
@@ -289,6 +379,42 @@ Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der 
 ---
 
 
+## Mängelbestande eines Hauses erhalten
+
+Gibt die Mängelbestande des Hauses mit der gegebenen ID zurück. Dafür muss der Nutzer Besitzer des Hauses oder Admin sein.
+
+### Method: `POST`
+
+### File: `get_complaints.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": "string"
+}   
+```
+
+### Response
+```JSON
+complaints: Complaint[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no complaint with the given ID"
+
+`403` Forbidden: "Insufficient permission to see the complaints"
+
+`500` Internal Server Error: "Something went wrong trying to retrieve the complaints from the database"
+
+---
+
+
 ## Mängelbestand reparieren
 
 Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung' und 'Gelöst'.
@@ -328,38 +454,76 @@ Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung
 ---
 
 
-## Mängelbestande eines Hauses erhalten
+## Aktivität anbieten
 
-Gibt die Mängelbestande des Hauses mit der gegebenen ID zurück. Dafür muss der Nutzer Besitzer des Hauses oder Admin sein.
+Registrierte Nutzer können Aktivitäten anbieten. Dafür muss Aktivitätsname, Beschreibung, Preis, Teilnehmeranzahl und die ID der Stadt, in der die Aktivität stattfindet angegeben werden. 
 
 ### Method: `POST`
 
-### File: `get_complaints.php`
+### File: `add_activity.php`
 
-### Required Role (backend-handled): `Vermieter` (or higher)
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
 {
-    "houseId": "string"
-}   
+    "name": "string",
+    "description": "string",
+    "price": number,
+    "participantCount": number,
+    "cityId": number
+}
 ```
 
 ### Response
 ```JSON
-complaints: Complaint[]
+{
+    "ok": boolean
+}
 ```
 
 ### Errors
 `401` Unauthorized: "No session"
 
-`403` Forbidden: "The user does not have the required permission"
+`403` Forbidden: "Publishers of activities have to be registered users"
 
-`404` Not Found: "There is no complaint with the given ID"
+`500` Internal Server Error: "Could not create activity in database"
 
-`403` Forbidden: "Insufficient permission to see the complaints"
+---
 
-`500` Internal Server Error: "Something went wrong trying to retrieve the complaints from the database"
+
+## Aktivität löschen
+
+Löscht die Aktivität mit der gegebenen ID. Der User muss dafür Admin sein.
+
+### Method: `POST`
+
+### File: `delete_activity.php`
+
+### Required Role (backend-handled): `Admin`
+
+### Body
+```JSON
+{
+    "activityId": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only admins can delete activities"
+
+`404` Not Found: "No activity with that id exists"
+
+`500` Internal Server Error: "Could not delete activity from database"
 
 ---
 
@@ -374,7 +538,7 @@ Werden die Rechnungen eines anderen Users angefragt, muss die Rolle Admin sein.
 
 ### File: `get_invoices.php`
 
-### Required Role (backend-handled): `Registered` (or higher)
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
@@ -391,7 +555,7 @@ invoices: Invoice[]
 ### Errors
 `401` Unauthorized: "No session"
 
-`403` Forbidden: "The requesting has to be at least registered"
+`403` Forbidden: "The requesting user has to be at least registered"
 
 `403` Forbidden: "The user does not have the required permission"
 
@@ -400,6 +564,85 @@ invoices: Invoice[]
 `404` Not Found: "There is no user with the given ID"
 
 `500` Internal Server Error:  "Something went wrong trying to retrieve the invoices of a user from the database"
+
+---
+
+
+## Buchungen eines Users erhalten
+
+Gibt die Buchungen des Users, dessen Email gegeben wird, zurück. Wird keine Mail angegeben, wird die aus der Session verwendet.
+
+Werden die Buchungen eines anderen Users angefragt, muss die Rolle Admin sein.
+
+### Method: `POST`
+
+### File: `get_users_bookings.php`
+
+### Required Role (backend-handled): `Registriert` (or higher)
+
+### Body
+```JSON
+{
+    "userEmail": "string" | null
+}   
+```
+
+### Response
+```JSON
+bookings: Booking[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "the requesting user has to be at least registered"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no user with the given mail"
+
+`404` Not Found: "User with ID not found in the database"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a user from the database"
+
+---
+
+## Buchungen eines Hauses erhalten
+
+Gibt die Buchungen des Hauses, dessen ID gegeben wird, zurück.
+
+Der anfragende User muss dafür entweder der Eigentümer des Hauses sein oder die Rolle Admin haben.
+
+### Method: `POST`
+
+### File: `get_users_bookings.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": "string"
+}   
+```
+
+### Response
+```JSON
+bookings: Booking[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The requesting user has to be a landlord or an admin"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no user with the given mail"
+
+`403` Forbidden: "Insufficient permission"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a home from the database"
 
 ---
 
