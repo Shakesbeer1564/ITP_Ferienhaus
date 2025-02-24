@@ -1,24 +1,6 @@
 import { Overview } from "./class/overview.js";
 import { HTTPService } from "./http-service.js";
 
-
-//? Beispiel:
-/*button events
-document.getElementById('test-click').addEventListener('click', loadData);
-
-async function loadData() {
-  const data = await HTTPService.getData('data.php');
-  
-  data.forEach(element => {
-    const node = document.createElement('li');
-    const text = document.createTextNode(`Name: ${element.name}, Alter: ${element.alter}`);
-    node.appendChild(text);
-
-    document.getElementById('testList').appendChild(node);
-  });
-}
-  */
-
 initializeData();
 
 //#region initialize_Data
@@ -39,9 +21,9 @@ function initialiseComponents(){
 }
 
 // TODO: Häuser holen testen
-async function loadHouses(query = null, data = null){
+async function loadHouses(data = null){
   try{
-    const res = await HTTPService.postData('get_houses', data, query);
+    const res = await HTTPService.postData('get_houses.php', data);
 
     if(res){
       renderHouseCards(res);
@@ -55,7 +37,7 @@ async function loadHouses(query = null, data = null){
 // TODO: Aktivitäten holen testen
 async function loadActivities() {
   try {
-    const res = await HTTPService.postData('get_activities', '');
+    const res = await HTTPService.postData('get_activities.php', '');
 
     if(res){
       renderActivityCards(res);
@@ -105,24 +87,26 @@ function loadStyle(href){
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
   const data = {
-    query: {
+    query: new URLSearchParams({
       place: inputs[0].value,
       region: inputs[1].value
-    },
-    data: {
-      roomCount: inputs[2].value,
-      bedCount: inputs[3].value,
-      startDate: inputs[4].value,
-      endDate: inputs[5].value
-    }
-  }
+    }).toString(),
+    roomCount: inputs[2].value,
+    bedCount: inputs[3].value,
+    startDate: inputs[4].value,
+    endDate: inputs[5].value
+  };
 
-  await loadHouses(query, data);
+  await loadHouses(data);
 })
 
 // Render room cards
 function renderHouseCards(cardElements){
   const roomContainer = document.getElementById('holiday-rooms-container');
+
+  while(roomContainer.firstChild){
+    roomContainer.removeChild(roomContainer.firstChild);
+  }
 
   cardElements.forEach(element => {
     const card = document.createElement('p-card');
@@ -142,18 +126,20 @@ function renderHouseCards(cardElements){
 function renderActivityCards(acCardElements){
   const activityContainer = document.getElementById('activity_card_container');
 
+  while(activityContainer.firstChild){
+    activityContainer.remove(activityContainer.firstChild);
+  }
+
   acCardElements.foreach((el) => {
     const card = document.createElement('p-card-activity');
-    card.setAttribute('id', element.id);
-    card.setAttribute('title', element.name);
-    card.setAttribute('price', element.price);
-    card.setAttribute('description', element.description);
+    card.setAttribute('id', el.id);
+    card.setAttribute('title', el.name);
+    card.setAttribute('price', el.price);
+    card.setAttribute('description', el.description);
 
     activityContainer.appendChild(card);
   })
 }
-
-
 
 // load login dialog
 document.querySelector('#open_Login').addEventListener('click', () => {
