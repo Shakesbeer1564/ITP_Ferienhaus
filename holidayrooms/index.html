@@ -6,11 +6,13 @@
   <title>Document</title>
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./script.js"></script>
+  <script defer src="./shared/card.js"></script>
+  <script defer src="./shared/activity-card.js"></script>
 </head>
 <body>
   <!-- app bar -->
   <div class="app-bar-container">
-    <div class="heading">
+    <div class="heading-title">
       <h1>Holidayrooms</h1>
     </div>
     <!-- Order overview -->
@@ -52,22 +54,7 @@
         <span>Ort</span>
       </div>
       <div class="result">
-        <input type="text" disabled="true" value="TestOrt"/>
-        <ul id="dropdown-place" class="dropdown-container">
-          <li>
-            <a>Place 1</a>
-          </li>
-          <li>
-            <a>Place 2</a>
-          </li>
-          <li>
-            <a>Place 3</a>
-          </li>
-        </ul>
-      </div>
-      <div id="place_filter" class="arrow">
-        <div class="arrow-implement">
-        </div>
+        <input id="place_input" class="input" type="text"/>
       </div>
     </div>
     <!--#endregion place_filter-->
@@ -78,25 +65,56 @@
         <span>Region</span>
       </div>
       <div class="result">
-        <input type="text" disabled="true" value="TestRegion"/>
-        <ul id="dropdown_region" class="dropdown-container">
-          <li>
-            <a>Option 1</a>
-          </li>
-          <li>
-            <a>Option 2</a>
-          </li>
-          <li>
-            <a>Option 3</a>
-          </li>
-        </ul>
-      </div>
-      <div id="region_filter" class="arrow">
-        <div class="arrow-implement">
-        </div>
+        <input id="region_input" class="input" type="text"/>
       </div>
     </div>
     <!--#endregion region_filter-->
+
+    <!--#region room-count_filter -->
+    <div class="filter">
+      <div class="filter-title">
+        <span>Room-Count</span>
+      </div>
+      <div class="input_number">
+        <input id="room_count" type="number" min="0" step="1" class="count input"/>
+      </div>
+    </div>
+    <!--#endregion room-count_filter-->
+
+    <!--#region room-count_filter -->
+    <div class="filter">
+      <div class="filter-title">
+        <span>Bed-Count</span>
+      </div>
+      <div class="input_number">
+        <input id="bed_count" type="number" min="0" step="1" class="count input"/>
+      </div>
+    </div>
+    <!--#endregion room-count_filter-->
+
+    <!--#region date_start -->
+    <div class="filter">
+      <div class="filter-title">
+        <span>Start-Date</span>
+      </div>
+      <div class="result">
+        <input id="date_start" class="input" type="date"/>
+      </div>
+    </div>
+    <!--#endregion date_start-->
+
+    <!--#region date_end -->
+    <div class="filter">
+      <div class="filter-title">
+        <span>End-Date</span>
+      </div>
+      <div class="result">
+        <input id="date_end" class="input" type="date"/>
+      </div>
+    </div> 
+    <!--#endregion date_end-->
+
+    <button id="apply_filter" class="apply-filter">Apply Filter</button>
   </div>
 
 
@@ -109,5 +127,36 @@
   </div>
 
   <div id="dark_background" class="dark-background"></div>
+
+  <div class="holiday-rooms-container">
+    <!-- Nur ein Beispiel ==> Das wird später dynamisch erzeugt -->
+    <!-- <p-card
+      image="./assets/dreaming-summer-image-1920x1080_48774-mm-90.jpg" 
+      region="Bayern"
+      place="SUII"
+      room_count="2"
+      bed_count="1"
+      description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      button-text="Book">
+    </p-card> -->
+  </div>
+
+  
+
+  <!-- Activities -->
+  <div class="container-filterbar">
+    <div class="heading">
+      <h3>Activities</h3>
+    </div>
+  </div>
+
+  <div id="activity_card_container" class="activity-card-container">
+    <!-- <p-card-activity 
+      title="Wandern" 
+      description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." 
+      price="10€" 
+      button-text="Book">
+    </p-card-activity> -->
+  </div>
 </body>
 </html>
