@@ -129,6 +129,42 @@ Changes the password hash of the user from the session. The given new password i
 ---
 
 
+## Delete User
+
+Deletes the user with the given ID from the database.
+
+### Method: `POST`
+
+### File: `delete_user.php`
+
+### Required Role (backend-handled): `Admin`
+
+### Body
+```JSON
+{
+    "userId": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only admins can delete users"
+
+`404` Not Found: "User with the given ID not found"
+
+`500` Internal Server Error: "Something went wrong while trying to delete the user from the database"
+
+---
+
+
 ## Suche nach Ferienhaus
 
 Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
