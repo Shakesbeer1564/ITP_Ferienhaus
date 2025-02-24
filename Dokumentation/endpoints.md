@@ -97,6 +97,38 @@ Löscht die aktuelle Session des Users. Das funktioniert auch, wenn der User kei
 ---
 
 
+## Reset Password
+
+Changes the password hash of the user from the session. The given new password is hashed and then written into the database.
+
+### Method: `POST`
+
+### File: `reset_password.php`
+
+### Body
+```JSON
+{
+    "newPassword": "string"
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`404` Not Found: "User from session not found"
+
+`500` Internal Server Error: "Something went wrong while trying to update the password hash in the database"
+
+---
+
+
 ## Suche nach Ferienhaus
 
 Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
