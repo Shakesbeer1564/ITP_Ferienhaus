@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Prepare and call the stored procedure
     $stmt = $conn->prepare("CALL GetBookingByHome(?, ?)");
-    $stmt->bind_param("ss", $house_id, $own_user_id);
+    $stmt->bind_param("ss", $own_user_id, $house_id);
     try {
         $ok = $stmt->execute();
     } catch (Exception $e) {
