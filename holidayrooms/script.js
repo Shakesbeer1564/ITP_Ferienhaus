@@ -1,4 +1,3 @@
-import { InputRequestHandler } from "./class/input-request-handler.js";
 import { Overview } from "./class/overview.js";
 import { HTTPService } from "./http-service.js";
 
@@ -26,9 +25,6 @@ initializeData();
 function initializeData(){
   initialiseComponents();
   loadHouses();
-
-  const inputHandler = new InputRequestHandler('.input');
-  inputHandler.request();
 }
 
 function initialiseComponents(){
@@ -42,16 +38,13 @@ function initialiseComponents(){
 }
 
 // TODO: Häuser holen testen
-async function loadHouses(ort = '', region = ''){
-  const searchParams = {
-    ort: ort,
-    region: region
-  };
-
+async function loadHouses(query = null, data = null){
   try{
-    // const data = await HTTPService.getData('get_houses', searchParams);
+    // const res = await HTTPService.postData('get_houses', data, query);
 
-    // TODO: Häuser in das HTML hinzufügen mit der shared-card-componente
+    // if(res){
+    //   this.renderHouseCards(res);
+    // }
   }
   catch(err){
     console.log('SOMETHING WENT WRONG WHILE GETTING THE HOUSES: ', err);
@@ -95,9 +88,39 @@ function loadStyle(href){
 }
 //#endregion helper_functions_loadComponents
 
-document.getElementById('place_input').addEventListener('input', (event) => {
-  console.log(event.target.value);
+document.getElementById('apply_filter').addEventListener('click', async () => {
+  const inputs = document.querySelectorAll('.input');
+  const query = {
+    place: inputs[0].value,
+    region: inputs[1].value
+  };
+  const data = {
+    roomCount: inputs[2].value,
+    bedCount: inputs[3].value,
+    startDate: inputs[4].value,
+    endDate: inputs[5].value
+  };
+
+  await loadHouses(query, data);
 })
+
+// Render room cards
+function renderHouseCards(cardElements){
+  const roomContainer = document.getElementById('holiday-rooms-container');
+
+  cardElements.forEach(element => {
+    const card = document.createElement('p-card');
+    card.setAttribute('image', element.image);
+    card.setAttribute('region', element.region);
+    card.setAttribute('place', element.place);
+    card.setAttribute('room_count', element.roomCount);
+    card.setAttribute('bed_count', element.bedCount);
+    card.setAttribute('description', element.description);
+    card.setAttribute('button-text', 'Book');
+
+    roomContainer.appendChild(card);
+  });
+}
 
 // load login dialog
 document.querySelector('#open_Login').addEventListener('click', () => {

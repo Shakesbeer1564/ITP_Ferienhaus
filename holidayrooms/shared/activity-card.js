@@ -1,56 +1,44 @@
-class CardComponent extends HTMLElement{
+class ActivityCardComponent extends HTMLElement{
   constructor(){
     super();
     this.attachShadow({ mode: 'open' });
 
     const container = document.createElement('div');
-    container.classList.add('card');
+    container.classList.add('ac_card');
 
+    // Header
     const header = document.createElement('div');
-    header.classList.add('card_header');
+    header.classList.add('ac_header');
+    const title = document.createElement('h2');
+    title.textContent = this.getAttribute('title') || 'No title available';
 
-    const img = document.createElement('img');
-    img.src = this.getAttribute('image') || 'No image available';
-    img.alt = 'Card image';
-
+    // Body
     const body = document.createElement('div');
-    body.classList.add('text-container');
+    body.classList.add('ac_body');
 
-    const reg_Text = document.createElement('p');
-    reg_Text.classList.add('reg-text');
-    reg_Text.textContent = `Region: ${this.getAttribute('region') || 'No region'}`;
-
-    const placeText = document.createElement('p');
-    placeText.classList.add('place-text');
-    placeText.textContent = `Place: ${this.getAttribute('place') || 'No place'}`;
-
-    const roomText = document.createElement('p');
-    roomText.classList.add('room-count-text');
-    roomText.textContent = `Room-Count: ${this.getAttribute('room_count') || 'No place'}`;
-
-    const bedText = document.createElement('p');
-    bedText.classList.add('bed-count-text');
-    bedText.textContent = `Bed-Count: ${this.getAttribute('bed_count') || 'No place'}`;
 
     const description = document.createElement('p');
-    description.classList.add('description');
+    description.classList.add('ac_desc');
     description.textContent = `Description: ${this.getAttribute('description') || 'No description'}`;
+  
+    const price = document.createElement('p');
+    price.classList.add('ac_price');
+    price.textContent = `Price: ${this.getAttribute('price') || 'No price available'}`;
 
+    // Footer
     const footer = document.createElement('div');
-    footer.classList.add('card_footer');
+    footer.classList.add('ac_card_footer');
 
     const button = document.createElement('button');
     button.textContent = this.getAttribute('button-text') || 'No text available';
     button.onclick = () => {
-      console.log(`Geklickt: ${this.getAttribute('text')}`); // --> Statt dem hier die ID holen
+      // const activityID = this.getAttribute('id') ;
+      console.log(`Geklickt: ${this.getAttribute('title')}`); // --> Statt dem hier die ID holen
     }
 
     // Zusammenfügen
-    header.appendChild(img);
-    body.appendChild(reg_Text);
-    body.appendChild(placeText);
-    body.appendChild(roomText);
-    body.appendChild(bedText);
+    header.appendChild(title);
+    body.appendChild(price);
     body.appendChild(description);
     footer.appendChild(button);
 
@@ -59,14 +47,14 @@ class CardComponent extends HTMLElement{
     container.appendChild(footer);
 
 
-    // Styling
+    // Adding style
     const style = document.createElement('style');
     style.textContent = `
-      .card{
+      .ac_card{
         border: 1px solid black; 
         border-radius: 10px; 
         width: 20em; 
-        height: 25em; 
+        height: 20em; 
         margin: 20px 10px 10px 10px;
         display: flex; 
         flex-direction: column; 
@@ -74,41 +62,43 @@ class CardComponent extends HTMLElement{
         box-shadow: 0px 0px 20px 1px rgba(0, 0, 0, 0.5);
         overflow: hidden;
       }
-      
-      .card .card_header{
+
+      .ac_card .ac_header{
         position: relative; 
         width: 100%; 
-        height: 40%; 
+        height: 20%; 
         overflow: hidden; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid black;
       }
 
-      .card .card_header img{
-        width: 100%;  
-        height: 100%;  
-        object-fit: cover;  
+      .ac_card .ac_header h2{
+        text-align: center;
       }
 
-      .card .text-container{
-        height: calc(100% - 40% - 40.69px);
+      .ac_card .ac_body{
+        height: calc(100% - 20% - 40.69px);
         display: flex;
         flex-direction: column;
         margin-left: 5px;
         overflow-y: auto;
       }
 
-      .card .text-container p{
+      .ac_card .ac_body p{
         margin: 5px;
         flex: 1;
       }
 
-      .card .card_footer{
+      .ac_card .ac_card_footer{
         height: 40.69px;
         display: flex;
         align-items: center;
         border-top: 1px solid black;
       }
-      
-      .card .card_footer button{
+
+      .ac_card .ac_card_footer button{
         margin-left: auto;
         margin-right: 5px;
         color: rgb(78, 74, 74);
@@ -120,11 +110,11 @@ class CardComponent extends HTMLElement{
         cursor: pointer;
       }
 
-      .card .card_footer button:hover{
+      .ac_card .ac_card_footer button:hover{
         background-color: rgb(214, 214, 214);
       }
 
-      .card .card_footer button:active{
+      .ac_card .ac_card_footer button:active{
         background-color: rgb(198, 198, 198);
       }
 
@@ -151,6 +141,6 @@ class CardComponent extends HTMLElement{
 
     this.shadowRoot.append(style, container);
   }
-}
+} 
 
-customElements.define('p-card', CardComponent);
+customElements.define('p-card-activity', ActivityCardComponent);

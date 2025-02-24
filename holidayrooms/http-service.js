@@ -6,7 +6,7 @@ class HttpService{
   }
 
   async getData(endpoint, searchParams = null){
-    const url = new URL(`${this.baseURL}/${endpoint}`);
+    const url = new URL(`/ITP_Ferienhaus/holidayrooms${this.baseURL}/${endpoint}`, window.location.origin);
     if(searchParams){
       Object.keys(searchParams).forEach(key => url.searchParams.append(key, searchParams[key]));
     }
@@ -31,8 +31,18 @@ class HttpService{
     }
   }
 
-  async postData(endpoint, data){
-    const res = await fetch(`${this.baseURL}/${endpoint}`, {
+  async postData(endpoint, data, searchParams = null){
+    let url;
+
+    if(!searchParams){
+      url = `${this.baseURL}/${endpoint}`;
+    }
+    else{
+      url = new URL(`/ITP_Ferienhaus/holidayrooms${this.baseURL}/${endpoint}`, window.location.origin);
+      Object.keys(searchParams).forEach(key => url.searchParams.append(key, searchParams[key]));
+    }
+
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -79,4 +89,4 @@ class HttpService{
   }
 }
 
-export const HTTPService = new HttpService('./backend/endpoints');
+export const HTTPService = new HttpService('/backend/endpoints');
