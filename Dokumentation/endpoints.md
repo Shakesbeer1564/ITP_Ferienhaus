@@ -75,6 +75,28 @@ Sind die Anmeldedaten invalide, wird keine Session erstellt und ein Fehler zurü
 ---
 
 
+## Abmelden
+
+Löscht die aktuelle Session des Users. Das funktioniert auch, wenn der User keine Session hat.
+
+### Method: `POST`
+
+### File: `sign_out.php`
+
+### Body
+```JSON
+{}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+---
+
+
 ## Suche nach Ferienhaus
 
 Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
