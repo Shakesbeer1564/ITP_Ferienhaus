@@ -214,8 +214,8 @@ html, body{
   width: 100%;
   height: 100%;
   border: none;
-  padding-left: 10px;
   font-size: 12pt;
+  text-align: center;
 }
 
 .filter .result input:focus{
@@ -232,15 +232,6 @@ html, body{
   width: 100%;
   height: 100%;
   border: none;
-  padding-left: 10px;
-  font-size: 12pt;
-}
-
-.filter .input_number .count{
-  width: 100%;
-  height: 100%;
-  border: none;
-  padding-right: 10px;
   font-size: 12pt;
   text-align: center;
 }
