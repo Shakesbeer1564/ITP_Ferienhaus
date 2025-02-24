@@ -402,6 +402,42 @@ Registrierte Nutzer können Aktivitäten anbieten. Dafür muss Aktivitätsname, 
 ---
 
 
+## Aktivität löschen
+
+Löscht die Aktivität mit der gegebenen ID. Der User muss dafür Admin sein.
+
+### Method: `POST`
+
+### File: `delete_activity.php`
+
+### Required Role (backend-handled): `Admin`
+
+### Body
+```JSON
+{
+    "activityId": number
+}
+```
+
+### Response
+```JSON
+{
+    "ok": boolean
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only admins can delete activities"
+
+`404` Not Found: "No activity with that id exists"
+
+`500` Internal Server Error: "Could not delete activity from database"
+
+---
+
+
 ## Rechnungen eines Users erhalten
 
 Gibt die Rechnungen des Users, dessen Email gegeben wird, zurück. Wird keine Mail angegeben, wird die aus der Session verwendet.
