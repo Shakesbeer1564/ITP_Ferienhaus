@@ -40,14 +40,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = create_db_connection();
 
     // Prepare and call the stored procedure
-    $stmt = $conn->prepare("CALL GetInvoicesByUser(?)");
+    $stmt = $conn->prepare("CALL GetBookingByUser(?)");
     $stmt->bind_param("s", $user_id);
     try {
         $ok = $stmt->execute();
     } catch (Exception $e) {
         // Check for custom sql error from procedure
         if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
-            send_http_status(404, "There is no user with the given ID");
+            send_http_status(404, "User with ID not found in the database");
         }
 
         // Rethrow the exception if it is not a custom error
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!$ok) {
-        send_http_status(500, "Something went wrong trying to retrieve the invoices of a user from the database");
+        send_http_status(500, "Something went wrong trying to retrieve the bookings of a user from the database");
     }
 
     // Get the result set
@@ -66,10 +66,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Extract entries and build array
     $row = $result->fetch_assoc();
-    $invoices = [];
+    $bookings = [];
     while ($row = $result->fetch_assoc()) {
-        $invoices[] = $row;
+        $bookings[] = $row;
     }
 
-    send_data($invoices);
+    send_data($bookings);
 }

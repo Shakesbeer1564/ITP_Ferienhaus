@@ -404,6 +404,46 @@ invoices: Invoice[]
 ---
 
 
+## Buchungen eines Users erhalten
+
+Gibt die Buchungen des Users, dessen Email gegeben wird, zurück. Wird keine Mail angegeben, wird die aus der Session verwendet.
+
+Werden die Buchungen eines anderen Users angefragt, muss die Rolle Admin sein.
+
+### Method: `POST`
+
+### File: `get_users_bookings.php`
+
+### Required Role (backend-handled): `Registered` (or higher)
+
+### Body
+```JSON
+{
+    "userEmail": "string" | null
+}   
+```
+
+### Response
+```JSON
+bookings: Booking[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The requesting has to be at least registered"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no user with the given mail"
+
+`404` Not Found: "User with ID not found in the database"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a user from the database"
+
+---
+
+
 ---
 ---
 # TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen
