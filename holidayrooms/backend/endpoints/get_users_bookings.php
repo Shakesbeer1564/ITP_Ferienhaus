@@ -15,13 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!has_permission(ROLE_REGISTERED)) {
-        send_http_status(403, "The requesting has to be at least registered");
+        send_http_status(403, "The requesting user has to be at least registered");
     }
 
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
 
     $own_user_mail = $_SESSION["email"];
+    $own_user_id = get_user_id_by_mail($own_user_mail);
 
     $user_mail = $data["userEmail"];
     if ($user_mail == null) {
@@ -40,8 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = create_db_connection();
 
     // Prepare and call the stored procedure
-    $stmt = $conn->prepare("CALL GetBookingByUser(?)");
-    $stmt->bind_param("s", $user_id);
+    $stmt = $conn->prepare("CALL GetBookingByUser(?, ?)");
+    $stmt->bind_param("ss", $user_id, $own_user_id);
     try {
         $ok = $stmt->execute();
     } catch (Exception $e) {

@@ -14,40 +14,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         send_http_status(401, "No session");
     }
 
-    if (!has_permission(ROLE_REGISTERED)) {
-        send_http_status(403, "The requesting user has to be at least registered");
+    if (!has_permission(ROLE_LANDLORD)) {
+        send_http_status(403, "The requesting user has to be a landlord or an admin");
     }
 
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
 
+    $house_id = $data["houseId"];
+
     $own_user_mail = $_SESSION["email"];
-
-    $user_mail = $data["userEmail"];
-    if ($user_mail == null) {
-        $user_mail = $own_user_mail;
-    }
-
-    if (!has_permission(ROLE_ADMIN) && $user_mail != $own_user_mail) {
-        send_http_status(403, "The user does not have the required permission");
-    }
-
-    $user_id = get_user_id_by_mail($user_mail);
-    if ($user_id == null) {
-        send_http_status(404, "There is no user with the given mail");
-    }
+    $own_user_id = get_user_id_by_mail($own_user_mail);
 
     $conn = create_db_connection();
 
     // Prepare and call the stored procedure
-    $stmt = $conn->prepare("CALL GetInvoicesByUser(?)");
-    $stmt->bind_param("s", $user_id);
+    $stmt = $conn->prepare("CALL GetBookingByHome(?, ?)");
+    $stmt->bind_param("ss", $house_id, $own_user_id);
     try {
         $ok = $stmt->execute();
     } catch (Exception $e) {
         // Check for custom sql error from procedure
         if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
-            send_http_status(404, "There is no user with the given ID");
+            send_http_status(403, "Insufficient permission");
         }
 
         // Rethrow the exception if it is not a custom error
@@ -55,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (!$ok) {
-        send_http_status(500, "Something went wrong trying to retrieve the invoices of a user from the database");
+        send_http_status(500, "Something went wrong trying to retrieve the bookings of a home from the database");
     }
 
     // Get the result set
@@ -66,10 +55,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Extract entries and build array
     $row = $result->fetch_assoc();
-    $invoices = [];
+    $bookings = [];
     while ($row = $result->fetch_assoc()) {
-        $invoices[] = $row;
+        $bookings[] = $row;
     }
 
-    send_data($invoices);
+    send_data($bookings);
 }

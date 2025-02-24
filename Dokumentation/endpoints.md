@@ -374,7 +374,7 @@ Werden die Rechnungen eines anderen Users angefragt, muss die Rolle Admin sein.
 
 ### File: `get_invoices.php`
 
-### Required Role (backend-handled): `Registered` (or higher)
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
@@ -391,7 +391,7 @@ invoices: Invoice[]
 ### Errors
 `401` Unauthorized: "No session"
 
-`403` Forbidden: "The requesting has to be at least registered"
+`403` Forbidden: "The requesting user has to be at least registered"
 
 `403` Forbidden: "The user does not have the required permission"
 
@@ -414,7 +414,7 @@ Werden die Buchungen eines anderen Users angefragt, muss die Rolle Admin sein.
 
 ### File: `get_users_bookings.php`
 
-### Required Role (backend-handled): `Registered` (or higher)
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
@@ -431,7 +431,7 @@ bookings: Booking[]
 ### Errors
 `401` Unauthorized: "No session"
 
-`403` Forbidden: "The requesting has to be at least registered"
+`403` Forbidden: "the requesting user has to be at least registered"
 
 `403` Forbidden: "The user does not have the required permission"
 
@@ -440,6 +440,45 @@ bookings: Booking[]
 `404` Not Found: "User with ID not found in the database"
 
 `500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a user from the database"
+
+---
+
+## Buchungen eines Hauses erhalten
+
+Gibt die Buchungen des Hauses, dessen ID gegeben wird, zurück.
+
+Der anfragende User muss dafür entweder der Eigentümer des Hauses sein oder die Rolle Admin haben.
+
+### Method: `POST`
+
+### File: `get_users_bookings.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": "string"
+}   
+```
+
+### Response
+```JSON
+bookings: Booking[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The requesting user has to be a landlord or an admin"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no user with the given mail"
+
+`403` Forbidden: "Insufficient permission"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a home from the database"
 
 ---
 
