@@ -289,6 +289,42 @@ Löscht das Haus mit der gegebenen ID. Dafür muss der User aus der Session der 
 ---
 
 
+## Mängelbestande eines Hauses erhalten
+
+Gibt die Mängelbestande des Hauses mit der gegebenen ID zurück. Dafür muss der Nutzer Besitzer des Hauses oder Admin sein.
+
+### Method: `POST`
+
+### File: `get_complaints.php`
+
+### Required Role (backend-handled): `Vermieter` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": "string"
+}   
+```
+
+### Response
+```JSON
+complaints: Complaint[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "The user does not have the required permission"
+
+`404` Not Found: "There is no complaint with the given ID"
+
+`403` Forbidden: "Insufficient permission to see the complaints"
+
+`500` Internal Server Error: "Something went wrong trying to retrieve the complaints from the database"
+
+---
+
+
 ## Mängelbestand reparieren
 
 Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung' und 'Gelöst'.
@@ -328,38 +364,40 @@ Setzt den Status eines Mängelbestands. Valide Werte sind 'Neu', 'In Bearbeitung
 ---
 
 
-## Mängelbestande eines Hauses erhalten
+## Aktivität anbieten
 
-Gibt die Mängelbestande des Hauses mit der gegebenen ID zurück. Dafür muss der Nutzer Besitzer des Hauses oder Admin sein.
+Registrierte Nutzer können Aktivitäten anbieten. Dafür muss Aktivitätsname, Beschreibung, Preis, Teilnehmeranzahl und die ID der Stadt, in der die Aktivität stattfindet angegeben werden. 
 
 ### Method: `POST`
 
-### File: `get_complaints.php`
+### File: `add_activity.php`
 
-### Required Role (backend-handled): `Vermieter` (or higher)
+### Required Role (backend-handled): `Registriert` (or higher)
 
 ### Body
 ```JSON
 {
-    "houseId": "string"
-}   
+    "name": "string",
+    "description": "string",
+    "price": number,
+    "participantCount": number,
+    "cityId": number
+}
 ```
 
 ### Response
 ```JSON
-complaints: Complaint[]
+{
+    "ok": boolean
+}
 ```
 
 ### Errors
 `401` Unauthorized: "No session"
 
-`403` Forbidden: "The user does not have the required permission"
+`403` Forbidden: "Publishers of activities have to be registered users"
 
-`404` Not Found: "There is no complaint with the given ID"
-
-`403` Forbidden: "Insufficient permission to see the complaints"
-
-`500` Internal Server Error: "Something went wrong trying to retrieve the complaints from the database"
+`500` Internal Server Error: "Could not create activity in database"
 
 ---
 
