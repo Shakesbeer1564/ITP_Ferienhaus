@@ -1,0 +1,344 @@
+html,
+body {
+  margin: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* App-bar styling */
+.app-bar-container {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  height: 60px;
+  background-color: rgb(234, 234, 234);
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  gap: 5px;
+}
+
+.app-bar-container .heading-title {
+  flex: 1;
+  height: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-bar-container .heading-title h1 {
+  letter-spacing: 10px;
+}
+
+.app-bar-container .overview-container {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 3px;
+  height: 35px;
+  overflow: hidden;
+}
+
+.app-bar-container .overview-container .title {
+  /*Title container*/
+  position: relative;
+  height: 100%;
+  color: rgb(43, 99, 210);
+  border-right: 1px solid rgb(173, 173, 173);
+  background-color: rgb(202, 202, 202);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.arrow {
+  margin-left: 10px;
+  height: 100%;
+  border-left: 1px solid #d6d6d6;
+  cursor: pointer;
+}
+
+.arrow-implement {
+  width: 0;
+  height: 0;
+  margin: 10px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid black;
+  display: inline-block;
+}
+
+.app-bar-container .buttons {
+  margin-left: auto;
+  margin-right: 15px;
+  height: 35px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-bar-container .buttons button {
+  color: rgb(78, 74, 74);
+  border: 1px solid rgb(185, 185, 185);
+  border-radius: 2px;
+  background-color: rgb(227, 227, 227);
+  width: 100px;
+  height: 100%;
+}
+
+.app-bar-container .buttons button:hover {
+  cursor: pointer;
+  background-color: rgb(214, 214, 214);
+}
+
+.app-bar-container .buttons button:active {
+  background-color: rgb(198, 198, 198);
+}
+
+/* !Karussell-Container FUNKTIONIERT NOCH NICHT !!! */
+.carousel {
+  width: 80%;
+  max-width: 800px;
+  overflow: hidden;
+  position: relative;
+  margin: 20px auto;
+  /* Zentrierung */
+}
+
+/* Container für alle Bilder */
+.carousel-images {
+  display: flex;
+  width: 600%;
+  /* 6 Bilder nebeneinander, also 6 * 100% */
+  animation: slide 36s infinite linear;
+  /* 36s für alle Bilder, unendlich wiederholen */
+}
+
+/* Jedes Bild im Karussell */
+.carousel-image {
+  width: 100%;
+  /* Jedes Bild nimmt die volle Breite des Containers ein */
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #8bc34a;
+  font-size: 50px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Animation für den kontinuierlichen Bildwechsel */
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+
+  /* Bild 1 sichtbar */
+  16.66% {
+    transform: translateX(-100%);
+  }
+
+  /* Bild 2 sichtbar */
+  33.33% {
+    transform: translateX(-200%);
+  }
+
+  /* Bild 3 sichtbar */
+  50% {
+    transform: translateX(-300%);
+  }
+
+  /* Bild 4 sichtbar */
+  66.66% {
+    transform: translateX(-400%);
+  }
+
+  /* Bild 5 sichtbar */
+  83.33% {
+    transform: translateX(-500%);
+  }
+
+  /* Bild 6 sichtbar */
+  100% {
+    transform: translateX(-600%);
+  }
+
+  /* Zurück zu Bild 1 */
+}
+
+/* Filterbar for rooms booking */
+.container-filterbar {
+  margin-top: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  width: 100%;
+  min-height: 50px;
+  background-color: rgb(234, 234, 234);
+}
+
+.container-filterbar .apply-filter {
+  /* margin-left: auto;
+  margin-right: 20px; */
+  margin: 2px 10px 2px auto;
+  border: 1px solid #e3e3e3;
+  border-radius: 3px;
+  height: 35px;
+  width: 100px;
+  overflow: hidden;
+  color: white;
+  background-color: rgb(43, 99, 210);
+}
+
+
+.container-filterbar .apply-filter:hover {
+  cursor: pointer;
+  background-color: rgb(214, 214, 214);
+  color: black;
+}
+
+.container-filterbar .apply-filter:active {
+  background-color: rgb(198, 198, 198);
+  color: black;
+}
+
+.heading {
+  margin-right: auto;
+  margin-left: 10px;
+}
+
+.filter {
+  display: flex;
+  border: 1px solid #e3e3e3;
+  border-radius: 3px;
+  width: fit-content;
+  background-color: #cacaca;
+  margin: 2px;
+  height: 30px;
+  position: relative;
+}
+
+.filter .filter-title {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #e3e3e3;
+  height: 100%;
+}
+
+.filter .result {
+  width: 100%;
+  height: 100%;
+  width: 12em;
+}
+
+.filter .result input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 12pt;
+  text-align: center;
+}
+
+.filter .result input:focus {
+  border: none;
+  outline: none;
+}
+
+.filter .input_number {
+  width: 3em;
+  height: 100%;
+}
+
+.filter .input_number .count {
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 12pt;
+  text-align: center;
+}
+
+.filter .input_number .count:focus {
+  border: none;
+  outline: none;
+}
+
+/* Login Dialog */
+.login-dialog {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 30%;
+  height: 50%;
+}
+
+.reg-dialog {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 25%;
+  height: 70%;
+}
+
+/* Dark background when login or registration will be displayed */
+.dark-background {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  /* Halbtransparentes Overlay */
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+}
+
+.holiday-rooms-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.activity-card-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
