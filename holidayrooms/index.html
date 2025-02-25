@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./script.js"></script>
+  <script defer src="./shared/card.js"></script>
+  <script defer src="./shared/activity-card.js"></script>
+</head>
+<body>
+  <!-- app bar -->
+  <div class="app-bar-container">
+    <div class="heading-title">
+      <h1>Holidayrooms</h1>
+    </div>
+    <!-- Order overview -->
+    <div class="overview-container">
+      <div class="title">
+        <span>Shopping</span>
+      </div>
+      <div class="arrow">
+        <div class="arrow-implement">
+        </div>
+      </div>
+    </div>
+    <div class="buttons">
+      <button id="open_Login">Login</button>
+      <button id="open_registration">Registration</button>
+    </div>
+  </div>
+
+  <!-- !Slider funktioniert noch nicht -->
+  <!-- <div class="carousel">
+    <div class="carousel-images">
+      <img src="./assets/16340d92-59e5-4fd6-b880-088f5b7a7383.jpg" alt="Bild 1" class="carousel-image">
+      <img src="./assets/21-vorsee-umlaufende-sonnenterrasse-und-umzaeunter-garten-1920x1080.jpg" alt="Bild 2" class="carousel-image">
+      <img src="./assets/5bdef9c5-329b-4bbf-8bf8-9057e983a72e.jpg" alt="Bild 3" class="carousel-image">
+      <img src="./assets/ferienhaus-suedschweden-rechts.jpg" alt="Bild 4" class="carousel-image">
+      <img src="./assets/b87a2203-aafb-4329-91d4-5acd072cdab4.jpg" alt="Bild 5" class="carousel-image">
+      <img src="./assets/ferienhaus-suedschweden-vallesborg.jpg" alt="Bild 6" class="carousel-image">
+    </div>
+  </div> -->
+
+  <div class="container-filterbar">
+    <div class="heading">
+      <h3>Rooms-Booking</h3>
+    </div>
+
+    <div class="filterbar">
+      <!--#region place_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Ort:</span>
+        </div>
+        <div class="result">
+          <input id="place_input" class="input" type="text"/>
+        </div>
+      </div>
+      <!--#endregion place_filter-->
+
+      <!--#region region_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Region:</span>
+        </div>
+        <div class="result">
+          <input id="region_input" class="input" type="text"/>
+        </div>
+      </div>
+      <!--#endregion region_filter-->
+
+      <!--#region room-count_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Room-Count:</span>
+        </div>
+        <div class="input_number">
+          <input id="room_count" type="number" min="0" step="1" class="count input"/>
+        </div>
+      </div>
+      <!--#endregion room-count_filter-->
+
+      <!--#region room-count_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Bed-Count:</span>
+        </div>
+        <div class="input_number">
+          <input id="bed_count" type="number" min="0" step="1" class="count input"/>
+        </div>
+      </div>
+      <!--#endregion room-count_filter-->
+
+      <!--#region date_start -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Start-Date:</span>
+        </div>
+        <div class="result">
+          <input id="date_start" class="input" type="date"/>
+        </div>
+      </div>
+      <!--#endregion date_start-->
+
+      <!--#region date_end -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>End-Date:</span>
+        </div>
+        <div class="result">
+          <input id="date_end" class="input" type="date"/>
+        </div>
+      </div> 
+      <!--#endregion date_end-->
+    </div>
+    <button id="apply_filter" class="apply-filter">Apply Filter</button>
+  </div>
+
+
+  <!-- Login-Dialog -->
+  <div id="login_dialog" class="login-dialog">
+  </div>
+
+  <!-- Registration-Dialog -->
+  <div id="reg_dialog" class="reg-dialog">
+  </div>
+
+  <div id="dark_background" class="dark-background"></div>
+
+  <div id="holiday-rooms-container" class="holiday-rooms-container">
+    <!-- Nur ein Beispiel ==> Das wird später dynamisch erzeugt -->
+    <!-- <p-card
+      image="./assets/dreaming-summer-image-1920x1080_48774-mm-90.jpg" 
+      region="Bayern"
+      place="SUII"
+      room_count="2"
+      bed_count="1"
+      description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      button-text="Book">
+    </p-card> -->
+  </div>
+
+  
+
+  <!-- Activities -->
+  <div class="container-filterbar">
+    <div class="heading">
+      <h3>Activities</h3>
+    </div>
+
+    <div class="filterbar">
+      <div class="filter search">
+        <div class="filter-title">
+          <span>Suche:</span>
+        </div>
+        <div class="result">
+          <input id="search" class="input" type="text"/>
+        </div>
+      </div> 
+    </div>
+
+    <button id="apply_filter_ac" class="apply-filter">Apply Filter</button>
+  </div>
+
+  <div id="activity_card_container" class="activity-card-container">
+    <!-- <p-card-activity 
+      title="Wandern" 
+      description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." 
+      price="10€" 
+      button-text="Book">
+    </p-card-activity> -->
+  </div>
+</body>
+</html>

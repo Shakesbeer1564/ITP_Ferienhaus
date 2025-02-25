@@ -1,4 +1,4 @@
-import { Role } from "./rolle";
+import { Role } from "./rolle.js";
 
 export class Kunde{
   id;
