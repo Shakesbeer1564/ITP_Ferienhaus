@@ -147,13 +147,12 @@ function renderActivityCards(acCardElements){
     }
   }
   
-
   for(let el of acCardElements){
     const card = document.createElement('p-card-activity');
-    card.setAttribute('id', el.id);
-    card.setAttribute('title', el.name);
-    card.setAttribute('price', el.price);
-    card.setAttribute('description', el.description);
+    card.setAttribute('id', el.AktivitätsID);
+    card.setAttribute('title', el.Name);
+    card.setAttribute('price', el.Preis);
+    card.setAttribute('description', el.Beschreibung);
 
     activityContainer.appendChild(card);
   }
