@@ -1,5 +1,6 @@
-import { Overview } from "./class/overview.js";
 import { HTTPService } from "./http-service.js";
+const { getOverviewClass } = await import('./class/overview.js');
+const Overview = await getOverviewClass();
 
 initializeData();
 
@@ -131,7 +132,7 @@ function renderHouseCards(cardElements){
     card.setAttribute('room_count', element.AnzahlZimmer);
     card.setAttribute('bed_count', element.AnzahlBetten);
     card.setAttribute('description', element.Beschreibung);
-    card.setAttribute('button-text', 'Book');
+    card.setAttribute('price', element.Preis);
 
     roomContainer.appendChild(card);
   });
@@ -143,7 +144,7 @@ function renderActivityCards(acCardElements){
 
   if(activityContainer.firstChild){
     while(activityContainer.firstChild){
-      activityContainer.remove(activityContainer.firstChild);
+      activityContainer.removeChild(activityContainer.firstChild);
     }
   }
   
@@ -152,13 +153,33 @@ function renderActivityCards(acCardElements){
     card.setAttribute('id', el.AktivitätsID);
     card.setAttribute('title', el.Name);
     card.setAttribute('price', el.Preis);
+    card.setAttribute('participants', el.AnzahlTeilnehmer);
+    card.setAttribute('place'. el.OrtName)
     card.setAttribute('description', el.Beschreibung);
 
     activityContainer.appendChild(card);
   }
 }
 
-// load login dialog
+//------------------------------------------
+//----------- Shoping-Card -----------------
+//------------------------------------------
+document.getElementById('shopIcon').addEventListener('click', () => {
+  let cardDialog = document.getElementById('cardDialog');
+  cardDialog.style.display = cardDialog.style.display === 'block' ? 'none' : 'block';
+
+  if(cardDialog.style.display === 'block')
+    renderShopItems();
+
+})
+
+function renderShopItems(){
+  console.log(Overview.getInstance().getHouseItem());
+}
+
+//------------------------------------------
+//----------- Dialog-Handling --------------
+//------------------------------------------
 document.querySelector('#open_Login').addEventListener('click', () => {
   document.getElementById('login_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';

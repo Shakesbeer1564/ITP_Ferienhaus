@@ -16,8 +16,6 @@ html, body{
   height: 60px;
   background-color: rgb(234, 234, 234);
   align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
   gap: 5px;
 }
 
@@ -36,43 +34,41 @@ html, body{
 }
 
 .app-bar-container .overview-container{
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  border: 1px solid rgb(173, 173, 173);
-  border-radius: 3px;
-  height: 35px;
-  overflow: hidden;
-}
-
-.app-bar-container .overview-container .title{ /*Title container*/
   position: relative;
-  height: 100%;
-  color: rgb(43, 99, 210);
-  border-right: 1px solid rgb(173, 173, 173);
-  background-color: rgb(202, 202, 202);
-  display: flex;
-  align-items: center;
-  text-align: center;
-  padding-left: 3px;
-  padding-right: 3px;
-}
-
-.arrow{
-  margin-left: 10px;
-  height: 100%;
-  border-left: 1px solid #d6d6d6;
-  cursor: pointer;
-}
-
-.arrow-implement{
-  width: 0;
-  height: 0;
-  margin: 10px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 10px solid black;
   display: inline-block;
+}
+
+.app-bar-container .overview-container img{
+  height: 40px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.app-bar-container .overview-container .card-dialog{
+  position: absolute;
+  display: none;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%);
+  background-color: #888;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 20em;
+  height: 25em;
+}
+
+.app-bar-container .overview-container .card-dialog .items{
+  height: calc(100% - 10%);
+}
+
+.app-bar-container .overview-container .card-dialog .close-div{
+  height: 10%;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button{
+  height: 90%;
+  float: right;
 }
   
 .app-bar-container .buttons{
