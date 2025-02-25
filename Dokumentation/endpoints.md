@@ -1,6 +1,6 @@
 # Endpoints
 
-Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird der HTTP Methoden Typ angegeben, die Datei des endpoints, der benötigte Request Body und die zu erwartende Response.
+Hier werden die Endpoints des Backends dokumentiert. Für jeden Endpoint wird der HTTP Methoden Typ angegeben, die Datei des Endpoints, der benötigte Request Body und die zu erwartende Response.
 
 Jeder Endpoint, der sich mit der Datenbank verbindet, gibt einen Error `500 Internal Server Error` - "Could not connect to database: " mit der Exception-Nachricht zurück, wenn die Verbindung zur Datenbank fehl schlägt. Tritt ein unerwarteter Fehler auf, gibt der Server eine Response mit Status Code `500 Internal Server Error` und dem Fehler als HTML zurück.
 
@@ -169,11 +169,11 @@ Deletes the user with the given ID from the database.
 
 Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
 
+Alle Parameter müssen vorhanden sein, können aber (ausgenommen 'query') `null` sein. Der Parameter query kann auch ein leerer String (`""`) sein.
+
 ### Method: `POST`
 
 ### File: `get_houses.php`
-
-### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
@@ -206,8 +206,6 @@ Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Akt
 ### Method: `POST`
 
 ### File: `get_activities.php`
-
-### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
