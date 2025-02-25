@@ -619,6 +619,8 @@ bookings: Booking[]
 
 `404` Not Found: "There is no user with the given mail"
 
+`403` Forbidden: "Insufficient permission to show bookings of this user"
+
 `404` Not Found: "User with ID not found in the database"
 
 `500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a user from the database"
