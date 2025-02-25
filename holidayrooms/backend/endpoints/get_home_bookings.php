@@ -54,7 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 
     // Extract entries and build array
-    $row = $result->fetch_assoc();
     $bookings = [];
     while ($row = $result->fetch_assoc()) {
         $bookings[] = $row;
