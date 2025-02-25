@@ -23,8 +23,8 @@ function initialiseComponents(){
 
 async function loadHouses(data = {
   query: "",
-  roomCount: "",
-  bedCount: "",
+  roomCount: 0,
+  bedCount: 0,
   startDate: "",
   endDate: ""
 }){
