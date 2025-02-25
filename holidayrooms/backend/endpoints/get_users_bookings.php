@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Prepare and call the stored procedure
     $stmt = $conn->prepare("CALL GetBookingByUser(?, ?)");
-    $stmt->bind_param("ss", $user_id, $own_user_id);
+    $stmt->bind_param("ss", $own_user_id, $user_id);
     try {
         $ok = $stmt->execute();
     } catch (Exception $e) {
