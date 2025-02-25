@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+    transition: background 0.3s ease;
+    position: relative;
+}
+
+.hidden {
+    display: none;
+}
+
+#dropdownBtn {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#dropdownMenu {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    width: 100px;
+    background: white;
+    position: absolute;
+}
+
+#dropdownMenu li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#dropdownMenu li:hover {
+    background: #f0f0f0;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content {
+    text-align: center;
+}
+
+.dimmed {
+    background: rgba(0, 0, 0, 0.3);
+}

@@ -18,6 +18,10 @@ function initialiseComponents(){
   // Registration-component
   loadComponent('./components/authentification/regionstation/registration.html', 'reg_dialog',
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
+
+  // Maengelanzeige-component
+  loadComponent('./components/maengelanzeige/maengel.html', 'maengel_dioalog',
+    './components/maengelanzeige/maengel.css', './components/maengelanzeige/maengel.js');
 }
 
 
@@ -143,7 +147,7 @@ function renderActivityCards(acCardElements){
 
   if(activityContainer.firstChild){
     while(activityContainer.firstChild){
-      activityContainer.remove(activityContainer.firstChild);
+      activityContainer.removeChild(activityContainer.firstChild);
     }
   }
   
@@ -169,3 +173,9 @@ document.querySelector('#open_registration').addEventListener('click', () => {
   document.getElementById('reg_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
+
+document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
+  document.getElementById('maengel_dioalog').style.display = 'block';
+  document.getElementById("dark_background").style.display = 'block';
+})
+
