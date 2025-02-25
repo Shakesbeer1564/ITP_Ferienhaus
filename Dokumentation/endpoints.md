@@ -665,6 +665,42 @@ bookings: Booking[]
 ---
 
 
+# Kunden erhalten
+
+Gibt alle Kunden zurück.
+
+### Method: `GET`
+
+### File: `get_customers.php`
+
+### Required Role (backend-handled): `Admin`
+
+### Response
+```JSON
+customers:
+[
+    {
+        "NutzerID": number,
+        "Name": "string",
+        "Email": "string",
+        "Telefonnummer": "string",
+        "RolleID": number,
+        "Passwort": "string",
+        "NameRolle": "string"
+    }
+]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only admins can see all users"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the users from the database"
+
+---
+
+
 ---
 ---
 # TODO: Fehlende Endpoints für Vermieter und für Admin hinzufügen
