@@ -24,7 +24,7 @@ function search_homes(string $query, int|null $room_count, int|null $bed_count, 
     $stmt->close();
     $conn->close();
 
-    $row = $result->fetch_assoc();
+    // Read homes from the query result
     $homes = [];
     while ($row = $result->fetch_assoc()) {
         $homes[] = $row;
@@ -48,7 +48,7 @@ function search_activities(string $query): array
     $stmt->close();
     $conn->close();
 
-    $row = $result->fetch_assoc();
+    // Read activities from the query result
     $activities = [];
     while ($row = $result->fetch_assoc()) {
         $activities[] = $row;
