@@ -1,6 +1,7 @@
 <?php
 
 include_once '../functions/database_connection.php';
+include_once '../functions/element_name_retrieval.php';
 
 function search_homes(string $query, int|null $room_count, int|null $bed_count, DateTime|null $start_date, DateTime|null $end_date): array
 {
@@ -24,9 +25,12 @@ function search_homes(string $query, int|null $room_count, int|null $bed_count, 
     $stmt->close();
     $conn->close();
 
-    $row = $result->fetch_assoc();
+    // Read homes from the query result
     $homes = [];
     while ($row = $result->fetch_assoc()) {
+        $owner_id = $row["EigentümerID"];
+        $row["EigentümerName"] = get_landlord_name($owner_id);
+
         $homes[] = $row;
     }
 
@@ -48,9 +52,12 @@ function search_activities(string $query): array
     $stmt->close();
     $conn->close();
 
-    $row = $result->fetch_assoc();
+    // Read activities from the query result
     $activities = [];
     while ($row = $result->fetch_assoc()) {
+        $ort_id = $row["OrtID"];
+        $row["OrtName"] = get_city_name($ort_id);
+
         $activities[] = $row;
     }
 

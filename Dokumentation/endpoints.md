@@ -1,5 +1,25 @@
 # Endpoints
 
+- [Registrierung](#registrierung)
+- [Login](#login)
+- [Abmelden](#abmelden)
+- [Reset Password](#reset-password)
+- [Delete User](#delete-user)
+- [Suche nach Ferienhaus](#suche-nach-ferienhaus)
+- [Suche nach Freizeitaktivität](#suche-nach-freizeitaktivität)
+- [Buchung](#buchung)
+- [Mängelbestand melden](#mängelbestand-melden)
+- [Haus anbieten](#haus-anbieten)
+- [Haus löschen](#haus-löschen)
+- [Mängelbestande eines Hauses erhalten](#mängelbestande-eines-hauses-erhalten)
+- [Mängelbestand reparieren](#mängelbestand-reparieren)
+- [Aktivität anbieten](#aktivität-anbieten)
+- [Aktivität löschen](#aktivität-löschen)
+- [Rechnungen eines Users erhalten](#rechnungen-eines-users-erhalten)
+- [Buchungen eines Users erhalten](#buchungen-eines-users-erhalten)
+- [Buchungen eines Hauses erhalten](#buchungen-eines-hauses-erhalten)
+- [Kunden erhalten](#kunden-erhalten)
+
 Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird der HTTP Methoden Typ angegeben, die Datei des endpoints, der benötigte Request Body und die zu erwartende Response.
 
 Jeder Endpoint, der sich mit der Datenbank verbindet, gibt einen Error `500 Internal Server Error` - "Could not connect to database: " mit der Exception-Nachricht zurück, wenn die Verbindung zur Datenbank fehl schlägt. Tritt ein unerwarteter Fehler auf, gibt der Server eine Response mit Status Code `500 Internal Server Error` und dem Fehler als HTML zurück.
@@ -169,11 +189,11 @@ Deletes the user with the given ID from the database.
 
 Sucht mit dem gegebenen Query-String Ferienhäuser, die die Mindestanzahl an Räumen und Betten erfüllen und in dem angegebenen Zeitraum frei sind. Dabei werden alle Häuser genommen, dessen Region oder Ort (City) den Query-String beinhalten. 
 
+Alle Parameter müssen vorhanden sein, können aber (ausgenommen 'query') `null` sein. Der Parameter query kann auch ein leerer String (`""`) sein.
+
 ### Method: `POST`
 
 ### File: `get_houses.php`
-
-### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
@@ -206,8 +226,6 @@ Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Akt
 ### Method: `POST`
 
 ### File: `get_activities.php`
-
-### Required Role (backend-handled): `Gast` (or higher)
 
 ### Body
 ```JSON
@@ -643,6 +661,42 @@ bookings: Booking[]
 `403` Forbidden: "Insufficient permission"
 
 `500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a home from the database"
+
+---
+
+
+# Kunden erhalten
+
+Gibt alle Kunden zurück.
+
+### Method: `GET`
+
+### File: `get_customers.php`
+
+### Required Role (backend-handled): `Admin`
+
+### Response
+```JSON
+customers:
+[
+    {
+        "NutzerID": number,
+        "Name": "string",
+        "Email": "string",
+        "Telefonnummer": "string",
+        "RolleID": number,
+        "Passwort": "string",
+        "NameRolle": "string"
+    }
+]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only admins can see all users"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the users from the database"
 
 ---
 

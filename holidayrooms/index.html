@@ -45,75 +45,76 @@
 
   <div class="container-filterbar">
     <div class="heading">
-      <h3>Rooms booking</h3>
+      <h3>Rooms-Booking</h3>
     </div>
 
-    <!--#region place_filter -->
-    <div class="filter">
-      <div class="filter-title">
-        <span>Ort</span>
+    <div class="filterbar">
+      <!--#region place_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Ort:</span>
+        </div>
+        <div class="result">
+          <input id="place_input" class="input" type="text"/>
+        </div>
       </div>
-      <div class="result">
-        <input id="place_input" class="input" type="text"/>
+      <!--#endregion place_filter-->
+
+      <!--#region region_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Region:</span>
+        </div>
+        <div class="result">
+          <input id="region_input" class="input" type="text"/>
+        </div>
       </div>
+      <!--#endregion region_filter-->
+
+      <!--#region room-count_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Room-Count:</span>
+        </div>
+        <div class="input_number">
+          <input id="room_count" type="number" min="0" step="1" class="count input"/>
+        </div>
+      </div>
+      <!--#endregion room-count_filter-->
+
+      <!--#region room-count_filter -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Bed-Count:</span>
+        </div>
+        <div class="input_number">
+          <input id="bed_count" type="number" min="0" step="1" class="count input"/>
+        </div>
+      </div>
+      <!--#endregion room-count_filter-->
+
+      <!--#region date_start -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>Start-Date:</span>
+        </div>
+        <div class="result">
+          <input id="date_start" class="input" type="date"/>
+        </div>
+      </div>
+      <!--#endregion date_start-->
+
+      <!--#region date_end -->
+      <div class="filter">
+        <div class="filter-title">
+          <span>End-Date:</span>
+        </div>
+        <div class="result">
+          <input id="date_end" class="input" type="date"/>
+        </div>
+      </div> 
+      <!--#endregion date_end-->
     </div>
-    <!--#endregion place_filter-->
-
-    <!--#region region_filter -->
-    <div class="filter">
-      <div class="filter-title">
-        <span>Region</span>
-      </div>
-      <div class="result">
-        <input id="region_input" class="input" type="text"/>
-      </div>
-    </div>
-    <!--#endregion region_filter-->
-
-    <!--#region room-count_filter -->
-    <div class="filter">
-      <div class="filter-title">
-        <span>Room-Count</span>
-      </div>
-      <div class="input_number">
-        <input id="room_count" type="number" min="0" step="1" class="count input"/>
-      </div>
-    </div>
-    <!--#endregion room-count_filter-->
-
-    <!--#region room-count_filter -->
-    <div class="filter">
-      <div class="filter-title">
-        <span>Bed-Count</span>
-      </div>
-      <div class="input_number">
-        <input id="bed_count" type="number" min="0" step="1" class="count input"/>
-      </div>
-    </div>
-    <!--#endregion room-count_filter-->
-
-    <!--#region date_start -->
-    <div class="filter">
-      <div class="filter-title">
-        <span>Start-Date</span>
-      </div>
-      <div class="result">
-        <input id="date_start" class="input" type="date"/>
-      </div>
-    </div>
-    <!--#endregion date_start-->
-
-    <!--#region date_end -->
-    <div class="filter">
-      <div class="filter-title">
-        <span>End-Date</span>
-      </div>
-      <div class="result">
-        <input id="date_end" class="input" type="date"/>
-      </div>
-    </div> 
-    <!--#endregion date_end-->
-
     <button id="apply_filter" class="apply-filter">Apply Filter</button>
   </div>
 
@@ -128,7 +129,7 @@
 
   <div id="dark_background" class="dark-background"></div>
 
-  <div class="holiday-rooms-container">
+  <div id="holiday-rooms-container" class="holiday-rooms-container">
     <!-- Nur ein Beispiel ==> Das wird später dynamisch erzeugt -->
     <!-- <p-card
       image="./assets/dreaming-summer-image-1920x1080_48774-mm-90.jpg" 
@@ -148,6 +149,19 @@
     <div class="heading">
       <h3>Activities</h3>
     </div>
+
+    <div class="filterbar">
+      <div class="filter search">
+        <div class="filter-title">
+          <span>Suche:</span>
+        </div>
+        <div class="result">
+          <input id="search" class="input" type="text"/>
+        </div>
+      </div> 
+    </div>
+
+    <button id="apply_filter_ac" class="apply-filter">Apply Filter</button>
   </div>
 
   <div id="activity_card_container" class="activity-card-container">
