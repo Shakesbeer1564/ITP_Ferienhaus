@@ -20,8 +20,14 @@ function initialiseComponents(){
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
 }
 
-// TODO: Häuser holen testen
-async function loadHouses(data = null){
+
+async function loadHouses(data = {
+  query: "",
+  roomCount: "",
+  bedCount: "",
+  startDate: "",
+  endDate: ""
+}){
   try{
     const res = await HTTPService.postData('get_houses.php', data);
 
@@ -34,10 +40,11 @@ async function loadHouses(data = null){
   }
 }
 
-// TODO: Aktivitäten holen testen
-async function loadActivities() {
+async function loadActivities(data = {
+  query: ""
+}) {
   try {
-    const res = await HTTPService.postData('get_activities.php', '');
+    const res = await HTTPService.postData('get_activities.php', data);
 
     if(res){
       renderActivityCards(res);
@@ -87,36 +94,43 @@ function loadStyle(href){
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
   const data = {
-    query: new URLSearchParams({
-      place: inputs[0].value,
-      region: inputs[1].value
-    }).toString(),
-    roomCount: inputs[2].value,
-    bedCount: inputs[3].value,
+    query: inputs[0].value,
+    roomCount: parseInt(inputs[2].value),
+    bedCount: parseInt(inputs[3].value),
     startDate: inputs[4].value,
     endDate: inputs[5].value
   };
 
   await loadHouses(data);
+});
+
+document.getElementById('apply_filter_ac').addEventListener('click', async() => {
+  const data = {
+    query: document.getElementById('search').value
+  };
+
+  await loadActivities(data);
 })
 
 // Render room cards
 function renderHouseCards(cardElements){
   const roomContainer = document.getElementById('holiday-rooms-container');
 
-  while(roomContainer.firstChild){
-    roomContainer.removeChild(roomContainer.firstChild);
+  if(roomContainer.firstChild){
+    while(roomContainer.firstChild){
+      roomContainer.removeChild(roomContainer.firstChild);
+    }
   }
 
   cardElements.forEach(element => {
     const card = document.createElement('p-card');
-    card.setAttribute('id', element.id);
+    card.setAttribute('id', element.HausID);
     card.setAttribute('image', element.image);
-    card.setAttribute('region', element.region);
-    card.setAttribute('place', element.place);
-    card.setAttribute('room_count', element.roomCount);
-    card.setAttribute('bed_count', element.bedCount);
-    card.setAttribute('description', element.description);
+    card.setAttribute('owner', element.EigentümerName);
+    card.setAttribute('place', element.Adresse);
+    card.setAttribute('room_count', element.AnzahlZimmer);
+    card.setAttribute('bed_count', element.AnzahlBetten);
+    card.setAttribute('description', element.Beschreibung);
     card.setAttribute('button-text', 'Book');
 
     roomContainer.appendChild(card);
@@ -126,11 +140,15 @@ function renderHouseCards(cardElements){
 function renderActivityCards(acCardElements){
   const activityContainer = document.getElementById('activity_card_container');
 
-  while(activityContainer.firstChild){
-    activityContainer.remove(activityContainer.firstChild);
-  }
 
-  acCardElements.foreach((el) => {
+  if(activityContainer.firstChild){
+    while(activityContainer.firstChild){
+      activityContainer.remove(activityContainer.firstChild);
+    }
+  }
+  
+
+  for(let el of acCardElements){
     const card = document.createElement('p-card-activity');
     card.setAttribute('id', el.id);
     card.setAttribute('title', el.name);
@@ -138,7 +156,7 @@ function renderActivityCards(acCardElements){
     card.setAttribute('description', el.description);
 
     activityContainer.appendChild(card);
-  })
+  }
 }
 
 // load login dialog

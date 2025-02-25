@@ -17,7 +17,7 @@ document.querySelector('#sign_in').addEventListener('click', async () => {
     }
 
     const dataJson = {
-      username: email,
+      email: email,
       password: password
     };
 

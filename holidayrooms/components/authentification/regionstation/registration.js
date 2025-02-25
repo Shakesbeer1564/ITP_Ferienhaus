@@ -13,7 +13,7 @@ document.getElementById('register').addEventListener('click', async () => {
       username: username,
       password: password,
       email: email,
-      phoen: tel
+      phone: tel
     };
 
     try {
