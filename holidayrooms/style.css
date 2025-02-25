@@ -147,16 +147,20 @@ html, body{
 .container-filterbar{
   margin-top: 10px;
   display: flex;
-  flex-flow: row wrap;
   align-items: center;
   width: 100%;
   min-height: 50px;
   background-color: rgb(234, 234, 234);
 }
 
+.container-filterbar .filterbar {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  width: 100%;
+}
+
 .container-filterbar .apply-filter{
-  /* margin-left: auto;
-  margin-right: 20px; */
   margin: 2px 10px 2px auto;
   border: 1px solid #e3e3e3;
   border-radius: 3px;
@@ -166,7 +170,6 @@ html, body{
   color: white;
   background-color: rgb(43, 99, 210);
 }
-
 
 .container-filterbar .apply-filter:hover{
   cursor: pointer;
@@ -180,8 +183,13 @@ html, body{
 }
 
 .heading{
-  margin-right: auto;
   margin-left: 10px;
+  margin-right: 10px;
+}
+
+.heading h3{
+  word-break: keep-all;
+  white-space: nowrap;
 }
 
 .filter{
