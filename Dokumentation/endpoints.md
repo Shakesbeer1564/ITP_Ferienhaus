@@ -1,6 +1,26 @@
 # Endpoints
 
-Hier werden die Endpoints des Backends dokumentiert. Für jeden Endpoint wird der HTTP Methoden Typ angegeben, die Datei des Endpoints, der benötigte Request Body und die zu erwartende Response.
+- [Registrierung](#registrierung)
+- [Login](#login)
+- [Abmelden](#abmelden)
+- [Reset Password](#reset-password)
+- [Delete User](#delete-user)
+- [Suche nach Ferienhaus](#suche-nach-ferienhaus)
+- [Suche nach Freizeitaktivität](#suche-nach-freizeitaktivität)
+- [Buchung](#buchung)
+- [Mängelbestand melden](#mängelbestand-melden)
+- [Haus anbieten](#haus-anbieten)
+- [Haus löschen](#haus-löschen)
+- [Mängelbestande eines Hauses erhalten](#mängelbestande-eines-hauses-erhalten)
+- [Mängelbestand reparieren](#mängelbestand-reparieren)
+- [Aktivität anbieten](#aktivität-anbieten)
+- [Aktivität löschen](#aktivität-löschen)
+- [Rechnungen eines Users erhalten](#rechnungen-eines-users-erhalten)
+- [Buchungen eines Users erhalten](#buchungen-eines-users-erhalten)
+- [Buchungen eines Hauses erhalten](#buchungen-eines-hauses-erhalten)
+- [Kunden erhalten](#kunden-erhalten)
+
+Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird der HTTP Methoden Typ angegeben, die Datei des endpoints, der benötigte Request Body und die zu erwartende Response.
 
 Jeder Endpoint, der sich mit der Datenbank verbindet, gibt einen Error `500 Internal Server Error` - "Could not connect to database: " mit der Exception-Nachricht zurück, wenn die Verbindung zur Datenbank fehl schlägt. Tritt ein unerwarteter Fehler auf, gibt der Server eine Response mit Status Code `500 Internal Server Error` und dem Fehler als HTML zurück.
 
