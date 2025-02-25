@@ -1,4 +1,4 @@
-import { HTTPService } from "./http-service.js";
+import { HTTPService } from "../../http-service.js";
 
 async function loadCustomers() {
     const res = await HTTPService.getData('get_customers.php');
@@ -35,7 +35,7 @@ function onCustomerRowClick(email) {
     console.log(email);
 
     const res = HTTPService.postData('get_users_bookings.php', {
-        "userMail": email
+        "userEmail": email
     });
 
     console.log(res);
