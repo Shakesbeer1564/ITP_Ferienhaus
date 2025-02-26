@@ -8,28 +8,25 @@ document.getElementById('close_mae_dialog').addEventListener('click', () => {
 
   document.addEventListener('DOMContentLoaded', loadBookedHousesinPast);
 
-
-
-
-  async function loadBookedHousesinPast() {
-    
+  async function loadBookedHousesinPast(data =  {
+    query:""
+  })
     try {
-        const response = await fetch('get_houses_booked_in_past.php');
+        const response = await HTTPService.postData('get_houses_booked_in_past.php', data);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
 
-        const textData = await response.text();
-        const houses = textData.split('\n').filter(line => line.trim() !== ''); // Convert to array
+        const houses = await response.json(); // Parse response as JSON
+        const dropdown = document.getElementById('houseDropdown');
 
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        dropdownMenu.innerHTML = ''; // Clear existing items
+        dropdown.innerHTML = '<option value="">Bitte wählen...</option>'; // Clear existing options
 
         houses.forEach(house => {
-            let listItem = document.createElement('li');
-            listItem.textContent = house; // Directly set text from response
-            listItem.onclick = () => openModal(house);
-            dropdownMenu.appendChild(listItem);
+            let option = document.createElement('option');
+            option.value = house.name; // Adjust based on JSON structure
+            option.textContent = house.name;
+            dropdown.appendChild(option);
         });
     } catch (error) {
         console.error('Error loading booked houses:', error);
@@ -39,7 +36,7 @@ document.getElementById('close_mae_dialog').addEventListener('click', () => {
 // Load data when page loads
 document.addEventListener('DOMContentLoaded', loadBookedHouses);
 
-}
+
 
 //document.getElementById('dropdownBtn').addEventListener('click', function(event) {
   //  event.stopPropagation();
