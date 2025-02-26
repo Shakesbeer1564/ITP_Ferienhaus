@@ -1,29 +1,90 @@
-// Einkaufkorb/Übersicht worüber der Benutzer seine Sachen anschauen kann und schlussendlich buchen kann
-export class Overview{
-  static instance;
-  #items = []; // type --> { key, item (also activity oder room)}
-
-  static getInstance(){
-    if(!this.instance){
-      this.instance = new Overview();
+const overviewPromise = (async () => {
+  const { HTTPService } = await import('../http-service.js');
+  
+  class Overview{
+    static instance;
+  
+    #houseItem = {
+      houseId: -1,
+      roomCount: -1,
+      bedCount: -1,
+      startDate: '',
+      endDate: ''
+    };
+  
+    #activityItems = [];
+  
+    static getInstance(){
+      if(!this.instance){
+        this.instance = new Overview();
+      }
+      
+      return this.instance;
     }
-    
-    return this.instance;
-  }
-
-  getItem(itemKey){
-    const item = this.#items.find(x => x.key === itemKey);
-    return item;
-  }
-
-  addItem(item){
-    this.#items.push(item);
-  }
-
-  deleteItem(itemKey){
-    const indexOfSearchedItem = this.#items.indexOf(this.#items.find(x => x.key === itemKey));
-    if(indexOfSearchedItem !== -1){
-      this.#items.splice(indexOfSearchedItem, 1);
+  
+    getHouseItem(){
+      return this.#houseItem;
+    }
+  
+    getActivityItems(){
+      return this.#activityItems;
+    }
+  
+    getActivityItemById(id){
+      const item = this.#activityItems.find(x => x.Id === id);
+      return item;
+    }
+  
+    addHouse(item){
+      if(this.#houseItem.houseId === -1)
+        this.#houseItem = item;
+      else
+        alert('Please remove the house booking at first');
+    }
+  
+    addActivity(item){
+      this.#activityItems.push(item);
+    }
+  
+    deleteHouseItem(){
+      this.#houseItem = {
+        houseId: -1,
+        roomCount: -1,
+        bedCount: -1,
+        startDate: '',
+        endDate: ''
+      };
+    }
+  
+    deleteActivityItem(itemKey){
+      const indexOfSearchedItem = this.#activityItems.indexOf(this.#activityItems.find(x => x.key === itemKey));
+      if(indexOfSearchedItem !== -1){
+        this.#activityItems.splice(indexOfSearchedItem, 1);
+      }
+    }
+  
+    async book(){
+      if(!this.#houseItem)
+        alert('You need to book a house first');
+  
+      const data = {
+        houseId: this.#houseItem.houseId,
+        startDate: this.#houseItem.startDate,
+        endDate: this.#houseItem.endDate,
+        activityIds: this.#activityItems.map(x => x.AktivitätsID)
+      };
+  
+      const res = await HTTPService.postData('book_house.php', data);
+  
+      if(res){
+        window.location.reload();
+      }
     }
   }
+
+  return Overview;
+})();
+
+export async function getOverviewClass(){
+  return overviewPromise;
 }
