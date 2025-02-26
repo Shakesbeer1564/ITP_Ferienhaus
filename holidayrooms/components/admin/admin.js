@@ -1,6 +1,9 @@
 import { HTTPService } from "../../http-service.js";
 
-let customerMailToId = {};
+// Store the users id to their mail
+let customersByMail = {};
+let backIcon = document.querySelector("#back-icon");
+backIcon.onclick = () => onBackIconClick();
 
 
 async function loadCustomers() {
@@ -8,7 +11,7 @@ async function loadCustomers() {
     displayCustomers(res);
 
     for (let customer of res) {
-        customerMailToId[customer.Email] = customer.NutzerID;
+        customersByMail[customer.Email] = customer;
     }
 }
 
@@ -36,7 +39,7 @@ function displayCustomers(customers) {
         emailCell.textContent = customer.Email;
         phoneCell.textContent = customer.Telefonnummer;
 
-        deleteCell.onclick = (event) => deleteUser(event, customerMailToId[customer.Email]);
+        deleteCell.onclick = (event) => deleteUser(event, customersByMail[customer.Email].NutzerID);
 
         row.appendChild(nameCell);
         row.appendChild(emailCell);
@@ -47,6 +50,14 @@ function displayCustomers(customers) {
 
         customerTableBody.appendChild(row);
     }
+}
+
+async function loadBookings(email) {
+    const res = await HTTPService.postData('get_users_bookings.php', {
+        "userEmail": email
+    });
+
+    displayBookings(res);
 }
 
 function displayBookings(bookings) {
@@ -73,22 +84,68 @@ function displayBookings(bookings) {
     }
 }
 
+async function loadInvoices(email) {
+    const res = await HTTPService.postData('get_invoices.php', {
+        "userEmail": email
+    });
+
+    displayInvoices(res);
+}
+
+function displayInvoices(invoices) {
+    const invoiceTableBody = document.querySelector('#invoice-table tbody');
+    // Clear any existing content
+    invoiceTableBody.innerHTML = '';
+
+    for (let invoice of invoices) {
+        const row = document.createElement('tr');
+
+        const invoiceDateCell = document.createElement('td');
+        const moneyValueCell = document.createElement('td');
+
+        invoiceDateCell.textContent = new Date(invoice.Rechnungsdatum).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' });
+        moneyValueCell.textContent = invoice.Betrag;
+
+        row.appendChild(invoiceDateCell);
+        row.appendChild(moneyValueCell);
+
+        invoiceTableBody.appendChild(row);
+    }
+}
+
 
 async function onCustomerRowClick(email) {
 
     let customerContainer = document.querySelector("#customer-container");
     let bookingContainer = document.querySelector("#booking-container");
+    let invoiceContainer = document.querySelector("#invoice-container");
+    let historyContainer = document.querySelector("#history-container");
+    let historyUsernameInfo = document.querySelector("#username-info");
 
-    customerContainer.classList.toggle('hidden');
-    bookingContainer.classList.toggle('hidden');
+    customerContainer.classList.add('hidden');
+    bookingContainer.classList.remove('hidden');
+    invoiceContainer.classList.remove('hidden');
+    historyContainer.classList.remove('hidden');
 
-    console.log(email);
+    historyUsernameInfo.textContent = "test";
 
-    const res = await HTTPService.postData('get_users_bookings.php', {
-        "userEmail": email
-    });
+    loadBookings(email);
+    loadInvoices(email);
+}
 
-    displayBookings(res);
+function onBackIconClick() {
+    let customerContainer = document.querySelector("#customer-container");
+    let bookingContainer = document.querySelector("#booking-container");
+    let invoiceContainer = document.querySelector("#invoice-container");
+    let historyContainer = document.querySelector("#history-container");
+    let historyUsernameInfo = document.querySelector("#username-info");
+
+    customerContainer.classList.remove('hidden');
+    bookingContainer.classList.add('hidden');
+    invoiceContainer.classList.add('hidden');
+    historyContainer.classList.add('hidden');
+
+    loadCustomers();
 }
 
 async function deleteUser(event, userId) {
@@ -102,6 +159,5 @@ async function deleteUser(event, userId) {
     // Update the customer table after the user has been deleted
     loadCustomers();
 }
-
 
 await loadCustomers();

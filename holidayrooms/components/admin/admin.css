@@ -48,6 +48,10 @@ body {
 .heading {
   margin-right: auto;
   margin-left: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .admin-page-table {
