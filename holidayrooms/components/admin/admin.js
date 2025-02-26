@@ -68,7 +68,6 @@ function displayBookings(bookings) {
         row.appendChild(startDateCell);
         row.appendChild(endDateCell);
         row.appendChild(priceCell);
-        row.appendChild(trashcanCell);
 
         bookingTableBody.appendChild(row);
     }
