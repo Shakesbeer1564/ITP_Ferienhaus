@@ -20,9 +20,11 @@ function initialiseComponents(){
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
 
   // Maengelanzeige-component
-  loadComponent('./components/maengelanzeige/maengel.html', 'maengel_dioalog',
-    './components/maengelanzeige/maengel.css', './components/maengelanzeige/maengel.js');
+  loadComponent('./components/authentification/maengelanzeige/maengel.html', 'maengel_dialog',
+    './components/authentification/maengelanzeige/maengel.css', './components/authentification/maengelanzeige/maengel.js');
 }
+
+
 
 
 async function loadHouses(data = {
@@ -64,6 +66,7 @@ function loadComponent(url, containerId, cssFile, jsFile){
   fetch(url)
     .then(res => res.text())
     .then(data => {
+      //console.log(data);
       document.getElementById(containerId).innerHTML = data;
 
       if(!document.getElementById(cssFile)){
@@ -175,7 +178,7 @@ document.querySelector('#open_registration').addEventListener('click', () => {
 })
 
 document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
-  document.getElementById('maengel_dioalog').style.display = 'block';
+  document.getElementById('maengel_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
 

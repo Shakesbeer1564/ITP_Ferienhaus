@@ -1,52 +1,93 @@
-body {
-    font-family: Arial, sans-serif;
-    transition: background 0.3s ease;
-    position: relative;
+@import url('../../../style.css'); /* Be sure the styles.css loads first */
+
+:root{
+  --header-height: 12%;
+  --footer-height: 15%;
 }
 
-.hidden {
-    display: none;
+.container {
+    height: 70%;
+    border: 1px solid black;
+    border-radius: 3px;
+    box-shadow: 0px 0px 3px white;
+    display: block;
+    background-color: rgb(247, 247, 247);
 }
 
-#dropdownBtn {
-    padding: 10px 20px;
+.container .mae_heading {
+    background-color: rgb(73, 148, 239);
+  display: flex;  
+  align-items: center;
+  height: var(--header-height);
+}
+
+.container .mae_heading .mae_title {
+    color: white;
+  margin-left: 10px;
+}
+
+.container .mae_heading button {
+    margin-left: auto;
+    margin-right: 5px;
+    border: 1px solid rgb(173, 173, 173);
+    border-radius: 3px;
+    width: 25px;
+    height: 25px;
     cursor: pointer;
 }
 
-#dropdownMenu {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    width: 100px;
-    background: white;
-    position: absolute;
+.body {
+    height: calc(100% - var(--header-height) - var(--footer-height));
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+
+.body h2 {
+    font-size: 1em;
+    margin-bottom: 5px;
 }
 
-#dropdownMenu li {
+.body select, .body input {
+    width: 100%;
     padding: 10px;
-    cursor: pointer;
-}
-
-#dropdownMenu li:hover {
-    background: #f0f0f0;
-}
-
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    font-size: 15pt;
+    background-color: transparent;
 }
 
-.modal-content {
-    text-align: center;
+.body input:focus, .body select:focus {
+    outline: none;
+    border-bottom: 1px solid black;
 }
 
-.dimmed {
-    background: rgba(0, 0, 0, 0.3);
+.footer {
+    height: var(--footer-height);
+    background-color: rgb(226, 226, 226);
+    border-top: 1px solid rgb(173, 173, 173);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.footer button {
+    border: 1px solid #e3e3e3;
+    border-radius: 3px;
+    height: 35px;
+    width: 100px;
+    color: rgb(78, 74, 74);
+    cursor: pointer;
+    background: #007BFF;
+    color: white;
+}
+
+.footer button:hover {
+    background-color: rgb(214, 214, 214);
+}
+
+.footer button:active {
+    background-color: rgb(198, 198, 198);
+}
 }

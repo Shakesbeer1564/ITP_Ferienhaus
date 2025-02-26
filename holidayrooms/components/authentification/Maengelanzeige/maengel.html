@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mängel Dropdown</title>
-    <link rel="stylesheet" href="maengel.css">
-</head>
-<body>
-    <button id="dropdownBtn">Mängel</button>
-    <ul id="dropdownMenu" class="hidden">
-        <li onclick="openModal('X')">X</li>
-        <li onclick="openModal('Y')">Y</li>
-        <li onclick="openModal('Z')">Z</li>
-    </ul>
-    
-    <div id="modal" class="modal hidden">
-        <div class="modal-content">
-            <p id="modalText"></p>
-            <input type="text" id="inputField" placeholder="Enter details">
-            <button id="submitButton" onclick="closeModal()">Submit</button>
+
+    <div class="container">
+        <div class="mae_heading">
+            <h1 class="mae_title">Mängel</h1>
+            <button id="close_mae_dialog">X</button>
+        </div>
+        
+        <div class="body">
+            <form id="maengel_form">
+                <h2>Wähle ein Haus:</h2>
+                <select id="dropdownMenu">
+                    <option value="" >Bitte wählen...</option>
+                </select>
+                
+                <h2>Details:</h2>
+                <input type="text" id="inputField" placeholder="Enter details" required>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <button id="submitButton">Submit</button>
         </div>
     </div>
     
-    <script src="maengel.js"></script>
-</body>
-</html>
+
