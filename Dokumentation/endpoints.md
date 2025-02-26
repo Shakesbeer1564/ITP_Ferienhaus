@@ -1,6 +1,27 @@
 # Endpoints
 
-Hier werden die Endpoints des Backends dokumentiert. Für jeden Endpoint wird der HTTP Methoden Typ angegeben, die Datei des Endpoints, der benötigte Request Body und die zu erwartende Response.
+- [Registrierung](#registrierung)
+- [Login](#login)
+- [Abmelden](#abmelden)
+- [Reset Password](#reset-password)
+- [Delete User](#delete-user)
+- [Suche nach Ferienhaus](#suche-nach-ferienhaus)
+- [Suche nach Freizeitaktivität](#suche-nach-freizeitaktivität)
+- [Buchung](#buchung)
+- [Häuser vergangener Buchungen anzeigen](#häuser-vergangener-buchungen-anzeigen)
+- [Mängelbestand melden](#mängelbestand-melden)
+- [Haus anbieten](#haus-anbieten)
+- [Haus löschen](#haus-löschen)
+- [Mängelbestande eines Hauses erhalten](#mängelbestande-eines-hauses-erhalten)
+- [Mängelbestand reparieren](#mängelbestand-reparieren)
+- [Aktivität anbieten](#aktivität-anbieten)
+- [Aktivität löschen](#aktivität-löschen)
+- [Rechnungen eines Users erhalten](#rechnungen-eines-users-erhalten)
+- [Buchungen eines Users erhalten](#buchungen-eines-users-erhalten)
+- [Buchungen eines Hauses erhalten](#buchungen-eines-hauses-erhalten)
+- [Kunden erhalten](#kunden-erhalten)
+
+Hier werden die Endpoints des Backends dokumentiert. Für jeden endpoint wird der HTTP Methoden Typ angegeben, die Datei des endpoints, der benötigte Request Body und die zu erwartende Response.
 
 Jeder Endpoint, der sich mit der Datenbank verbindet, gibt einen Error `500 Internal Server Error` - "Could not connect to database: " mit der Exception-Nachricht zurück, wenn die Verbindung zur Datenbank fehl schlägt. Tritt ein unerwarteter Fehler auf, gibt der Server eine Response mit Status Code `500 Internal Server Error` und dem Fehler als HTML zurück.
 
@@ -259,6 +280,31 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 `401` Unauthorized: "Session invalid: User does not exist"
 
 `403` Forbidden: "Only registered users can book houses"
+
+---
+
+
+# Häuser vergangener Buchungen anzeigen
+
+### Method: `GET`
+
+### File: `get_houses_booked_in_past.php`
+
+### Required Role (backend-handled): `Registriert` (or higher)
+
+### Response
+```JSON
+houses: House[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`404` Not Found: "Could not find user in db or its role id is null"
+
+`500` Internal Server Error: "Something went wrong while trying to execute the database query"
 
 ---
 
@@ -599,6 +645,8 @@ bookings: Booking[]
 
 `404` Not Found: "There is no user with the given mail"
 
+`403` Forbidden: "Insufficient permission to show bookings of this user"
+
 `404` Not Found: "User with ID not found in the database"
 
 `500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a user from the database"
@@ -641,6 +689,42 @@ bookings: Booking[]
 `403` Forbidden: "Insufficient permission"
 
 `500` Internal Server Error:  "Something went wrong trying to retrieve the bookings of a home from the database"
+
+---
+
+
+# Kunden erhalten
+
+Gibt alle Kunden zurück.
+
+### Method: `GET`
+
+### File: `get_customers.php`
+
+### Required Role (backend-handled): `Admin`
+
+### Response
+```JSON
+customers:
+[
+    {
+        "NutzerID": number,
+        "Name": "string",
+        "Email": "string",
+        "Telefonnummer": "string",
+        "RolleID": number,
+        "Passwort": "string",
+        "NameRolle": "string"
+    }
+]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only admins can see all users"
+
+`500` Internal Server Error:  "Something went wrong trying to retrieve the users from the database"
 
 ---
 

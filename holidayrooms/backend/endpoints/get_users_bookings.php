@@ -42,12 +42,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Prepare and call the stored procedure
     $stmt = $conn->prepare("CALL GetBookingByUser(?, ?)");
-    $stmt->bind_param("ss", $user_id, $own_user_id);
+    $stmt->bind_param("ss", $own_user_id, $user_id);
     try {
         $ok = $stmt->execute();
     } catch (Exception $e) {
         // Check for custom sql error from procedure
         if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
+            // Check for permission error
+            if ($e->getMessage() == "User ist nicht berechtigt, diese Buchung anzuzeigen") {
+                send_http_status(403, "Insufficient permission to show bookings of this user");
+            }
+            // Otherwise the user was not found
             send_http_status(404, "User with ID not found in the database");
         }
 
