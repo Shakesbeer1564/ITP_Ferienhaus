@@ -8,6 +8,7 @@ const overviewPromise = (async () => {
       houseId: -1,
       roomCount: -1,
       bedCount: -1,
+      place: '',
       startDate: '',
       endDate: ''
     };
@@ -36,10 +37,7 @@ const overviewPromise = (async () => {
     }
   
     addHouse(item){
-      if(this.#houseItem.houseId === -1)
-        this.#houseItem = item;
-      else
-        alert('Please remove the house booking at first');
+      this.#houseItem = item;
     }
   
     addActivity(item){

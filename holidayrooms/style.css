@@ -50,7 +50,8 @@ html, body{
   top: 100%;
   left: 50%;
   transform: translate(-50%);
-  background-color: #888;
+  z-index: 1000;
+  background-color: #ffffff;
   border: 1px solid #ccc;
   padding: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -59,6 +60,7 @@ html, body{
 }
 
 .app-bar-container .overview-container .card-dialog .items{
+  width: 100%;
   height: calc(100% - 10%);
 }
 
@@ -252,7 +254,7 @@ html, body{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 100000;
   width: 30%;
   height: 50%;
 }
@@ -263,7 +265,7 @@ html, body{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 100000;
   width: 25%;
   height: 70%;
 }
@@ -279,7 +281,7 @@ html, body{
   background: rgba(0, 0, 0, 0.8); /* Halbtransparentes Overlay */
   justify-content: center;
   align-items: center;
-  z-index: 5;
+  z-index: 10000;
 }
 
 .holiday-rooms-container{
