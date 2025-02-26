@@ -50,7 +50,46 @@ body {
   margin-left: 10px;
 }
 
-#customer-table td {
+.admin-page-table {
+  margin-left: auto;
+  margin-right: auto;
+
+  margin-top: 20px;
+
+  border-spacing: 0;
+
+  border: 1px solid black;
+
+  width: 70%;
+}
+
+.admin-page-table thead tr {
+  background: rgb(197, 195, 195);
+}
+
+/* Table header cell */
+.admin-page-table th {
+  padding-top: 6px;
+  padding-bottom: 6px;
+
+  width: 25%;
+}
+
+.admin-page-table tbody tr {
+  background: rgb(240, 240, 240);
+}
+
+.admin-page-table tbody tr:hover {
+  background: rgb(222, 220, 220);
+}
+
+/* Table body cell */
+.admin-page-table td {
+  text-align: center;
+  border-top: 1px solid #999;
+}
+
+.admin-page-table td {
   padding: 20px;
 }
 
