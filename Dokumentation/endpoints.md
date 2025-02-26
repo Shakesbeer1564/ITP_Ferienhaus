@@ -8,6 +8,7 @@
 - [Suche nach Ferienhaus](#suche-nach-ferienhaus)
 - [Suche nach Freizeitaktivität](#suche-nach-freizeitaktivität)
 - [Buchung](#buchung)
+- [Häuser vergangener Buchungen anzeigen](#häuser-vergangener-buchungen-anzeigen)
 - [Mängelbestand melden](#mängelbestand-melden)
 - [Haus anbieten](#haus-anbieten)
 - [Haus löschen](#haus-löschen)
@@ -279,6 +280,31 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 `401` Unauthorized: "Session invalid: User does not exist"
 
 `403` Forbidden: "Only registered users can book houses"
+
+---
+
+
+# Häuser vergangener Buchungen anzeigen
+
+### Method: `GET`
+
+### File: `get_houses_booked_in_past.php`
+
+### Required Role (backend-handled): `Registriert` (or higher)
+
+### Response
+```JSON
+houses: House[]
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "User from session does not have the required permission"
+
+`404` Not Found: "Could not find user in db or its role id is null"
+
+`500` Internal Server Error: "Something went wrong while trying to execute the database query"
 
 ---
 
