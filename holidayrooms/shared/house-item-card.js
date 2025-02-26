@@ -37,6 +37,10 @@
         button.textContent = '❌';
         button.onclick = () => {
           Overview.getInstance().deleteHouseItem();
+          
+          const itemContainer = document.querySelector('.items');
+          const houseItem = document.querySelector('p-house-item');
+          itemContainer.removeChild(houseItem);
         }
 
         header.append(title);
