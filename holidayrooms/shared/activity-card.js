@@ -62,7 +62,11 @@
           };
 
           Overview.getInstance().addActivity(item);
-          console.log(Overview.getInstance().getActivityItems());
+
+          const itemsContainer = document.querySelector('.items');
+          const acItem = document.createElement('p-activity-item');
+          acItem.setAttribute('id', item.id);
+          itemsContainer.appendChild(acItem);
         }
       
         // Zusammenfügen

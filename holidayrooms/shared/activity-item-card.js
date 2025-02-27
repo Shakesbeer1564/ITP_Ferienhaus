@@ -2,64 +2,62 @@
   const { getOverviewClass } = await import('../class/overview.js');
   const Overview = await getOverviewClass();
 
-  class HouseItemCard extends HTMLElement{
-    constructor() {
+  class ActivityItemCardComponent extends HTMLElement{
+    constructor(){
       super();
 
       setTimeout(() => {
         this.attachShadow({ mode: 'open' });
+
+        const activityID = this.getAttribute('id').toString();
         
         const container = document.createElement('div');
-        container.classList.add('h-item-card');
+        container.classList.add('ac-item-card');
 
         const header = document.createElement('div');
-        header.classList.add('h-item-header');
+        header.classList.add('ac-item-header');
 
         const title = document.createElement('h3');
-        title.textContent = 'House';
+        title.textContent = Overview.getInstance().getActivityItemById(activityID)?.title;
 
         const body = document.createElement('div');
-        body.classList.add('h-item-body');
+        body.classList.add('ac-item-body');
 
         const placeText = document.createElement('p');
-        placeText.textContent = `Place: ${Overview.getInstance().getHouseItem().place}`;
+        placeText.textContent = `Place: ${Overview.getInstance().getActivityItemById(activityID)?.place}`;
         
-        const dateRange = document.createElement('p');
-        dateRange.textContent = `Date-Range: ${Overview.getInstance().getHouseItem().startDate} - ${Overview.getInstance().getHouseItem().endDate}`;
-
-        const roomCount = document.createElement('p');
-        roomCount.textContent = `Room-Count: ${Overview.getInstance().getHouseItem().roomCount}`;
-
-        const bedCount = document.createElement('p');
-        bedCount.textContent = `Bed-Count: ${Overview.getInstance().getHouseItem().bedCount}`;
+        const participants = document.createElement('p');
+        participants.textContent = `Participants ${Overview.getInstance().getActivityItemById(activityID)?.participants}`;
+      
+        const price = document.createElement('p');
+        price.textContent = `Price: ${Overview.getInstance().getActivityItemById(activityID)?.price}`;
 
         const button = document.createElement('button');
         button.textContent = '❌';
         button.onclick = () => {
-          Overview.getInstance().deleteHouseItem();
-          
-          this.closest('p-house-item').remove();
+          Overview.getInstance().deleteActivityItem(activityID);
+
+          this.closest('p-activity-item').remove();
         }
 
         header.append(title);
         header.append(button);
         body.append(placeText);
-        body.append(dateRange);
-        body.append(roomCount);
-        body.append(bedCount);
+        body.append(participants);
+        body.append(price);
         container.append(header);
         container.append(body);
 
         const style = document.createElement('style');
         style.textContent = `
-          .h-item-card{
+          .ac-item-card{
             border-top: 1px solid black;
             border-bottom: 1px solid black;
             width: 100%;
             height: fit-content;
-          }
+          } 
 
-          .h-item-card .h-item-header{
+          .ac-item-card .ac-item-header{
             position: relative;
             display: flex;
             align-items: center;
@@ -67,7 +65,7 @@
             height: 10%;
           }
 
-          .h-item-card .h-item-header button{
+          .ac-item-card .ac-item-header button{
             margin-left: auto;
             border: none;
             outline: none;
@@ -76,14 +74,14 @@
             cursor: pointer;
           }
 
-          .h-item-card .h-item-body{
+          .ac-item-card .ac-item-body{
             display: flex;
             flex-flow: column;
             width: 100%;
             height: 90%;
           }
 
-          .h-item-card .h-item-body p{
+          .ac-item-card .ac-item-body p{
             flex: 1;
             padding: 0px 0px 0px 10px;
             margin: 5px;
@@ -98,5 +96,5 @@
   }
 
   // registrate the web-component
-  customElements.define('p-house-item', HouseItemCard);
+  customElements.define('p-activity-item', ActivityItemCardComponent);
 })();

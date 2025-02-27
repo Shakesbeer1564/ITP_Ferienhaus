@@ -32,7 +32,7 @@ const overviewPromise = (async () => {
     }
   
     getActivityItemById(id){
-      const item = this.#activityItems.find(x => x.Id === id);
+      const item = this.#activityItems.find(x => x.id === id);
       return item;
     }
   
@@ -69,8 +69,10 @@ const overviewPromise = (async () => {
         houseId: this.#houseItem.houseId,
         startDate: this.#houseItem.startDate,
         endDate: this.#houseItem.endDate,
-        activityIds: this.#activityItems.map(x => x.AktivitätsID)
+        activityIds: this.#activityItems.map(x => x.id)
       };
+      console.log(data);
+      return;
   
       const res = await HTTPService.postData('book_house.php', data);
   

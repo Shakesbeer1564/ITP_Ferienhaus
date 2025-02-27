@@ -173,11 +173,6 @@ document.getElementById('apply_filter_ac').addEventListener('click', async() => 
 //------------------------------------------
 document.getElementById('shopIcon').addEventListener('click', () => {
   handleShoppingCardDialog();
-
-  if(cardDialog.style.display === 'block'){
-    
-  }
-
 })
 
 document.getElementById('closeDialog').addEventListener('click', handleShoppingCardDialog);
@@ -186,6 +181,10 @@ function handleShoppingCardDialog(){
   let cardDialog = document.getElementById('cardDialog');
   cardDialog.style.display = cardDialog.style.display === 'block' ? 'none' : 'block';
 }
+
+document.getElementById('book').addEventListener('click', async () => {
+  await Overview.getInstance().book();
+})
 
 //------------------------------------------
 //----------- Dialog-Handling --------------
