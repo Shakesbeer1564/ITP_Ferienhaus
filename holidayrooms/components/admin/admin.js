@@ -15,6 +15,18 @@ async function loadCustomers() {
     }
 }
 
+async function loadHouses() {
+    const res = await HTTPService.postData('get_houses.php', {
+        "query": "",
+        "roomCount": null,
+        "bedCount": null,
+        "startDate": null,
+        "endDate": null
+    });
+
+    displayHouses(res);
+}
+
 function displayCustomers(customers) {
     const customerTableBody = document.querySelector('#customer-table tbody');
     // Clear any existing content
@@ -52,6 +64,60 @@ function displayCustomers(customers) {
         row.onclick = () => onCustomerRowClick(customer.Email);
 
         customerTableBody.appendChild(row);
+    }
+}
+
+function displayHouses(houses) {
+    const houseTableBody = document.querySelector('#house-table tbody');
+    // Clear any existing content
+    houseTableBody.innerHTML = '';
+
+    const trashcanCell = document.createElement('td');
+    const trashcanImage = document.createElement('img');
+    trashcanImage.src = "../../assets/trashcan_icon.png";
+    trashcanImage.width = 32;
+    trashcanImage.height = 32;
+    trashcanCell.appendChild(trashcanImage);
+
+    for (let house of houses) {
+        const row = document.createElement('tr');
+
+        const addressCell = document.createElement('td');
+        const descriptionCell = document.createElement('td');
+        const roomsCell = document.createElement('td');
+        const bedsCell = document.createElement('td');
+        const priceCell = document.createElement('td');
+        const ownerNameCell = document.createElement('td');
+        const deleteCell = trashcanCell.cloneNode(true);
+
+        const DESC_MAX_LEN = 100;
+        let houseDescription = house.Beschreibung.length <= DESC_MAX_LEN ? house.Beschreibung : `${house.Beschreibung.substring(0, DESC_MAX_LEN)}...`;
+
+        addressCell.textContent = house.Adresse;
+        descriptionCell.textContent = houseDescription;
+        roomsCell.textContent = house.AnzahlZimmer;
+        bedsCell.textContent = house.AnzahlBetten;
+        priceCell.textContent = house.Preis;
+        ownerNameCell.textContent = house.EigentümerName;
+
+        // TODO
+        // deleteCell.onclick = (event) => deleteHouse(event, customersByMail[house.Email].NutzerID);
+
+        deleteCell.classList.add("image-container");
+        row.classList.add("clickable");
+
+        row.appendChild(addressCell);
+        row.appendChild(descriptionCell);
+        row.appendChild(roomsCell);
+        row.appendChild(bedsCell);
+        row.appendChild(priceCell);
+        row.appendChild(ownerNameCell);
+        row.appendChild(deleteCell);
+
+        // TODO
+        // row.onclick = () => onHouseRowClick(house.Email);
+
+        houseTableBody.appendChild(row);
     }
 }
 
@@ -183,3 +249,4 @@ function removeClickedClasses() {
 }
 
 await loadCustomers();
+await loadHouses();

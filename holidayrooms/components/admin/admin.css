@@ -75,12 +75,22 @@ body {
 .admin-page-table th {
   padding-top: 6px;
   padding-bottom: 6px;
+}
 
+#customer-table th {
   width: 25%;
+}
+
+#house-table th {
+  width: 14.29%;
 }
 
 .admin-page-table tbody tr {
   background: rgb(240, 240, 240);
+}
+
+#house-table tbody tr {
+  height: 96px;
 }
 
 .admin-page-table tbody tr.clickable:hover {
