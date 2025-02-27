@@ -8,6 +8,7 @@ const overviewPromise = (async () => {
       houseId: -1,
       roomCount: -1,
       bedCount: -1,
+      price: 0,
       place: '',
       startDate: '',
       endDate: ''
@@ -49,16 +50,25 @@ const overviewPromise = (async () => {
         houseId: -1,
         roomCount: -1,
         bedCount: -1,
+        price: 0,
         startDate: '',
         endDate: ''
       };
     }
   
     deleteActivityItem(itemKey){
-      const indexOfSearchedItem = this.#activityItems.indexOf(this.#activityItems.find(x => x.key === itemKey));
+      const indexOfSearchedItem = this.#activityItems.indexOf(this.#activityItems.find(x => x.id === itemKey));
       if(indexOfSearchedItem !== -1){
         this.#activityItems.splice(indexOfSearchedItem, 1);
       }
+    }
+
+    calculatePrice(){
+      const housePrice = parseFloat(this.#houseItem.price);
+      const activityPrice = parseFloat(this.#activityItems.reduce((sum, activity) => sum + activity.price, 0));
+      const result = housePrice + activityPrice;
+      
+      document.getElementById('resultPrice').textContent = result.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
     }
   
     async book(){

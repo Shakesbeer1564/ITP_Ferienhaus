@@ -39,6 +39,9 @@
         const bedText = document.createElement('p');
         bedText.classList.add('bed-count-text');
         bedText.textContent = `Bed-Count: ${this.getAttribute('bed_count') || 'No place'}`;
+
+        const price = document.createElement('p');
+        price.textContent = `Price: ${this.getAttribute('price') || 'No price'}`
         
         const description = document.createElement('p');
         description.classList.add('description');
@@ -56,6 +59,7 @@
               roomCount: this.getAttribute('room_count'),
               bedCount: this.getAttribute('bed_count'),
               place: this.getAttribute('place'),
+              price: this.getAttribute('price'),
               startDate: document.getElementById('date_start').value,
               endDate: document.getElementById('date_end').value
             });
@@ -75,6 +79,7 @@
         body.appendChild(placeText);
         body.appendChild(roomText);
         body.appendChild(bedText);
+        body.appendChild(price);
         body.appendChild(description);
         footer.appendChild(button);
       

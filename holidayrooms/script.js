@@ -173,7 +173,26 @@ document.getElementById('apply_filter_ac').addEventListener('click', async() => 
 //------------------------------------------
 document.getElementById('shopIcon').addEventListener('click', () => {
   handleShoppingCardDialog();
+  handleBookButton();
+  Overview.getInstance().calculatePrice();
 })
+
+function handleBookButton(){
+  if(Overview.getInstance().getHouseItem().houseId === -1 && Overview.getInstance().getActivityItems().length === 0){
+    document.querySelector('#book').disabled = true;
+  }
+  else{
+    document.querySelector('#book').disabled = false;
+  }
+}
+
+function calculatePrice(){
+  const housePrice = parseFloat(Overview.getInstance().getHouseItem().price);
+  const activityPrice = parseFloat(Overview.getInstance().getActivityItems().reduce((sum, activity) => sum + activity.price, 0));
+  const result = housePrice + activityPrice;
+  
+  document.getElementById('resultPrice').textContent = result.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
+}
 
 document.getElementById('closeDialog').addEventListener('click', handleShoppingCardDialog);
 

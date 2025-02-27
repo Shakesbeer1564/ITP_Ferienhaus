@@ -37,8 +37,8 @@
         button.textContent = '❌';
         button.onclick = () => {
           Overview.getInstance().deleteHouseItem();
-          
           this.closest('p-house-item').remove();
+          Overview.getInstance().calculatePrice();
         }
 
         header.append(title);

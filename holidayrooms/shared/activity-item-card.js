@@ -36,8 +36,8 @@
         button.textContent = '❌';
         button.onclick = () => {
           Overview.getInstance().deleteActivityItem(activityID);
-
           this.closest('p-activity-item').remove();
+          Overview.getInstance().calculatePrice();
         }
 
         header.append(title);

@@ -62,15 +62,47 @@ html, body{
 .app-bar-container .overview-container .card-dialog .items{
   width: 100%;
   height: calc(100% - 10%);
+  overflow-y: auto;
 }
 
 .app-bar-container .overview-container .card-dialog .close-div{
   height: 10%;
+  display: flex;
+  align-items: center;
 }
 
 .app-bar-container .overview-container .card-dialog .close-div button{
   height: 90%;
-  float: right;
+  color: rgb(78, 74, 74);
+  border: 1px solid rgb(185, 185, 185);
+  border-radius: 2px;
+  background-color: rgb(227, 227, 227);
+  cursor: pointer;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button:hover{
+  cursor: pointer;
+  background-color: rgb(215, 215, 215);
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button:active{
+  background-color: rgb(198, 198, 198);
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button:disabled{
+  background-color: #e7e7e760;
+  cursor: default;
+  color: #55555586;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div #resultPrice{
+  white-space: nowrap;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button, 
+.app-bar-container .overview-container .card-dialog .close-div #resultPrice{
+  flex: 1;
+  margin: 0px 2px 0px 2px;
 }
   
 .app-bar-container .buttons{
