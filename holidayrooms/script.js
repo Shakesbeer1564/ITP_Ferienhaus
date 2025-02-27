@@ -171,7 +171,8 @@ document.getElementById('apply_filter_ac').addEventListener('click', async() => 
 //------------------------------------------
 //----------- Shoping-Card -----------------
 //------------------------------------------
-document.getElementById('shopIcon').addEventListener('click', () => {
+document.getElementById('shopIcon').addEventListener('click', (e) => {
+  e.stopPropagation();
   handleShoppingCardDialog();
   handleBookButton();
   Overview.getInstance().calculatePrice();
@@ -186,13 +187,13 @@ function handleBookButton(){
   }
 }
 
-function calculatePrice(){
-  const housePrice = parseFloat(Overview.getInstance().getHouseItem().price);
-  const activityPrice = parseFloat(Overview.getInstance().getActivityItems().reduce((sum, activity) => sum + activity.price, 0));
-  const result = housePrice + activityPrice;
-  
-  document.getElementById('resultPrice').textContent = result.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
-}
+document.addEventListener('click', (event) => {
+  const itemsContainer = document.getElementById('cardDialog');
+
+  if(itemsContainer && !itemsContainer.contains(event.target)){
+    itemsContainer.style.display = 'none';
+  }
+})
 
 document.getElementById('closeDialog').addEventListener('click', handleShoppingCardDialog);
 
