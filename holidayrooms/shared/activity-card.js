@@ -11,13 +11,17 @@
         const container = document.createElement('div');
         container.classList.add('ac_card');
         
-        // Header
+        //------------------------------------------
+        //---------------- Header ------------------
+        //------------------------------------------
         const header = document.createElement('div');
         header.classList.add('ac_header');
         const title = document.createElement('h2');
         title.textContent = this.getAttribute('title') || 'No title available';
         
-        // Body
+        //------------------------------------------
+        //----------------- Body -------------------
+        //------------------------------------------
         const body = document.createElement('div');
         body.classList.add('ac_body');
         
@@ -39,7 +43,9 @@
         place.classList.add('ac_price');
         place.textContent = `Place: ${this.getAttribute('place') || 'No place available'}`;
   
-        // Footer
+        //------------------------------------------
+        //--------------- Footer -------------------
+        //------------------------------------------
         const footer = document.createElement('div');
         footer.classList.add('ac_card_footer');
         
@@ -56,7 +62,11 @@
           };
 
           Overview.getInstance().addActivity(item);
-          console.log(Overview.getInstance().getActivityItems());
+
+          const itemsContainer = document.querySelector('.items');
+          const acItem = document.createElement('p-activity-item');
+          acItem.setAttribute('id', item.id);
+          itemsContainer.appendChild(acItem);
         }
       
         // Zusammenfügen

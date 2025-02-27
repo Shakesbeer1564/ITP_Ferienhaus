@@ -8,6 +8,8 @@ const overviewPromise = (async () => {
       houseId: -1,
       roomCount: -1,
       bedCount: -1,
+      price: 0,
+      place: '',
       startDate: '',
       endDate: ''
     };
@@ -31,15 +33,12 @@ const overviewPromise = (async () => {
     }
   
     getActivityItemById(id){
-      const item = this.#activityItems.find(x => x.Id === id);
+      const item = this.#activityItems.find(x => x.id === id);
       return item;
     }
   
     addHouse(item){
-      if(this.#houseItem.houseId === -1)
-        this.#houseItem = item;
-      else
-        alert('Please remove the house booking at first');
+      this.#houseItem = item;
     }
   
     addActivity(item){
@@ -51,16 +50,25 @@ const overviewPromise = (async () => {
         houseId: -1,
         roomCount: -1,
         bedCount: -1,
+        price: 0,
         startDate: '',
         endDate: ''
       };
     }
   
     deleteActivityItem(itemKey){
-      const indexOfSearchedItem = this.#activityItems.indexOf(this.#activityItems.find(x => x.key === itemKey));
+      const indexOfSearchedItem = this.#activityItems.indexOf(this.#activityItems.find(x => x.id === itemKey));
       if(indexOfSearchedItem !== -1){
         this.#activityItems.splice(indexOfSearchedItem, 1);
       }
+    }
+
+    calculatePrice(){
+      const housePrice = parseFloat(this.#houseItem.price);
+      const activityPrice = parseFloat(this.#activityItems.reduce((sum, activity) => sum + activity.price, 0));
+      const result = housePrice + activityPrice;
+      
+      document.getElementById('resultPrice').textContent = result.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
     }
   
     async book(){
@@ -71,8 +79,10 @@ const overviewPromise = (async () => {
         houseId: this.#houseItem.houseId,
         startDate: this.#houseItem.startDate,
         endDate: this.#houseItem.endDate,
-        activityIds: this.#activityItems.map(x => x.AktivitätsID)
+        activityIds: this.#activityItems.map(x => x.id)
       };
+      console.log(data);
+      return;
   
       const res = await HTTPService.postData('book_house.php', data);
   

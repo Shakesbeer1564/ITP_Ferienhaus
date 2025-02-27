@@ -8,7 +8,8 @@
   <script type="module" src="./script.js"></script>
   <script defer src="./shared/card.js"></script>
   <script defer src="./shared/activity-card.js"></script>
-  <!-- <script type="module" src="./shared/card.js"></script> -->
+  <script defer src="./shared/house-item-card.js"></script>
+  <script defer src="./shared/activity-item-card.js"></script>
 </head>
 <body>
   <!-- app bar -->
@@ -21,15 +22,14 @@
       <img id="shopIcon" class="shop-icon" src="./assets/einkaufswagen_icon.png">
       <div id="cardDialog" class="card-dialog">
         <div class="items">
-          TEEEEEEEEEEEEEEEEEEST
         </div>
         <div class="close-div">
-          <button id="close-dialog">Schließen</button>
+          <h4 id="resultPrice"></h4>
+          <button id="book">Book</button>
+          <button id="closeDialog">Schließen</button>
         </div>
       </div>
     </div>
-
-   
 
     <div class="buttons">
       <button id="open_Login">Login</button>
@@ -133,6 +133,7 @@
       place="SUII"
       room_count="2"
       bed_count="1"
+      price="123,99"
       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
       button-text="Book">
     </p-card>
