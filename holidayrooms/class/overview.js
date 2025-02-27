@@ -64,8 +64,11 @@ const overviewPromise = (async () => {
     }
 
     calculatePrice(){
-      const housePrice = parseFloat(this.#houseItem.price);
-      const activityPrice = parseFloat(this.#activityItems.reduce((sum, activity) => sum + activity.price, 0));
+      const housePrice = parseFloat(this.#houseItem.price.toString().replace(',', '.'));
+      let activityPrice = 0;
+      this.#activityItems.forEach((value) => {
+        activityPrice += parseFloat((value.price || 0));
+      });
       const result = housePrice + activityPrice;
       
       document.getElementById('resultPrice').textContent = result.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';

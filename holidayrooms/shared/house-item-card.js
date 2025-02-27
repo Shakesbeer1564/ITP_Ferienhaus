@@ -35,7 +35,8 @@
 
         const button = document.createElement('button');
         button.textContent = '❌';
-        button.onclick = () => {
+        button.onclick = (e) => {
+          e.stopPropagation();
           Overview.getInstance().deleteHouseItem();
           this.closest('p-house-item').remove();
           Overview.getInstance().calculatePrice();
