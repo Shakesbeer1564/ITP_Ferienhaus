@@ -1,18 +1,70 @@
 import { HTTPService } from "../../http-service.js";
 
-// Store the users id to their mail
-let customersByMail = {};
 let backIcon = document.querySelector("#back-icon");
 backIcon.onclick = () => onBackIconClick();
+
+await loadCustomers();
+await loadHouses();
+
+
+function hideCustomerContainer() {
+    let customerContainer = document.querySelector("#customer-container");
+    customerContainer.classList.add('hidden');
+}
+function showCustomerContainer() {
+    let customerContainer = document.querySelector("#customer-container");
+    customerContainer.classList.remove('hidden');
+    loadCustomers();
+}
+function hideUserBookingContainer() {
+    let userBookingContainer = document.querySelector("#user-booking-container");
+    userBookingContainer.classList.add('hidden');
+}
+function showUserBookingContainer() {
+    let userBookingContainer = document.querySelector("#user-booking-container");
+    userBookingContainer.classList.remove('hidden');
+}
+function hideInvoiceContainer() {
+    let invoiceContainer = document.querySelector("#invoice-container");
+    invoiceContainer.classList.add('hidden');
+}
+function showInvoiceContainer() {
+    let invoiceContainer = document.querySelector("#invoice-container");
+    invoiceContainer.classList.remove('hidden');
+}
+function hideHistoryContainer() {
+    let historyContainer = document.querySelector("#history-container");
+    historyContainer.classList.add('hidden');
+}
+function showHistoryContainer(historyText) {
+    let historyContainer = document.querySelector("#history-container");
+    historyContainer.classList.remove('hidden');
+    let historyContainerText = document.querySelector("#history-text");
+    historyContainerText.textContent = historyText;
+}
+
+function hideHouseContainer() {
+    let houseContainer = document.querySelector("#house-container");
+    houseContainer.classList.add('hidden');
+}
+function showHouseContainer() {
+    let houseContainer = document.querySelector("#house-container");
+    houseContainer.classList.remove('hidden');
+    loadHouses();
+}
+function hideHouseBookingContainer() {
+    let houseBookingContainer = document.querySelector("#house-booking-container");
+    houseBookingContainer.classList.add('hidden');
+}
+function showHouseBookingContainer() {
+    let houseBookingContainer = document.querySelector("#house-booking-container");
+    houseBookingContainer.classList.remove('hidden');
+}
 
 
 async function loadCustomers() {
     const res = await HTTPService.getData('get_customers.php');
     displayCustomers(res);
-
-    for (let customer of res) {
-        customersByMail[customer.Email] = customer;
-    }
 }
 
 async function loadHouses() {
@@ -51,7 +103,7 @@ function displayCustomers(customers) {
         emailCell.textContent = customer.Email;
         phoneCell.textContent = customer.Telefonnummer;
 
-        deleteCell.onclick = (event) => deleteUser(event, customersByMail[customer.Email].NutzerID);
+        deleteCell.onclick = (event) => deleteUser(event, customer.NutzerID);
 
         deleteCell.classList.add("image-container");
         row.classList.add("clickable");
@@ -61,7 +113,7 @@ function displayCustomers(customers) {
         row.appendChild(phoneCell);
         row.appendChild(deleteCell);
 
-        row.onclick = () => onCustomerRowClick(customer.Email);
+        row.onclick = () => onCustomerRowClick(customer.Email, customer.Name);
 
         customerTableBody.appendChild(row);
     }
@@ -100,8 +152,7 @@ function displayHouses(houses) {
         priceCell.textContent = house.Preis;
         ownerNameCell.textContent = house.EigentümerName;
 
-        // TODO
-        // deleteCell.onclick = (event) => deleteHouse(event, customersByMail[house.Email].NutzerID);
+        deleteCell.onclick = (event) => deleteHouse(event, house.HausID);
 
         deleteCell.classList.add("image-container");
         row.classList.add("clickable");
@@ -114,25 +165,24 @@ function displayHouses(houses) {
         row.appendChild(ownerNameCell);
         row.appendChild(deleteCell);
 
-        // TODO
-        // row.onclick = () => onHouseRowClick(house.Email);
+        row.onclick = () => onHouseRowClick(house.HausID, house.Adresse);
 
         houseTableBody.appendChild(row);
     }
 }
 
-async function loadBookings(email) {
+async function loadUserBookings(email) {
     const res = await HTTPService.postData('get_users_bookings.php', {
         "userEmail": email
     });
 
-    displayBookings(res);
+    displayUserBookings(res);
 }
 
-function displayBookings(bookings) {
-    const bookingTableBody = document.querySelector('#booking-table tbody');
+function displayUserBookings(bookings) {
+    const userBookingTableBody = document.querySelector('#user-booking-table tbody');
     // Clear any existing content
-    bookingTableBody.innerHTML = '';
+    userBookingTableBody.innerHTML = '';
 
     for (let booking of bookings) {
         const row = document.createElement('tr');
@@ -149,7 +199,7 @@ function displayBookings(bookings) {
         row.appendChild(endDateCell);
         row.appendChild(priceCell);
 
-        bookingTableBody.appendChild(row);
+        userBookingTableBody.appendChild(row);
     }
 }
 
@@ -182,40 +232,75 @@ function displayInvoices(invoices) {
     }
 }
 
+async function loadHouseBookings(houseId) {
+    const res = await HTTPService.postData('get_home_bookings.php', {
+        "houseId": houseId
+    });
 
-async function onCustomerRowClick(email) {
+    displayHouseBookings(res);
+}
 
-    let customerContainer = document.querySelector("#customer-container");
-    let bookingContainer = document.querySelector("#booking-container");
-    let invoiceContainer = document.querySelector("#invoice-container");
-    let historyContainer = document.querySelector("#history-container");
-    let historyUsernameInfo = document.querySelector("#username-info");
+function displayHouseBookings(bookings) {
+    const houseBookingTableBody = document.querySelector('#house-booking-table tbody');
+    // Clear any existing content
+    houseBookingTableBody.innerHTML = '';
 
-    customerContainer.classList.add('hidden');
-    bookingContainer.classList.remove('hidden');
-    invoiceContainer.classList.remove('hidden');
-    historyContainer.classList.remove('hidden');
+    for (let booking of bookings) {
+        const row = document.createElement('tr');
 
-    historyUsernameInfo.textContent = "test";
+        const startDateCell = document.createElement('td');
+        const endDateCell = document.createElement('td');
+        const priceCell = document.createElement('td');
 
-    loadBookings(email);
+        startDateCell.textContent = new Date(booking.Startdatum).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' });
+        endDateCell.textContent = new Date(booking.Enddatum).toLocaleDateString(undefined, { day: '2-digit', month: '2-digit', year: 'numeric' });
+        priceCell.textContent = booking.Preis;
+
+        row.appendChild(startDateCell);
+        row.appendChild(endDateCell);
+        row.appendChild(priceCell);
+
+        houseBookingTableBody.appendChild(row);
+    }
+}
+
+
+async function onCustomerRowClick(email, username) {
+    hideCustomerContainer();
+    hideHouseContainer();
+
+    showUserBookingContainer(email);
+    showInvoiceContainer(email);
+    showHistoryContainer(`History of user: ${username}`);
+
+    loadUserBookings(email);
     loadInvoices(email);
 
     removeClickedClasses();
 }
 
+function onHouseRowClick(houseId, address) {
+    hideCustomerContainer();
+    hideHouseContainer();
+
+    showHouseBookingContainer();
+    showHistoryContainer(`Information about house: ${address}`);
+
+    loadHouseBookings(houseId);
+
+    removeClickedClasses();
+}
+
+
 function onBackIconClick() {
-    let customerContainer = document.querySelector("#customer-container");
-    let bookingContainer = document.querySelector("#booking-container");
-    let invoiceContainer = document.querySelector("#invoice-container");
-    let historyContainer = document.querySelector("#history-container");
+    showCustomerContainer();
+    showHouseContainer();
 
-    customerContainer.classList.remove('hidden');
-    bookingContainer.classList.add('hidden');
-    invoiceContainer.classList.add('hidden');
-    historyContainer.classList.add('hidden');
+    hideUserBookingContainer();
+    hideInvoiceContainer();
+    hideHistoryContainer();
 
-    loadCustomers();
+    hideHouseBookingContainer();
 }
 
 async function deleteUser(event, userId) {
@@ -241,12 +326,32 @@ async function deleteUser(event, userId) {
     loadCustomers();
 }
 
+async function deleteHouse(event, houseId) {
+    // Prevent other click events from triggering
+    event.stopPropagation();
+
+    let target = event.target;
+    if (target.localName == "img") {
+        target = target.offsetParent;
+    }
+
+    if (!target.classList.contains('delete-clicked')) {
+        removeClickedClasses();
+        target.classList.add('delete-clicked');
+        return;
+    }
+
+    await HTTPService.postData('delete_house.php', {
+        "houseId": houseId
+    });
+
+    // Refresh the houses after one has been deleted
+    loadHouses();
+}
+
 function removeClickedClasses() {
     let tableCells = document.querySelectorAll("td");
     for (let cell of tableCells) {
         cell.classList.remove('delete-clicked');
     }
 }
-
-await loadCustomers();
-await loadHouses();
