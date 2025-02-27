@@ -91,3 +91,11 @@
     background-color: rgb(198, 198, 198);
 }
 }
+
+.dropdownMenu {
+    position: relative;
+    z-index: 9999 !important;
+    display: block !important;
+}
+
+  
