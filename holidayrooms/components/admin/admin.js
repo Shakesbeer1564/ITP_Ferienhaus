@@ -41,6 +41,9 @@ function displayCustomers(customers) {
 
         deleteCell.onclick = (event) => deleteUser(event, customersByMail[customer.Email].NutzerID);
 
+        deleteCell.classList.add("image-container");
+        row.classList.add("clickable");
+
         row.appendChild(nameCell);
         row.appendChild(emailCell);
         row.appendChild(phoneCell);
@@ -131,6 +134,8 @@ async function onCustomerRowClick(email) {
 
     loadBookings(email);
     loadInvoices(email);
+
+    removeClickedClasses();
 }
 
 function onBackIconClick() {
@@ -138,7 +143,6 @@ function onBackIconClick() {
     let bookingContainer = document.querySelector("#booking-container");
     let invoiceContainer = document.querySelector("#invoice-container");
     let historyContainer = document.querySelector("#history-container");
-    let historyUsernameInfo = document.querySelector("#username-info");
 
     customerContainer.classList.remove('hidden');
     bookingContainer.classList.add('hidden');
@@ -152,12 +156,30 @@ async function deleteUser(event, userId) {
     // Prevent other click events from triggering
     event.stopPropagation();
 
+    let target = event.target;
+    if (target.localName == "img") {
+        target = target.offsetParent;
+    }
+
+    if (!target.classList.contains('delete-clicked')) {
+        removeClickedClasses();
+        target.classList.add('delete-clicked');
+        return;
+    }
+
     await HTTPService.postData('delete_user.php', {
         "userId": userId
     });
 
     // Update the customer table after the user has been deleted
     loadCustomers();
+}
+
+function removeClickedClasses() {
+    let tableCells = document.querySelectorAll("td");
+    for (let cell of tableCells) {
+        cell.classList.remove('delete-clicked');
+    }
 }
 
 await loadCustomers();

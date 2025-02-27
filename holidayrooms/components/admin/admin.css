@@ -83,7 +83,7 @@ body {
   background: rgb(240, 240, 240);
 }
 
-.admin-page-table tbody tr:hover {
+.admin-page-table tbody tr.clickable:hover {
   background: rgb(222, 220, 220);
 }
 
@@ -93,8 +93,16 @@ body {
   border-top: 1px solid #999;
 }
 
-.admin-page-table td {
+.admin-page-table td:not(.image-container) {
   padding: 20px;
+}
+
+.image-container {
+  padding: 10px;
+}
+
+.delete-clicked {
+  background: #f003;
 }
 
 
