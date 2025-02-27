@@ -100,7 +100,7 @@ function renderActivityCards(acCardElements){
     card.setAttribute('title', el.Name);
     card.setAttribute('price', el.Preis);
     card.setAttribute('participants', el.AnzahlTeilnehmer);
-    card.setAttribute('place'. el.OrtName)
+    card.setAttribute('place', el.OrtName)
     card.setAttribute('description', el.Beschreibung);
 
     activityContainer.appendChild(card);
@@ -202,9 +202,7 @@ function handleShoppingCardDialog(){
   cardDialog.style.display = cardDialog.style.display === 'block' ? 'none' : 'block';
 }
 
-document.getElementById('book').addEventListener('click', async () => {
-  await Overview.getInstance().book();
-})
+document.getElementById('book').addEventListener('click', () => Overview.getInstance().book());
 
 //------------------------------------------
 //----------- Dialog-Handling --------------

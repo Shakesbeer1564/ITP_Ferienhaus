@@ -33,6 +33,9 @@
         const bedCount = document.createElement('p');
         bedCount.textContent = `Bed-Count: ${Overview.getInstance().getHouseItem().bedCount}`;
 
+        const price = document.createElement('p');
+        price.textContent = `Price: ${Overview.getInstance().getHouseItem().price}€`;
+
         const button = document.createElement('button');
         button.textContent = '❌';
         button.onclick = (e) => {
@@ -48,6 +51,7 @@
         body.append(dateRange);
         body.append(roomCount);
         body.append(bedCount);
+        body.append(price);
         container.append(header);
         container.append(body);
 
