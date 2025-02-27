@@ -37,8 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Get customers from the result
     $customers = [];
     while ($row = $result->fetch_assoc()) {
+        // Add role name to row
         $role_id = $row["RolleID"];
         $row["NameRolle"] = get_role_name_by_id($role_id);
+
+        // Remove password from row
+        unset($row["Passwort"]);
+
+        // Add row to response
         $customers[] = $row;
     }
 
