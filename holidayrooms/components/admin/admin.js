@@ -7,6 +7,15 @@ await loadCustomers();
 await loadHouses();
 
 
+function hideBackIcon() {
+    let backIcon = document.querySelector("#back-icon");
+    backIcon.classList.add('hidden');
+}
+function showBackIcon() {
+    let backIcon = document.querySelector("#back-icon");
+    backIcon.classList.remove('hidden');
+}
+
 function hideCustomerContainer() {
     let customerContainer = document.querySelector("#customer-container");
     customerContainer.classList.add('hidden');
@@ -269,6 +278,8 @@ async function onCustomerRowClick(email, username) {
     hideCustomerContainer();
     hideHouseContainer();
 
+    showBackIcon();
+
     showUserBookingContainer(email);
     showInvoiceContainer(email);
     showHistoryContainer(`History of user: ${username}`);
@@ -283,6 +294,8 @@ function onHouseRowClick(houseId, address) {
     hideCustomerContainer();
     hideHouseContainer();
 
+    showBackIcon();
+
     showHouseBookingContainer();
     showHistoryContainer(`Information about house: ${address}`);
 
@@ -293,6 +306,8 @@ function onHouseRowClick(houseId, address) {
 
 
 function onBackIconClick() {
+    hideBackIcon();
+
     showCustomerContainer();
     showHouseContainer();
 
