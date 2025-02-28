@@ -51,6 +51,7 @@
         footer.classList.add('card_footer');
         
         const button = document.createElement('button');
+        button.classList.add('book-button');
         button.textContent = 'Book';
         button.onclick = () => {
           if(document.getElementById('date_start').value === '' || document.getElementById('date_end').value === ''){
@@ -151,6 +152,11 @@
           }
           .card .card_footer button:active {
             background-color: rgb(198, 198, 198);
+          }
+          .card .card_footer button:disabled{
+            background-color: #e7e7e760;
+            cursor: default;
+            color: #55555586;
           }
           ::-webkit-scrollbar {
             width: 5px;
