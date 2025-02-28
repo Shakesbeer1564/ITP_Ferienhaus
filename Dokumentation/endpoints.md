@@ -7,6 +7,7 @@
 - [Delete User](#delete-user)
 - [Suche nach Ferienhaus](#suche-nach-ferienhaus)
 - [Suche nach Freizeitaktivität](#suche-nach-freizeitaktivität)
+- [Preis einer Hausbuchung berechnen](#preis-einer-hausbuchung-berechnen)
 - [Buchung](#buchung)
 - [Häuser vergangener Buchungen anzeigen](#häuser-vergangener-buchungen-anzeigen)
 - [Mängelbestand melden](#mängelbestand-melden)
@@ -239,6 +240,44 @@ Sucht mit dem gegebenen Query-String Freizeitaktivitäten. Dabei werden alle Akt
 ```JSON
 activities: Activity[]
 ```
+---
+
+
+## Preis einer Hausbuchung berechnen
+
+Berechnet den Preis einer Buchung für das gegebene Haus in dem gegebenen Zeitraum (Start- und Enddatum).
+
+### Method: `POST`
+
+### File: `get_house_booking_price.php`
+
+### Required Role (backend-handled): `Registriert` (or higher)
+
+### Body
+```JSON
+{
+    "houseId": number,
+    "startDate": Date,
+    "endDate": Date
+}   
+```
+
+### Response
+```JSON
+{
+    "price": number
+}
+```
+
+### Errors
+`401` Unauthorized: "No session"
+
+`403` Forbidden: "Only registered users can view the price of a house booking"
+
+`404` Not Found: "Could not find the house with the given ID"
+
+`500` Internal Server Error: "Something went wrong while trying to execute the database query"
+
 ---
 
 
