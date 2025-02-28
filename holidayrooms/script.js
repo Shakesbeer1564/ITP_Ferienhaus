@@ -147,71 +147,32 @@ function loadStyle(href){
 //------------------------------------------
 //-------- Apply-Filter-Buttons ------------
 //------------------------------------------
-// document.addEventListener('DOMContentLoaded', () => {
-//   let dateStart = document.getElementById('date_start');
-//   let dateEnd = document.getElementById('date_end');
-//   let applyFilterButton = document.getElementById('apply_filter');
-//   let bookButton = document.querySelector('.book-button');
-
-//   let dateChanged = false;
-
-//   function disableButton(){
-//     bookButton.disabled = true;
-//     dateChanged = true;
-//   }
-
-//   dateStart.addEventListener('change', disableButton);
-//   dateEnd.addEventListener('change', disableButton);
-
-//   applyFilterButton.addEventListener('click', () => {
-//     if(dateChanged){
-//       dateChanged = false;
-//       bookButton.disabled = false;
-//     }
-//   })
-// })
-
 window.onload = () => {
-  new Promise((resolve) => {
-    if (document.readyState === 'loading') {
-      document.addEventListener("DOMContentLoaded", resolve);
-    } else {
-      resolve(); // Wenn das DOM bereits geladen ist
+  const dateStart = document.getElementById('date_start');
+  const dateEnd = document.getElementById('date_end');
+  const applyFilterButton = document.getElementById('apply_filter');
+
+  const shadowHost = document.querySelector("p-card");
+  const shadowRoot = shadowHost.shadowRoot; // Zugriff auf das Shadow DOM
+  const bookButton = shadowRoot.querySelector(".book-button");
+
+  let dateChanged = false;
+
+  function disableButton(){
+    bookButton.disabled = true;
+    dateChanged = true;
+  }
+
+  dateStart.addEventListener('change', disableButton);
+  dateEnd.addEventListener('change', disableButton);
+
+  applyFilterButton.addEventListener('click', () => {
+    if(dateChanged){
+      dateChanged = false;
+      bookButton.disabled = false;
     }
   })
-  .then(() => {
-    let dateStart = document.getElementById('date_start');
-    let dateEnd = document.getElementById('date_end');
-    let applyFilterButton = document.getElementById('apply_filter');
-    let shadowHost = document.querySelector("p-card");
-    let shadowRoot = shadowHost.shadowRoot; // Zugriff auf das Shadow DOM
-    let bookButton = shadowRoot.querySelector(".book-button"); // Jetzt den Button auswählen
-
-    // let bookButton = document.querySelector('.book-button');
-
-    let dateChanged = false;
-
-    function disableButton(){
-      bookButton.disabled = true;
-      dateChanged = true;
-    }
-
-    dateStart.addEventListener('change', disableButton);
-    dateEnd.addEventListener('change', disableButton);
-
-    applyFilterButton.addEventListener('click', () => {
-      if(dateChanged){
-        dateChanged = false;
-        bookButton.disabled = false;
-      }
-    })
-  })
-  .catch((err) => console.log('ERROR: ', err));
 }
-
-
-
-
 
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
