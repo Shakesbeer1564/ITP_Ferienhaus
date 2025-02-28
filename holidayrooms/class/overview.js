@@ -85,7 +85,6 @@ const overviewPromise = (async () => {
         activityIds: this.#activityItems.map(x => x.id)
       };
       console.log(data);
-      return;
   
       const res = await HTTPService.postData('book_house.php', data);
   
