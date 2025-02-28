@@ -151,10 +151,10 @@ document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
   const data = {
     query: inputs[0].value,
-    roomCount: parseInt(inputs[2].value),
-    bedCount: parseInt(inputs[3].value),
-    startDate: inputs[4].value,
-    endDate: inputs[5].value
+    roomCount: parseInt(inputs[1].value),
+    bedCount: parseInt(inputs[2].value),
+    startDate: inputs[3].value,
+    endDate: inputs[4].value
   };
 
   await loadHouses(data);
