@@ -24,6 +24,11 @@ function initialiseComponents(){
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
 }
 
+window.addEventListener('load', () => {
+  // handle login/registration and logout button visibility
+  
+});
+
 //------------------------------------------
 //----------- Card-Handling ----------------
 //------------------------------------------
@@ -147,7 +152,7 @@ function loadStyle(href){
 //------------------------------------------
 //-------- Apply-Filter-Buttons ------------
 //------------------------------------------
-window.onload = () => {
+window.addEventListener('load', () => {
   const dateStart = document.getElementById('date_start');
   const dateEnd = document.getElementById('date_end');
   const applyFilterButton = document.getElementById('apply_filter');
@@ -172,7 +177,7 @@ window.onload = () => {
       bookButton.disabled = false;
     }
   })
-}
+})
 
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
