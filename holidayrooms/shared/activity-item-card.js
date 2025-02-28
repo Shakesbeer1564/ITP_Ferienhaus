@@ -27,7 +27,7 @@
         placeText.textContent = `Place: ${Overview.getInstance().getActivityItemById(activityID)?.place}`;
         
         const participants = document.createElement('p');
-        participants.textContent = `Participants ${Overview.getInstance().getActivityItemById(activityID)?.participants}`;
+        participants.textContent = `Participants: ${Overview.getInstance().getActivityItemById(activityID)?.participants}`;
       
         const price = document.createElement('p');
         price.textContent = `Price: ${Overview.getInstance().getActivityItemById(activityID)?.price}`;

@@ -53,6 +53,11 @@
         const button = document.createElement('button');
         button.textContent = 'Book';
         button.onclick = () => {
+          if(document.getElementById('date_start').value === '' || document.getElementById('date_end').value === ''){
+            alert('Please select a date');
+            return;
+          }
+
           if(Overview.getInstance().getHouseItem().houseId === -1){
             Overview.getInstance().addHouse({
               houseId: this.getAttribute('id'),

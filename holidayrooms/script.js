@@ -133,7 +133,7 @@ function loadComponent(url, containerId, cssFile, jsFile){
 
 function loadScript(src){
   let script = document.createElement('script');
-  script.src = `${src}?v=${new Date().getTime()}`;
+  script.src = src;
   script.id = src;
   script.defer = true;
   script.type = 'module';
@@ -143,7 +143,7 @@ function loadScript(src){
 function loadStyle(href){
   let link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = `${href}?v=${new Date().getTime()}`
+  link.href = href;
   link.defer = true;
   link.id = href;
   document.head.appendChild(link);
