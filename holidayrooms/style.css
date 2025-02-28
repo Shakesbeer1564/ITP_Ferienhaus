@@ -16,8 +16,6 @@ html, body{
   height: 60px;
   background-color: rgb(234, 234, 234);
   align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
   gap: 5px;
 }
 
@@ -36,43 +34,75 @@ html, body{
 }
 
 .app-bar-container .overview-container{
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  border: 1px solid rgb(173, 173, 173);
-  border-radius: 3px;
-  height: 35px;
-  overflow: hidden;
-}
-
-.app-bar-container .overview-container .title{ /*Title container*/
   position: relative;
-  height: 100%;
-  color: rgb(43, 99, 210);
-  border-right: 1px solid rgb(173, 173, 173);
-  background-color: rgb(202, 202, 202);
-  display: flex;
-  align-items: center;
-  text-align: center;
-  padding-left: 3px;
-  padding-right: 3px;
+  display: inline-block;
 }
 
-.arrow{
-  margin-left: 10px;
-  height: 100%;
-  border-left: 1px solid #d6d6d6;
+.app-bar-container .overview-container img{
+  height: 40px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.app-bar-container .overview-container .card-dialog{
+  position: absolute;
+  display: none;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%);
+  z-index: 1000;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  width: 20em;
+  height: 25em;
+}
+
+.app-bar-container .overview-container .card-dialog .items{
+  width: 100%;
+  height: calc(100% - 10%);
+  overflow-y: auto;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div{
+  height: 10%;
+  display: flex;
+  align-items: center;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button{
+  height: 90%;
+  color: rgb(78, 74, 74);
+  border: 1px solid rgb(185, 185, 185);
+  border-radius: 2px;
+  background-color: rgb(227, 227, 227);
   cursor: pointer;
 }
 
-.arrow-implement{
-  width: 0;
-  height: 0;
-  margin: 10px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 10px solid black;
-  display: inline-block;
+.app-bar-container .overview-container .card-dialog .close-div button:hover{
+  cursor: pointer;
+  background-color: rgb(215, 215, 215);
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button:active{
+  background-color: rgb(198, 198, 198);
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button:disabled{
+  background-color: #e7e7e760;
+  cursor: default;
+  color: #55555586;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div #resultPrice{
+  white-space: nowrap;
+}
+
+.app-bar-container .overview-container .card-dialog .close-div button, 
+.app-bar-container .overview-container .card-dialog .close-div #resultPrice{
+  flex: 1;
+  margin: 0px 2px 0px 2px;
 }
   
 .app-bar-container .buttons{
@@ -256,7 +286,7 @@ html, body{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 100000;
   width: 30%;
   height: 50%;
 }
@@ -267,7 +297,7 @@ html, body{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 100000;
   width: 25%;
   height: 70%;
 }
@@ -294,7 +324,7 @@ html, body{
   background: rgba(0, 0, 0, 0.8); /* Halbtransparentes Overlay */
   justify-content: center;
   align-items: center;
-  z-index: 5;
+  z-index: 10000;
 }
 
 .holiday-rooms-container{

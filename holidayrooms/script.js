@@ -1,9 +1,13 @@
-import { Overview } from "./class/overview.js";
 import { HTTPService } from "./http-service.js";
+const { getOverviewClass } = await import('./class/overview.js');
+const Overview = await getOverviewClass();
 
 initializeData();
 
-//#region initialize_Data
+//------------------------------------------
+//----------- Initialisation ---------------
+//------------------------------------------
+
 function initializeData(){
   initialiseComponents();
   loadHouses();
@@ -24,9 +28,9 @@ function initialiseComponents(){
     './components/authentification/maengelanzeige/maengel.css', './components/authentification/maengelanzeige/maengel.js');
 }
 
-
-
-
+//------------------------------------------
+//----------- Card-Handling ----------------
+//------------------------------------------
 async function loadHouses(data = {
   query: "",
   roomCount: 0,
@@ -46,6 +50,30 @@ async function loadHouses(data = {
   }
 }
 
+function renderHouseCards(cardElements){
+  const roomContainer = document.getElementById('holiday-rooms-container');
+
+  if(roomContainer.firstChild){
+    while(roomContainer.firstChild){
+      roomContainer.removeChild(roomContainer.firstChild);
+    }
+  }
+
+  cardElements.forEach(element => {
+    const card = document.createElement('p-card');
+    card.setAttribute('id', element.HausID);
+    card.setAttribute('image', element.image);
+    card.setAttribute('owner', element.EigentümerName);
+    card.setAttribute('place', element.Adresse);
+    card.setAttribute('room_count', element.AnzahlZimmer);
+    card.setAttribute('bed_count', element.AnzahlBetten);
+    card.setAttribute('description', element.Beschreibung);
+    card.setAttribute('price', element.Preis);
+
+    roomContainer.appendChild(card);
+  });
+}
+
 async function loadActivities(data = {
   query: ""
 }) {
@@ -59,9 +87,33 @@ async function loadActivities(data = {
     console.log('SOMETHIGN WENT WRONG WHILE GETTING THE ACTIVITIES: ', err);
   }
 }
-//#endregion initialize_Data
 
-//#region helper_functions_loadComponents
+function renderActivityCards(acCardElements){
+  const activityContainer = document.getElementById('activity_card_container');
+
+
+  if(activityContainer.firstChild){
+    while(activityContainer.firstChild){
+      activityContainer.removeChild(activityContainer.firstChild);
+    }
+  }
+  
+  for(let el of acCardElements){
+    const card = document.createElement('p-card-activity');
+    card.setAttribute('id', el.AktivitätsID);
+    card.setAttribute('title', el.Name);
+    card.setAttribute('price', el.Preis);
+    card.setAttribute('participants', el.AnzahlTeilnehmer);
+    card.setAttribute('place', el.OrtName)
+    card.setAttribute('description', el.Beschreibung);
+
+    activityContainer.appendChild(card);
+  }
+}
+
+//------------------------------------------
+//----------- Component-Loader -------------
+//------------------------------------------
 function loadComponent(url, containerId, cssFile, jsFile){
   fetch(url)
     .then(res => res.text())
@@ -96,8 +148,10 @@ function loadStyle(href){
   link.id = href;
   document.head.appendChild(link);
 }
-//#endregion helper_functions_loadComponents
 
+//------------------------------------------
+//-------- Apply-Filter-Buttons ------------
+//------------------------------------------
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
   const data = {
@@ -119,59 +173,50 @@ document.getElementById('apply_filter_ac').addEventListener('click', async() => 
   await loadActivities(data);
 })
 
-// Render room cards
-function renderHouseCards(cardElements){
-  const roomContainer = document.getElementById('holiday-rooms-container');
+//------------------------------------------
+//----------- Shoping-Card -----------------
+//------------------------------------------
+document.getElementById('shopIcon').addEventListener('click', (e) => {
+  e.stopPropagation();
+  handleShoppingCardDialog();
+  handleBookButton();
+  Overview.getInstance().calculatePrice();
+})
 
-  if(roomContainer.firstChild){
-    while(roomContainer.firstChild){
-      roomContainer.removeChild(roomContainer.firstChild);
-    }
+function handleBookButton(){
+  if(Overview.getInstance().getHouseItem().houseId === -1 && Overview.getInstance().getActivityItems().length === 0){
+    document.querySelector('#book').disabled = true;
   }
-
-  cardElements.forEach(element => {
-    const card = document.createElement('p-card');
-    card.setAttribute('id', element.HausID);
-    card.setAttribute('image', element.image);
-    card.setAttribute('owner', element.EigentümerName);
-    card.setAttribute('place', element.Adresse);
-    card.setAttribute('room_count', element.AnzahlZimmer);
-    card.setAttribute('bed_count', element.AnzahlBetten);
-    card.setAttribute('description', element.Beschreibung);
-    card.setAttribute('button-text', 'Book');
-
-    roomContainer.appendChild(card);
-  });
-}
-
-function renderActivityCards(acCardElements){
-  const activityContainer = document.getElementById('activity_card_container');
-
-
-  if(activityContainer.firstChild){
-    while(activityContainer.firstChild){
-      activityContainer.removeChild(activityContainer.firstChild);
-    }
-  }
-  
-  for(let el of acCardElements){
-    const card = document.createElement('p-card-activity');
-    card.setAttribute('id', el.AktivitätsID);
-    card.setAttribute('title', el.Name);
-    card.setAttribute('price', el.Preis);
-    card.setAttribute('description', el.Beschreibung);
-
-    activityContainer.appendChild(card);
+  else{
+    document.querySelector('#book').disabled = false;
   }
 }
 
-// load login dialog
+document.addEventListener('click', (event) => {
+  const itemsContainer = document.getElementById('cardDialog');
+
+  if(itemsContainer && !itemsContainer.contains(event.target)){
+    itemsContainer.style.display = 'none';
+  }
+})
+
+document.getElementById('closeDialog').addEventListener('click', handleShoppingCardDialog);
+
+function handleShoppingCardDialog(){
+  let cardDialog = document.getElementById('cardDialog');
+  cardDialog.style.display = cardDialog.style.display === 'block' ? 'none' : 'block';
+}
+
+document.getElementById('book').addEventListener('click', () => Overview.getInstance().book());
+
+//------------------------------------------
+//----------- Dialog-Handling --------------
+//------------------------------------------
 document.querySelector('#open_Login').addEventListener('click', () => {
   document.getElementById('login_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
 
-// load registration dialog
 document.querySelector('#open_registration').addEventListener('click', () => {
   document.getElementById('reg_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';

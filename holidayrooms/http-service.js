@@ -6,7 +6,7 @@ class HttpService{
   }
 
   async getData(endpoint, searchParams = null){
-    const url = new URL(`/ITP_Ferienhaus/holidayrooms${this.baseURL}/${endpoint}`, window.location.origin);
+    const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
     if(searchParams){
       Object.keys(searchParams).forEach(key => url.searchParams.append(key, searchParams[key]));
     }
@@ -32,7 +32,8 @@ class HttpService{
   }
 
   async postData(endpoint, data){
-    const res = await fetch(`${this.baseURL}/${endpoint}`, {
+    const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -48,7 +49,8 @@ class HttpService{
   }
 
   async putData(endpoint, data){
-    const res = await fetch(`${this.baseURL}/${endpoint}`, {
+    const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
+    const res = await fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -64,7 +66,8 @@ class HttpService{
   }
 
   async deleteData(endpoint){
-    const res = await fetch(`${this.baseURL}/${endpoint}`, {
+    const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
+    const res = await fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
