@@ -22,6 +22,10 @@ function initialiseComponents(){
   // Registration-component
   loadComponent('./components/authentification/regionstation/registration.html', 'reg_dialog',
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
+
+  // Maengelanzeige-component
+  loadComponent('./components/authentification/maengelanzeige/maengel.html', 'maengel_dialog',
+    './components/authentification/maengelanzeige/maengel.css', './components/authentification/maengelanzeige/maengel.js');
 }
 
 //------------------------------------------
@@ -100,7 +104,7 @@ function renderActivityCards(acCardElements){
     card.setAttribute('title', el.Name);
     card.setAttribute('price', el.Preis);
     card.setAttribute('participants', el.AnzahlTeilnehmer);
-    card.setAttribute('place'. el.OrtName)
+    card.setAttribute('place', el.OrtName)
     card.setAttribute('description', el.Beschreibung);
 
     activityContainer.appendChild(card);
@@ -114,6 +118,7 @@ function loadComponent(url, containerId, cssFile, jsFile){
   fetch(url)
     .then(res => res.text())
     .then(data => {
+      //console.log(data);
       document.getElementById(containerId).innerHTML = data;
 
       if(!document.getElementById(cssFile)){
@@ -202,9 +207,7 @@ function handleShoppingCardDialog(){
   cardDialog.style.display = cardDialog.style.display === 'block' ? 'none' : 'block';
 }
 
-document.getElementById('book').addEventListener('click', async () => {
-  await Overview.getInstance().book();
-})
+document.getElementById('book').addEventListener('click', () => Overview.getInstance().book());
 
 //------------------------------------------
 //----------- Dialog-Handling --------------
@@ -218,3 +221,9 @@ document.querySelector('#open_registration').addEventListener('click', () => {
   document.getElementById('reg_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
+
+document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
+  document.getElementById('maengel_dialog').style.display = 'block';
+  document.getElementById("dark_background").style.display = 'block';
+})
+

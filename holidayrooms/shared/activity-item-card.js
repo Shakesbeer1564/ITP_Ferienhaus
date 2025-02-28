@@ -34,7 +34,8 @@
 
         const button = document.createElement('button');
         button.textContent = '❌';
-        button.onclick = () => {
+        button.onclick = (e) => {
+          e.stopPropagation();
           Overview.getInstance().deleteActivityItem(activityID);
           this.closest('p-activity-item').remove();
           Overview.getInstance().calculatePrice();

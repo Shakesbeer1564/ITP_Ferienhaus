@@ -1,0 +1,34 @@
+ <div class="container">
+        <div class="mae_heading">
+            <h1 class="mae_title">Mängel</h1>
+            <button id="close_mae_dialog" onclick="closeDialog()">X</button>
+        </div>
+        
+        <div class="body">
+            <form id="maengel_form">
+                <h2>Wähle ein Haus:</h2>
+                <select id="dropdownMenu">
+                    <option value="">Bitte wählen...</option>
+                </select>
+    
+                <h2>Details:</h2>
+                <input type="text" id="inputField" placeholder="Enter details" required>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <button id="submitButton">Submit</button>
+        </div>
+    </div>
+    
+    <!-- Modal for displaying selected house -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modalText"></p>
+        </div>
+    </div>
+    
+
+    
+    
+
