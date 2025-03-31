@@ -8,7 +8,11 @@ initializeData();
 //----------- Initialisation ---------------
 //------------------------------------------
 
-function initializeData(){
+async function initializeData(){
+  checkLogoutButtonVisibility();
+  setTimeout(() => {
+    disableBookButton();
+  });
   initialiseComponents();
   loadHouses();
   loadActivities();
@@ -24,10 +28,20 @@ function initialiseComponents(){
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
 }
 
-window.addEventListener('load', () => {
-  // handle login/registration and logout button visibility
-  
-});
+function checkLogoutButtonVisibility(){
+  const logoutButton = document.getElementById('logout');
+
+  // Müssen wir über ein extra Endpunkt prüfen ob die Session da ist, weil die 
+  // Session_ID generiert wird und kein fester Key angegeben wird      
+  if(document.cookie.length > 0){
+    logoutButton.style.display = 'block';
+    document.getElementById('open_Login').style.display = 'none';
+    document.getElementById('open_registration').style.display = 'none';
+  }
+  else{
+    logoutButton.style.display = 'none';
+  }
+}
 
 //------------------------------------------
 //----------- Card-Handling ----------------
@@ -152,13 +166,13 @@ function loadStyle(href){
 //------------------------------------------
 //-------- Apply-Filter-Buttons ------------
 //------------------------------------------
-window.addEventListener('load', () => {
+function disableBookButton(){
   const dateStart = document.getElementById('date_start');
   const dateEnd = document.getElementById('date_end');
   const applyFilterButton = document.getElementById('apply_filter');
 
   const shadowHost = document.querySelector("p-card");
-  const shadowRoot = shadowHost.shadowRoot; // Zugriff auf das Shadow DOM
+  const shadowRoot = shadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
   const bookButton = shadowRoot.querySelector(".book-button");
 
   let dateChanged = false;
@@ -168,8 +182,8 @@ window.addEventListener('load', () => {
     dateChanged = true;
   }
 
-  dateStart.addEventListener('change', disableButton);
-  dateEnd.addEventListener('change', disableButton);
+  dateStart.addEventListener('input', disableButton);
+  dateEnd.addEventListener('input', disableButton);
 
   applyFilterButton.addEventListener('click', () => {
     if(dateChanged){
@@ -177,7 +191,7 @@ window.addEventListener('load', () => {
       bookButton.disabled = false;
     }
   })
-})
+}
 
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
@@ -247,4 +261,15 @@ document.querySelector('#open_Login').addEventListener('click', () => {
 document.querySelector('#open_registration').addEventListener('click', () => {
   document.getElementById('reg_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
+})
+
+
+//------------------------------------------
+//---------------- Logout ------------------
+//------------------------------------------
+document.getElementById('logout').addEventListener('click', async () => {
+  const res = await HTTPService.postData('sign_out.php');
+
+  if(res)
+    window.location.reload();
 })
