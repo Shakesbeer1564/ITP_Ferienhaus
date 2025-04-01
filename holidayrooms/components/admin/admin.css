@@ -1,0 +1,142 @@
+html,
+body {
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* App-bar styling */
+.app-bar-container {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  height: 60px;
+  background-color: rgb(234, 234, 234);
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  gap: 5px;
+}
+
+.heading-title {
+  flex: 1;
+  height: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heading-title h1 {
+  letter-spacing: 10px;
+}
+
+/* Filterbar for rooms booking */
+.heading-bar {
+  margin-top: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  width: 100%;
+  min-height: 50px;
+  background-color: rgb(234, 234, 234);
+}
+
+.heading {
+  margin-right: auto;
+  margin-left: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+#back-icon {
+  position: absolute;
+  left: 14px;
+}
+
+.admin-page-table {
+  margin-left: auto;
+  margin-right: auto;
+
+  margin-top: 20px;
+
+  border-spacing: 0;
+
+  border: 1px solid black;
+
+  width: 70%;
+}
+
+.admin-page-table thead tr {
+  background: rgb(197, 195, 195);
+}
+
+/* Table header cell */
+.admin-page-table th {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+#customer-table th {
+  width: 25%;
+}
+
+#house-table th {
+  width: 14.29%;
+}
+
+.admin-page-table tbody tr {
+  background: rgb(240, 240, 240);
+}
+
+#house-table tbody tr {
+  height: 96px;
+}
+
+.admin-page-table tbody tr.clickable:hover {
+  background: rgb(222, 220, 220);
+}
+
+/* Table body cell */
+.admin-page-table td {
+  text-align: center;
+  border-top: 1px solid #999;
+}
+
+.admin-page-table td:not(.image-container) {
+  padding: 20px;
+}
+
+.image-container {
+  padding: 10px;
+}
+
+.delete-clicked {
+  background: #f003;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

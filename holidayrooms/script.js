@@ -26,19 +26,10 @@ function initialiseComponents(){
   // Registration-component
   loadComponent('./components/authentification/regionstation/registration.html', 'reg_dialog',
     './components/authentification/regionstation/registration.css', './components/authentification/regionstation/registration.js');
-}
 
-function checkLogoutButtonVisibility(){
-  const logoutButton = document.getElementById('logout');
-
-  if(document.cookie.length > 0){
-    logoutButton.style.display = 'block';
-    document.getElementById('open_Login').style.display = 'none';
-    document.getElementById('open_registration').style.display = 'none';
-  }
-  else{
-    logoutButton.style.display = 'none';
-  }
+  // Maengelanzeige-component
+  loadComponent('./components/authentification/maengelanzeige/maengel.html', 'maengel_dialog',
+    './components/authentification/maengelanzeige/maengel.css', './components/authentification/maengelanzeige/maengel.js');
 }
 
 //------------------------------------------
@@ -131,6 +122,7 @@ function loadComponent(url, containerId, cssFile, jsFile){
   fetch(url)
     .then(res => res.text())
     .then(data => {
+      //console.log(data);
       document.getElementById(containerId).innerHTML = data;
 
       if(!document.getElementById(cssFile)){
@@ -261,13 +253,8 @@ document.querySelector('#open_registration').addEventListener('click', () => {
   document.getElementById("dark_background").style.display = 'block';
 })
 
-
-//------------------------------------------
-//---------------- Logout ------------------
-//------------------------------------------
-document.getElementById('logout').addEventListener('click', async () => {
-  const res = await HTTPService.postData('sign_out.php');
-
-  if(res)
-    window.location.reload();
+document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
+  document.getElementById('maengel_dialog').style.display = 'block';
+  document.getElementById("dark_background").style.display = 'block';
 })
+

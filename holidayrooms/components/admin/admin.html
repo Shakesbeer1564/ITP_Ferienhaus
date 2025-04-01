@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Ferienhausverwaltung</title>
+  <link rel="stylesheet" href="./admin.css">
+  <script src="admin.js" type="module"></script>
+</head>
+
+<body>
+  <!-- app bar -->
+  <div class="app-bar-container">
+    <div class="heading-title">
+      <img src="../../assets/back_icon.png" width="32" height="32" id="back-icon" class="hidden">
+      <h1>Holidayrooms - Admin</h1>
+    </div>
+  </div>
+
+  <!-- Customers -->
+  <div id="customer-container">
+    <div class="heading-bar">
+      <div class="heading">
+        <h3>Customers</h3>
+      </div>
+    </div>
+    <!-- Customer table -->
+    <table id="customer-table" class="admin-page-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Customer rows will be appended here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- History -->
+  <div id="history-container" class="hidden">
+    <div class="heading-bar">
+      <div class="heading">
+        <h3 id="history-text"></h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Bookings -->
+  <div id="user-booking-container" class="hidden">
+    <div class="heading-bar">
+      <div class="heading">
+        <h3>User Bookings</h3>
+      </div>
+    </div>
+    <table id="user-booking-table" class="admin-page-table">
+      <thead>
+        <tr>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Bookings will be appended here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Invoices -->
+  <div id="invoice-container" class="hidden">
+    <div class="heading-bar">
+      <div class="heading">
+        <h3>Invoices</h3>
+      </div>
+    </div>
+    <table id="invoice-table" class="admin-page-table">
+      <thead>
+        <tr>
+          <th>Invoice date</th>
+          <th>Invoice amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Invoices will be appended here -->
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- Houses -->
+  <div id="house-container">
+    <div class="heading-bar">
+      <div class="heading">
+        <h3>Houses</h3>
+      </div>
+    </div>
+    <!-- House table -->
+    <table id="house-table" class="admin-page-table">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Description</th>
+          <th>Rooms</th>
+          <th>Beds</th>
+          <th>Price per night</th>
+          <th>Owner name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- House rows will be appended here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- House Bookings -->
+  <div id="house-booking-container" class="hidden">
+    <div class="heading-bar">
+      <div class="heading">
+        <h3>House Bookings</h3>
+      </div>
+    </div>
+    <table id="house-booking-table" class="admin-page-table">
+      <thead>
+        <tr>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Bookings will be appended here -->
+      </tbody>
+    </table>
+  </div>
+
+</body>
+
+</html>
