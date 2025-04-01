@@ -12,6 +12,7 @@ document.getElementById('close_mae_dialog').addEventListener('click', () => {
    // document.getElementById('dropdownMenu').classList.toggle('hidden');
 //});
 
+
 document.addEventListener('click', function(event) {
     const dropdownMenu = document.getElementById('dropdownMenu');
     if (!dropdownMenu.classList.contains('hidden')) {
