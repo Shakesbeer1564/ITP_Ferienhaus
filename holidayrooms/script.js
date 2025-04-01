@@ -39,14 +39,22 @@ export async function checkLogoutButtonVisibility(){
   const logoutButton = document.getElementById('logout');
   const notificationOfDefectsButton = document.getElementById('open_maengelanzeige');
   const username = document.getElementById('username');
+  const overview = document.getElementById('overview');
 
   const res = await HTTPService.getData('get_username.php');
   if(res.username !== null){
+    loginButton.style.display = 'none';
+    registrationButton.style.display = 'none';
     logoutButton.style.disBplay = 'block';
     notificationOfDefectsButton.style.display = 'block';
     username.textContent = `Welcome ${res.username}`;
+    overview.style.display = 'block';
   }
   else{
+    logoutButton.style.disBplay = 'none';
+    notificationOfDefectsButton.style.display = 'none';
+    username.style.display = `none`;
+    overview.style.display = 'none';
     loginButton.style.display = 'block';
     registrationButton.style.display = 'block';
   }
