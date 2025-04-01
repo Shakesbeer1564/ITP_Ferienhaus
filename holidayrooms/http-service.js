@@ -32,20 +32,25 @@ class HttpService{
   }
 
   async postData(endpoint, data){
-    const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    if(!res.ok){
-      throw new Error('Error while getting data');
+    try{
+      const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if(!res.ok){
+        throw new Error('Error while getting data');
+      }
+  
+      return await res.json();
     }
-
-    return await res.json();
+    catch(err){
+      console.log('HTTP-Post error: ', err);
+    }
   }
 
   async putData(endpoint, data){

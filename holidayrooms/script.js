@@ -8,7 +8,11 @@ initializeData();
 //----------- Initialisation ---------------
 //------------------------------------------
 
-function initializeData(){
+async function initializeData(){
+  checkLogoutButtonVisibility();
+  setTimeout(() => {
+    disableBookButton();
+  });
   initialiseComponents();
   loadHouses();
   loadActivities();
@@ -26,6 +30,36 @@ function initialiseComponents(){
   // Maengelanzeige-component
   loadComponent('./components/authentification/maengelanzeige/maengel.html', 'maengel_dialog',
     './components/authentification/maengelanzeige/maengel.css', './components/authentification/maengelanzeige/maengel.js');
+}
+
+function checkLogoutButtonVisibility(){
+  const logoutButton = document.getElementById('logout');
+
+  // Müssen wir über ein extra Endpunkt prüfen ob die Session da ist, weil die 
+  // Session_ID generiert wird und kein fester Key angegeben wird      
+  if(document.cookie.length > 0){
+    logoutButton.style.display = 'block';
+    document.getElementById('open_Login').style.display = 'none';
+    document.getElementById('open_registration').style.display = 'none';
+  }
+  else{
+    logoutButton.style.display = 'none';
+  }
+}
+
+function checkLogoutButtonVisibility(){
+  const logoutButton = document.getElementById('logout');
+
+  // Müssen wir über ein extra Endpunkt prüfen ob die Session da ist, weil die 
+  // Session_ID generiert wird und kein fester Key angegeben wird      
+  if(document.cookie.length > 0){
+    logoutButton.style.display = 'block';
+    document.getElementById('open_Login').style.display = 'none';
+    document.getElementById('open_registration').style.display = 'none';
+  }
+  else{
+    logoutButton.style.display = 'none';
+  }
 }
 
 //------------------------------------------
@@ -133,7 +167,7 @@ function loadComponent(url, containerId, cssFile, jsFile){
 
 function loadScript(src){
   let script = document.createElement('script');
-  script.src = `${src}?v=${new Date().getTime()}`;
+  script.src = src;
   script.id = src;
   script.defer = true;
   script.type = 'module';
@@ -143,7 +177,7 @@ function loadScript(src){
 function loadStyle(href){
   let link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = `${href}?v=${new Date().getTime()}`
+  link.href = href;
   link.defer = true;
   link.id = href;
   document.head.appendChild(link);
@@ -152,14 +186,41 @@ function loadStyle(href){
 //------------------------------------------
 //-------- Apply-Filter-Buttons ------------
 //------------------------------------------
+function disableBookButton(){
+  const dateStart = document.getElementById('date_start');
+  const dateEnd = document.getElementById('date_end');
+  const applyFilterButton = document.getElementById('apply_filter');
+
+  const shadowHost = document.querySelector("p-card");
+  const shadowRoot = shadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
+  const bookButton = shadowRoot.querySelector(".book-button");
+
+  let dateChanged = false;
+
+  function disableButton(){
+    bookButton.disabled = true;
+    dateChanged = true;
+  }
+
+  dateStart.addEventListener('input', disableButton);
+  dateEnd.addEventListener('input', disableButton);
+
+  applyFilterButton.addEventListener('click', () => {
+    if(dateChanged){
+      dateChanged = false;
+      bookButton.disabled = false;
+    }
+  })
+}
+
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
   const data = {
     query: inputs[0].value,
-    roomCount: parseInt(inputs[2].value),
-    bedCount: parseInt(inputs[3].value),
-    startDate: inputs[4].value,
-    endDate: inputs[5].value
+    roomCount: parseInt(inputs[1].value),
+    bedCount: parseInt(inputs[2].value),
+    startDate: inputs[3].value,
+    endDate: inputs[4].value
   };
 
   await loadHouses(data);
@@ -227,3 +288,14 @@ document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
   document.getElementById("dark_background").style.display = 'block';
 })
 
+
+
+//------------------------------------------
+//---------------- Logout ------------------
+//------------------------------------------
+document.getElementById('logout').addEventListener('click', async () => {
+  const res = await HTTPService.postData('sign_out.php');
+
+  if(res)
+    window.location.reload();
+})

@@ -75,7 +75,7 @@ const overviewPromise = (async () => {
     }
   
     async book(){
-      if(!this.#houseItem)
+      if(this.#houseItem.houseId !== -1)
         alert('You need to book a house first');
   
       const data = {
@@ -84,8 +84,6 @@ const overviewPromise = (async () => {
         endDate: this.#houseItem.endDate,
         activityIds: this.#activityItems.map(x => x.id)
       };
-      console.log(data);
-      return;
   
       const res = await HTTPService.postData('book_house.php', data);
   

@@ -1,5 +1,6 @@
 // !Müssen wir dynamisch importieren, da wir keine html-Datei haben um es als type=module zu kennzeichnen
 (async () => {
+  const { HTTPService } = await import('../http-service.js');
   const { getOverviewClass } = await import('../class/overview.js');
   const Overview = await getOverviewClass();
   
@@ -51,22 +52,39 @@
         footer.classList.add('card_footer');
         
         const button = document.createElement('button');
+        button.classList.add('book-button');
         button.textContent = 'Book';
-        button.onclick = () => {
+        button.onclick = async () => {
+          if(document.getElementById('date_start').value === '' || document.getElementById('date_end').value === ''){
+            alert('Please select a date');
+            return;
+          }
+
           if(Overview.getInstance().getHouseItem().houseId === -1){
-            Overview.getInstance().addHouse({
-              houseId: this.getAttribute('id'),
-              roomCount: this.getAttribute('room_count'),
-              bedCount: this.getAttribute('bed_count'),
-              place: this.getAttribute('place'),
-              price: this.getAttribute('price'),
-              startDate: document.getElementById('date_start').value,
-              endDate: document.getElementById('date_end').value
-            });
+            try{
+              const calculatedPrice = await this.HTTPService.postData('get_house_booking_price.php', {
+                houseId: this.getAttribute('id'),
+                startDate: document.getElementById('date_start').value,
+                endDate: document.getElementById('date_end').value
+              })
   
-            const itemContainer = document.querySelector('.items');
-            const houseItem = document.createElement('p-house-item');
-            itemContainer.appendChild(houseItem);
+              Overview.getInstance().addHouse({
+                houseId: this.getAttribute('id'),
+                roomCount: this.getAttribute('room_count'),
+                bedCount: this.getAttribute('bed_count'),
+                place: this.getAttribute('place'),
+                price: calculatedPrice,
+                startDate: document.getElementById('date_start').value,
+                endDate: document.getElementById('date_end').value
+              });
+    
+              const itemContainer = document.querySelector('.items');
+              const houseItem = document.createElement('p-house-item');
+              itemContainer.appendChild(houseItem);
+            }
+            catch(err){
+              console.log('SOMETHING WENT WRONG WHILE BOOKING THE HOUSE: ', err);
+            }
           }
           else{
             alert('Please remove the booked house at first');
@@ -146,6 +164,11 @@
           }
           .card .card_footer button:active {
             background-color: rgb(198, 198, 198);
+          }
+          .card .card_footer button:disabled{
+            background-color: #e7e7e760;
+            cursor: default;
+            color: #55555586;
           }
           ::-webkit-scrollbar {
             width: 5px;
