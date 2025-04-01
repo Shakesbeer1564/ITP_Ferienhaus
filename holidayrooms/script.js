@@ -31,8 +31,6 @@ function initialiseComponents(){
 function checkLogoutButtonVisibility(){
   const logoutButton = document.getElementById('logout');
 
-  // Müssen wir über ein extra Endpunkt prüfen ob die Session da ist, weil die 
-  // Session_ID generiert wird und kein fester Key angegeben wird      
   if(document.cookie.length > 0){
     logoutButton.style.display = 'block';
     document.getElementById('open_Login').style.display = 'none';

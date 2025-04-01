@@ -46,7 +46,7 @@ class HttpService{
         throw new Error('Error while getting data');
       }
   
-      return await res.json();
+      return res.json();
     }
     catch(err){
       console.log('HTTP-Post error: ', err);
