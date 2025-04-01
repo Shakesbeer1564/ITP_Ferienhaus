@@ -8,6 +8,8 @@
   <script type="module" src="./script.js"></script>
   <script defer src="./shared/card.js"></script>
   <script defer src="./shared/activity-card.js"></script>
+  <script defer src="./shared/house-item-card.js"></script>
+  <script defer src="./shared/activity-item-card.js"></script>
 </head>
 <body>
   <!-- app bar -->
@@ -17,17 +19,22 @@
     </div>
     <!-- Order overview -->
     <div class="overview-container">
-      <div class="title">
-        <span>Shopping</span>
-      </div>
-      <div class="arrow">
-        <div class="arrow-implement">
+      <img id="shopIcon" class="shop-icon" src="./assets/einkaufswagen_icon.png">
+      <div id="cardDialog" class="card-dialog">
+        <div class="items">
+        </div>
+        <div class="close-div">
+          <h4 id="resultPrice"></h4>
+          <button id="book">Book</button>
+          <button id="closeDialog">Close</button>
         </div>
       </div>
     </div>
+
     <div class="buttons">
       <button id="open_Login">Login</button>
       <button id="open_registration">Registration</button>
+      <button id="open_maengelanzeige">Mängelanzeige erstellen</button>
     </div>
   </div>
 
@@ -52,18 +59,7 @@
       <!--#region place_filter -->
       <div class="filter">
         <div class="filter-title">
-          <span>Ort:</span>
-        </div>
-        <div class="result">
-          <input id="place_input" class="input" type="text"/>
-        </div>
-      </div>
-      <!--#endregion place_filter-->
-
-      <!--#region region_filter -->
-      <div class="filter">
-        <div class="filter-title">
-          <span>Region:</span>
+          <span>Place:</span>
         </div>
         <div class="result">
           <input id="region_input" class="input" type="text"/>
@@ -127,19 +123,25 @@
   <div id="reg_dialog" class="reg-dialog">
   </div>
 
+  <!-- Mängelanzeige-Dialog -->
+  <div id="maengel_dialog" class="maengel-dialog">
+  </div>
+
   <div id="dark_background" class="dark-background"></div>
 
   <div id="holiday-rooms-container" class="holiday-rooms-container">
     <!-- Nur ein Beispiel ==> Das wird später dynamisch erzeugt -->
-    <!-- <p-card
+    <p-card
+      id="1"
       image="./assets/dreaming-summer-image-1920x1080_48774-mm-90.jpg" 
       region="Bayern"
       place="SUII"
       room_count="2"
       bed_count="1"
+      price="123,99"
       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
       button-text="Book">
-    </p-card> -->
+    </p-card>
   </div>
 
   
@@ -153,7 +155,7 @@
     <div class="filterbar">
       <div class="filter search">
         <div class="filter-title">
-          <span>Suche:</span>
+          <span>Search:</span>
         </div>
         <div class="result">
           <input id="search" class="input" type="text"/>
@@ -165,12 +167,14 @@
   </div>
 
   <div id="activity_card_container" class="activity-card-container">
-    <!-- <p-card-activity 
+    <p-card-activity 
       title="Wandern" 
       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." 
       price="10€" 
-      button-text="Book">
-    </p-card-activity> -->
+      id="1"
+      place="Nürnberg"
+      participants="2">
+    </p-card-activity>
   </div>
 </body>
 </html>

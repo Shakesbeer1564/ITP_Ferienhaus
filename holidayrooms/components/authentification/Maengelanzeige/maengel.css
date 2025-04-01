@@ -1,0 +1,101 @@
+@import url('../../../style.css'); /* Be sure the styles.css loads first */
+
+:root{
+  --header-height: 12%;
+  --footer-height: 15%;
+}
+
+.container {
+    height: 70%;
+    border: 1px solid black;
+    border-radius: 3px;
+    box-shadow: 0px 0px 3px white;
+    display: block;
+    background-color: rgb(247, 247, 247);
+}
+
+.container .mae_heading {
+    background-color: rgb(73, 148, 239);
+  display: flex;  
+  align-items: center;
+  height: var(--header-height);
+}
+
+.container .mae_heading .mae_title {
+    color: white;
+  margin-left: 10px;
+}
+
+.container .mae_heading button {
+    margin-left: auto;
+    margin-right: 5px;
+    border: 1px solid rgb(173, 173, 173);
+    border-radius: 3px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.body {
+    height: calc(100% - var(--header-height) - var(--footer-height));
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+
+.body h2 {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+.body select, .body input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15pt;
+    background-color: transparent;
+}
+
+.body input:focus, .body select:focus {
+    outline: none;
+    border-bottom: 1px solid black;
+}
+
+.footer {
+    height: var(--footer-height);
+    background-color: rgb(226, 226, 226);
+    border-top: 1px solid rgb(173, 173, 173);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.footer button {
+    border: 1px solid #e3e3e3;
+    border-radius: 3px;
+    height: 35px;
+    width: 100px;
+    color: rgb(78, 74, 74);
+    cursor: pointer;
+    background: #007BFF;
+    color: white;
+}
+
+.footer button:hover {
+    background-color: rgb(214, 214, 214);
+}
+
+.footer button:active {
+    background-color: rgb(198, 198, 198);
+}
+}
+
+.dropdownMenu {
+    position: relative;
+    z-index: 9999 !important;
+    display: block !important;
+}
+
+  
