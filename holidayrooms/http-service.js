@@ -5,13 +5,14 @@ class HttpService{
     this.baseURL = baseURL
   }
 
-  async getData(endpoint, searchParams = null){
+ 
+  async getData(endpoint, searchParams = null, contentType = 'json') {
     const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
-    if(searchParams){
+    if (searchParams) {
       Object.keys(searchParams).forEach(key => url.searchParams.append(key, searchParams[key]));
     }
 
-    try{
+    try {
       const res = await fetch(url, {
         method: 'GET',
         headers: {
@@ -19,13 +20,13 @@ class HttpService{
         }
       });
 
-      if(!res.ok){
+      if (!res.ok) {
         throw new Error('Error while getting data');
       }
 
-      return await res.json();
+      return contentType == 'json' ? res.json() : res.blob();
     }
-    catch(err){
+    catch (err) {
       console.error('Error GET: ', err);
       throw err;
     }
