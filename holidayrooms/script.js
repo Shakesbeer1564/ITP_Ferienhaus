@@ -32,6 +32,24 @@ function initialiseComponents(){
     './components/authentification/maengelanzeige/maengel.css', './components/authentification/maengelanzeige/maengel.js');
 }
 
+// Function is being used in login and registration too
+export async function checkLogoutButtonVisibility(){
+  const loginButton = document.getElementById('open_Login');
+  const registrationButton = document.getElementById('open_registration');
+  const logoutButton = document.getElementById('logout');
+  const notificationOfDefectsButton = document.getElementById('open_maengelanzeige');
+
+  const res = await HTTPService.getData('get_username.php');
+  if(res !== null){
+    logoutButton.style.disBplay = 'block';
+    notificationOfDefectsButton.style.display = 'block';
+  }
+  else{
+    loginButton.style.display = 'block';
+    registrationButton.style.display = 'block';
+  }
+}
+
 //------------------------------------------
 //----------- Card-Handling ----------------
 //------------------------------------------
@@ -256,5 +274,17 @@ document.querySelector('#open_registration').addEventListener('click', () => {
 document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
   document.getElementById('maengel_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
+})
+
+//------------------------------------------
+//---------------- Logout ------------------
+//------------------------------------------
+document.getElementById('logout').addEventListener('click', async () => {
+  const res = await HTTPService.postData('sign_out.php');
+
+  // Evtl. statt reload einfach wieder die 
+  // checkLogoutButtonVisisbility Funktion aufrufen
+  if(res)
+    window.location.reload();
 })
 

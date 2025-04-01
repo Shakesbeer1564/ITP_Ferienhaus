@@ -1,4 +1,5 @@
 import { HTTPService } from "../../../http-service.js";
+import { checkLogoutButtonVisibility } from "../../../script.js";
 
 // Close button
 document.getElementById('close_dialog').addEventListener('click', () => {
@@ -23,8 +24,9 @@ document.querySelector('#sign_in').addEventListener('click', async () => {
 
     const data = await HTTPService.postData('login.php', dataJson);
 
-    if(!!data){
+    if(data){
       closeDialog();
+      checkLogoutButtonVisibility();
     }
   } catch (error) {
     console.log('SOMETHING WENT WRING WHILE LOGIN: ', error);

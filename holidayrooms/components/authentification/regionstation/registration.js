@@ -1,4 +1,5 @@
 import { HTTPService } from "../../../http-service.js";
+import { checkLogoutButtonVisibility } from "../../../script.js";
 
 document.getElementById('close_reg_dialog').addEventListener('click', closeDialog);
 
@@ -19,8 +20,9 @@ document.getElementById('register').addEventListener('click', async () => {
     try {
       const data = await HTTPService.postData('register.php', jsonData);
 
-      if(!!data){
+      if(data){
         closeDialog();
+        checkLogoutButtonVisibility();
       }
     } catch (error) {
       console.log('ERROR WHILE REGISTER AN USER: ', error);

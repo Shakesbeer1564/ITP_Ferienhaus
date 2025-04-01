@@ -122,6 +122,7 @@ html, body{
   background-color: rgb(227, 227, 227);
   width: 100px;
   height: 100%;
+  display: none;
 }
 
 .app-bar-container .buttons button:hover{
