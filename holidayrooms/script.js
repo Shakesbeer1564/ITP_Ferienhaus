@@ -38,11 +38,13 @@ export async function checkLogoutButtonVisibility(){
   const registrationButton = document.getElementById('open_registration');
   const logoutButton = document.getElementById('logout');
   const notificationOfDefectsButton = document.getElementById('open_maengelanzeige');
+  const username = document.getElementById('username');
 
   const res = await HTTPService.getData('get_username.php');
-  if(res !== null){
+  if(res.username !== null){
     logoutButton.style.disBplay = 'block';
     notificationOfDefectsButton.style.display = 'block';
+    username.textContent = `Welcome ${res.username}`;
   }
   else{
     loginButton.style.display = 'block';
