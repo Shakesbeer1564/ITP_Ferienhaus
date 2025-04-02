@@ -46,7 +46,7 @@ export async function checkLogoutButtonVisibility(){
   if(res.username !== null){
     loginButton.style.display = 'none';
     registrationButton.style.display = 'none';
-    logoutButton.style.disBplay = 'block';
+    logoutButton.style.display = 'block';
     username.textContent = `Welcome ${res.username}`;
     // overview.style.display = 'block';
     // notificationOfDefectsButton.style.display = 'block';

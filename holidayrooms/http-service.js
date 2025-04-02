@@ -32,7 +32,7 @@ class HttpService{
     }
   }
 
-  async postData(endpoint, data){
+  async postData(endpoint, data, contentType = 'json'){
     try{
       const url = new URL(`${this.baseURL}/${endpoint}`, import.meta.url);
       const res = await fetch(url, {
@@ -46,8 +46,8 @@ class HttpService{
       if(!res.ok){
         throw new Error('Error while getting data');
       }
-  
-      return res.json();
+
+      return contentType === 'json' ? res.json() : res.blob();
     }
     catch(err){
       console.log('HTTP-Post error: ', err);
