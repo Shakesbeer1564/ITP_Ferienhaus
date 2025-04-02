@@ -29,7 +29,6 @@ function search_homes(string $query, int|null $room_count, int|null $bed_count, 
     $homes = [];
     while ($row = $result->fetch_assoc()) {
         $owner_id = $row["EigentuemerId"];
-        var_dump($row);
         $row["EigentuemerName"] = get_landlord_name($owner_id);
 
         $homes[] = $row;
