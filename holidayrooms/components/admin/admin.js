@@ -159,7 +159,7 @@ function displayHouses(houses) {
         roomsCell.textContent = house.AnzahlZimmer;
         bedsCell.textContent = house.AnzahlBetten;
         priceCell.textContent = house.Preis;
-        ownerNameCell.textContent = house.EigentümerName;
+        ownerNameCell.textContent = house.EigentuemerName;
 
         deleteCell.onclick = (event) => deleteHouse(event, house.HausID);
 
