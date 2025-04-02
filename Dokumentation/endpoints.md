@@ -309,6 +309,8 @@ Erstellt eine Buchung in der Datenbank für das Haus mit der gegebenen ID in dem
 
 Es können auch nur Aktivitäten gebucht werden. Somit sind ID des Hauses und Zeitraum optional. 
 
+Zurückgegeben wird ein PDF mit der Buchungsbestätigung, dass das Frontend dann auf den lokalen PC herunterladen kann.
+
 Der Nutzer wird aus der Session genommen.
 Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 
@@ -329,10 +331,8 @@ Der Preis wird aus der Dauer und dem pro Nacht Preises des Hauses errechnet.
 ```
 
 ### Response
-```JSON
-{
-    "ok": boolean
-}
+```
+PDF
 ```
 
 ### Errors
