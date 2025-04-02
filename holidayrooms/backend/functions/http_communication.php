@@ -17,3 +17,11 @@ function send_data(array $data): void
     echo json_encode($data);
     exit;
 }
+
+function send_pdf(FPDF $pdf): void
+{
+    header("Content-Type: application/pdf");
+    http_response_code(200);
+    $pdf->Output();
+    exit;
+}

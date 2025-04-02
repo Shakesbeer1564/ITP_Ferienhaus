@@ -13,7 +13,7 @@ function get_landlord_name(int $landlord_id): string|null
         return null;
     }
 
-    $landlord_name = $row['EigentümerName'];
+    $landlord_name = $row['EigentuemerName'];
 
     return $landlord_name;
 }
