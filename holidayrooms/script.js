@@ -40,15 +40,27 @@ export async function checkLogoutButtonVisibility(){
   const notificationOfDefectsButton = document.getElementById('open_maengelanzeige');
   const username = document.getElementById('username');
   const overview = document.getElementById('overview');
+  const adminPageButton = document.getElementById('open_admin_page');
 
-  const res = await HTTPService.getData('get_username.php');
+  const res = await HTTPService.getData('get_user.php');
   if(res.username !== null){
     loginButton.style.display = 'none';
     registrationButton.style.display = 'none';
     logoutButton.style.disBplay = 'block';
-    notificationOfDefectsButton.style.display = 'block';
     username.textContent = `Welcome ${res.username}`;
-    overview.style.display = 'block';
+    // overview.style.display = 'block';
+    // notificationOfDefectsButton.style.display = 'block';
+
+    if(res.rolename === 'Admin'){
+      notificationOfDefectsButton.style.display = 'none';
+      overview.style.display = 'none';
+      adminPageButton.style.display = 'block';
+    }
+    else{
+      overview.style.display = 'block';
+      notificationOfDefectsButton.style.display = 'block';
+    }
+    
   }
   else{
     logoutButton.style.disBplay = 'none';
@@ -292,9 +304,14 @@ document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
 document.getElementById('logout').addEventListener('click', async () => {
   const res = await HTTPService.postData('sign_out.php');
 
-  // Evtl. statt reload einfach wieder die 
-  // checkLogoutButtonVisisbility Funktion aufrufen
   if(res)
     window.location.reload();
 })
 
+
+//------------------------------------------
+//-------------- Admin Page ----------------
+//------------------------------------------
+document.getElementById('open_admin_page').addEventListener('click', () => {
+  window.location.href = './components/admin/admin.html';
+})
