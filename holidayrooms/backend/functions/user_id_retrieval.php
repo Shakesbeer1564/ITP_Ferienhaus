@@ -59,7 +59,7 @@ function get_landlord_id_by_user_id(int $landlord_id): int|null
         return null;
     }
 
-    $landlord_id = $row['EigentümerID'];
+    $landlord_id = $row['EigentuemerID'];
 
     return $landlord_id;
 }

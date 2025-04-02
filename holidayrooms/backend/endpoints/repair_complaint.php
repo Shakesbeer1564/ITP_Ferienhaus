@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check for a custom error from the procedure
         if ($e->getCode() == CUSTOM_SQL_ERROR_CODE) {
             // Check if the complaint does not exist
-            if ($e->getMessage() == "Mängelanzeige existiert nicht.") {
+            if ($e->getMessage() == "Maengelanzeige existiert nicht.") {
                 send_http_status(404, "There is no complaint with the given ID");
             }
             // Otherwise the user does not have the permission by the procedure to resolve the complaint
