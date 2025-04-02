@@ -31,16 +31,17 @@ Jeder Endpoint, der sich mit der Datenbank verbindet, gibt einen Error `500 Inte
 
 Prüft den Status der Session des aktuellen Nutzers.
 
-Dabei wird der Name des Nutzers zurückgegeben, wenn es eine Session gibt. Gibt es keine Session, wird null als Username zurückgegeben.
+Dabei wird der Name des Nutzers und der Name dessen Rolle zurückgegeben, wenn es eine Session gibt. Gibt es keine Session, wird null für Username und Rollenname zurückgegeben.
 
 ### Method: `GET`
 
-### File: `get_username.php`
+### File: `get_user.php`
 
 ### Response:
 ```JSON
 {
-    "username": string | null
+    "username": string | null,
+    "rolename": string | null
 }
 ```
 
