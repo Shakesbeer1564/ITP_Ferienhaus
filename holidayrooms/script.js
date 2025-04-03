@@ -211,37 +211,6 @@ document.querySelector("input[type='date']").addEventListener('input', () => {
   })
 })
 
-function disableBookButton(){
-  const dateStart = document.getElementById('date_start');
-  const dateEnd = document.getElementById('date_end');
-  const applyFilterButton = document.getElementById('apply_filter');
-
-  const shadowHost = document.querySelectorAll("p-card");
-  if(shadowHost){
-    shadowHost.forEach(cardShadowHost => {
-      const shadowRoot = cardShadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
-      const bookButton = shadowRoot.querySelector(".book-button");
-
-      let dateChanged = false;
-  
-      function disableButton(){
-        bookButton.disabled = true;
-        dateChanged = true;
-      }
-    
-      dateStart.addEventListener('input', disableButton);
-      dateEnd.addEventListener('input', disableButton);
-    
-      applyFilterButton.addEventListener('click', () => {
-        if(dateChanged){
-          dateChanged = false;
-          bookButton.disabled = false;
-        }
-      })
-    })
-  }
-}
-
 document.getElementById('apply_filter').addEventListener('click', async () => {
   const inputs = document.querySelectorAll('.input');
   const data = {
