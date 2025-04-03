@@ -18,10 +18,12 @@
         header.classList.add('card_header');
         
         let img = document.createElement('img');
-        if(this.getAttribute('image') !== undefined){
+        img.alt = 'Card image';
+
+        if(this.getAttribute('image') !== '')
           img.src = this.getAttribute('image') || '';
-          img.alt = 'Card image';
-        }
+        else
+          img.src = 'assets/no_image_available.png'
         
         
         const body = document.createElement('div');

@@ -59,7 +59,6 @@ async function loadBookedHousesinPast() {
         dropdown.appendChild(defaultOption);
       
         houses.forEach(house => {
-            console.log(house);
             let listItem = document.createElement('option');
             listItem.value = house.HausID; // Assuming house has an "Adresse" field
             listItem.textContent = house.Adresse;

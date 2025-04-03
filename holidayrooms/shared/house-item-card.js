@@ -34,7 +34,7 @@
         bedCount.textContent = `Bed-Count: ${Overview.getInstance().getHouseItem().bedCount}`;
 
         const price = document.createElement('p');
-        price.textContent = `Price: ${Overview.getInstance().getHouseItem().price}€`;
+        price.textContent = `Price: ${Overview.getInstance().getHouseItem().price.price}€`;
 
         const button = document.createElement('button');
         button.textContent = '❌';

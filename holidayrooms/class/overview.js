@@ -64,7 +64,7 @@ const overviewPromise = (async () => {
     }
 
     calculatePrice(){
-      const housePrice = parseFloat(this.#houseItem.price.toString().replace(',', '.'));
+      const housePrice = this.#houseItem.price.price !== undefined ? parseFloat(this.#houseItem.price.price.toString().replace(',', '.')) : parseFloat('0,00'.replace(',', '.'));
       let activityPrice = 0;
       this.#activityItems.forEach((value) => {
         activityPrice += parseFloat((value.price || 0));
