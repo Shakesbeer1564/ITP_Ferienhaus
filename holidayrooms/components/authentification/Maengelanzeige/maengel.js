@@ -44,6 +44,9 @@ function closeDialog(){
 
 async function loadBookedHousesinPast() {
     try {
+        const res = await HTTPService.getData('get_user.php');
+        if(res.username === null) return;
+
         const houses = await HTTPService.getData('get_houses_booked_in_past.php');
            
         const dropdown = document.getElementById('dropdownMenu');

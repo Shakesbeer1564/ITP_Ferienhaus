@@ -203,8 +203,12 @@ function disableBookButton(){
   const applyFilterButton = document.getElementById('apply_filter');
 
   const shadowHost = document.querySelector("p-card");
-  const shadowRoot = shadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
-  const bookButton = shadowRoot.querySelector(".book-button");
+  let shadowRoot, bookButton;
+  
+  if(shadowHost){
+    shadowRoot = shadowHost.shadowRoot;
+    bookButton = shadowRoot.querySelector(".book-button");
+  }
 
   let dateChanged = false;
 
