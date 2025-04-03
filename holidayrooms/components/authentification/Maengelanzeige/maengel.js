@@ -19,20 +19,13 @@ document.addEventListener('click', function(event) {
     }
 });
 
+document.getElementById('close_mae_dialog').addEventListener('click', closeDialog);
+
 function openModal(item) {
     document.getElementById('modalText').innerText = 'You selected: ' + item;
     document.getElementById('modal').classList.remove('hidden');
     document.body.classList.add('dimmed');
 }
-
-
-function closeModal() {
-    document.getElementById('modal').classList.add('hidden');
-    document.body.classList.remove('dimmed');
-}
-
-
-
 
 function closeDialog(){
     document.getElementById("dark_background").style.display = 'none';

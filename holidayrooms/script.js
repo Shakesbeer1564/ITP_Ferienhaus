@@ -1,5 +1,4 @@
 import { HTTPService } from "./http-service.js";
-import { randomFromSeed } from "./shared/random.js";
 const { getOverviewClass } = await import('./class/overview.js');
 const Overview = await getOverviewClass();
 
@@ -48,9 +47,8 @@ export async function checkLogoutButtonVisibility(){
     loginButton.style.display = 'none';
     registrationButton.style.display = 'none';
     logoutButton.style.display = 'block';
+    username.style.display = 'block';
     username.textContent = `Welcome ${res.username}`;
-    // overview.style.display = 'block';
-    // notificationOfDefectsButton.style.display = 'block';
 
     if(res.rolename === 'Admin'){
       notificationOfDefectsButton.style.display = 'none';
@@ -197,6 +195,10 @@ function loadStyle(href){
 //------------------------------------------
 //-------- Apply-Filter-Buttons ------------
 //------------------------------------------
+// document.querySelector(input[type='date']).addEventListener('click', () => {
+
+// })
+
 function disableBookButton(){
   const dateStart = document.getElementById('date_start');
   const dateEnd = document.getElementById('date_end');
