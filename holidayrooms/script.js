@@ -1,4 +1,5 @@
 import { HTTPService } from "./http-service.js";
+import { randomFromSeed } from "./shared/random.js";
 const { getOverviewClass } = await import('./class/overview.js');
 const Overview = await getOverviewClass();
 
@@ -74,27 +75,60 @@ async function loadHouses(data = {
   }
 }
 
-function renderHouseCards(cardElements){
+async function loadHouseImage(id, i) {
+
+  return new Promise(async (resolve, reject) => {
+    setTimeout(async () => {
+      const response = await fetch(`https://thishousedoesnotexist.org/${id}`);
+
+      const pageContent = await response.text();
+
+      // Parse the HTML using a DOM parser
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(pageContent, 'text/html');
+
+      // Find the image by its id and get the src attribute
+      const imageElement = doc.querySelector('.img-house');
+      if (imageElement) {
+        let imgUrl = imageElement.src.replace("localhost", "thishousedoesnotexist.org");
+        resolve(imgUrl);
+      } else {
+        console.error('Could not find img element');
+      }
+    }, i * 10);
+  });
+}
+
+function renderHouseCards(cardElements) {
   const roomContainer = document.getElementById('holiday-rooms-container');
 
-  if(roomContainer.firstChild){
-    while(roomContainer.firstChild){
+  if (roomContainer.firstChild) {
+    while (roomContainer.firstChild) {
       roomContainer.removeChild(roomContainer.firstChild);
     }
   }
 
+  let i = 0;
   cardElements.forEach(element => {
-    const card = document.createElement('p-card');
-    card.setAttribute('id', element.HausID);
-    card.setAttribute('image', element.image);
-    card.setAttribute('owner', element.EigentümerName);
-    card.setAttribute('place', element.Adresse);
-    card.setAttribute('room_count', element.AnzahlZimmer);
-    card.setAttribute('bed_count', element.AnzahlBetten);
-    card.setAttribute('description', element.Beschreibung);
-    card.setAttribute('price', element.Preis);
+    // Create random number between 0 and 1
+    let rnd = randomFromSeed(element.Preis ^ element.AnzahlBetten ^ element.AnzahlZimmer);
+    // Create imgId as 8 digit number
+    let imgId = Math.floor(rnd * 8.9e7 + 1e7);
 
-    roomContainer.appendChild(card);
+    loadHouseImage(imgId, i).then((url) => {
+      const card = document.createElement('p-card');
+      card.setAttribute('id', element.HausID);
+      card.setAttribute('image', url);
+      card.setAttribute('owner', element.EigentümerName);
+      card.setAttribute('place', element.Adresse);
+      card.setAttribute('room_count', element.AnzahlZimmer);
+      card.setAttribute('bed_count', element.AnzahlBetten);
+      card.setAttribute('description', element.Beschreibung);
+      card.setAttribute('price', element.Preis);
+
+      roomContainer.appendChild(card);
+    });
+    i += 1;
   });
 }
 
