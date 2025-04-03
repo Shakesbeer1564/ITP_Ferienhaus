@@ -75,7 +75,7 @@ const overviewPromise = (async () => {
     }
   
     async book(){
-      if(this.#houseItem.houseId !== -1)
+      if(this.#houseItem.houseId === -1)
         alert('You need to book a house first');
   
       const data = {
@@ -85,12 +85,12 @@ const overviewPromise = (async () => {
         activityIds: this.#activityItems.map(x => x.id)
       };
   
-      const res = await HTTPService.postData('book_house.php', data);
+      const res = await HTTPService.postData('book_house.php', data, 'pdf');
   
       if(res){
         const link = document.createElement('a');
         link.href = URL.createObjectURL(res);
-        link.download = '.pdf';
+        link.download = 'Booking_Confirmation.pdf';
         link.click();
         window.location.reload();
       }
