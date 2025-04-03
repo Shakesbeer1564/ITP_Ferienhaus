@@ -17,9 +17,12 @@
         const header = document.createElement('div');
         header.classList.add('card_header');
         
-        const img = document.createElement('img');
-        img.src = this.getAttribute('image') || 'No image available';
-        img.alt = 'Card image';
+        let img = document.createElement('image');
+        if(this.getAttribute('image') !== undefined){
+          img.src = this.getAttribute('image') || '';
+          img.alt = 'Card image';
+        }
+        
         
         const body = document.createElement('div');
         body.classList.add('text-container');
@@ -91,7 +94,8 @@
         }
       
         // Zusammenfügen der Elemente
-        header.appendChild(img);
+        if(this.getAttribute('image') !== undefined)
+          header.appendChild(img);
         body.appendChild(reg_Text);
         body.appendChild(placeText);
         body.appendChild(roomText);
