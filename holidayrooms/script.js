@@ -192,22 +192,24 @@ function loadStyle(href){
 //------------------------------------------
 //-------- Apply-Filter-Buttons ------------
 //------------------------------------------
-document.querySelector("input[type='date']").addEventListener('input', () => {
-  setTimeout(() => {
-    const applyFilterButton = document.getElementById('apply_filter');
-  
-    const shadowHost = document.querySelectorAll("p-card");
-    if(shadowHost){
-      shadowHost.forEach(cardShadowHost => {
-        const shadowRoot = cardShadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
-        const bookButton = shadowRoot.querySelector(".book-button");
-        bookButton.disabled = true;
-      
-        applyFilterButton.addEventListener('click', () => {
-          bookButton.disabled = false;
+document.querySelectorAll('input[type="date"]').forEach(dateInput => {
+  dateInput.addEventListener('input', () => {
+    setTimeout(() => {
+      const applyFilterButton = document.getElementById('apply_filter');
+    
+      const shadowHost = document.querySelectorAll("p-card");
+      if(shadowHost){
+        shadowHost.forEach(cardShadowHost => {
+          const shadowRoot = cardShadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
+          const bookButton = shadowRoot.querySelector(".book-button");
+          bookButton.disabled = true;
+        
+          applyFilterButton.addEventListener('click', () => {
+            bookButton.disabled = false;
+          })
         })
-      })
-    }
+      }
+    })
   })
 })
 
