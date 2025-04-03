@@ -17,7 +17,7 @@
         const header = document.createElement('div');
         header.classList.add('card_header');
         
-        let img = document.createElement('image');
+        let img = document.createElement('img');
         if(this.getAttribute('image') !== undefined){
           img.src = this.getAttribute('image') || '';
           img.alt = 'Card image';
