@@ -64,7 +64,7 @@
 
           if(Overview.getInstance().getHouseItem().houseId === -1){
             try{
-              const calculatedPrice = await HTTPService.postData('get_house_booking_price.php', {
+              const calculatedPriceResult = await HTTPService.postData('get_house_booking_price.php', {
                 houseId: this.getAttribute('id'),
                 startDate: document.getElementById('date_start').value,
                 endDate: document.getElementById('date_end').value
@@ -75,7 +75,7 @@
                 roomCount: this.getAttribute('room_count'),
                 bedCount: this.getAttribute('bed_count'),
                 place: this.getAttribute('place'),
-                price: calculatedPrice,
+                price: calculatedPriceResult.price,
                 startDate: document.getElementById('date_start').value,
                 endDate: document.getElementById('date_end').value
               });
