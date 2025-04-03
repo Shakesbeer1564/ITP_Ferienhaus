@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Feb 2025 um 12:40
+-- Erstellungszeit: 03. Apr 2025 um 08:04
 -- Server-Version: 10.4.28-MariaDB
 -- PHP-Version: 8.2.4
 
@@ -11,8 +11,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-CREATE DATABASE IF NOT EXISTS Ferienhausverwaltung_Gruppe5;
-USE Ferienhausverwaltung_Gruppe5;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -20,8 +18,10 @@ USE Ferienhausverwaltung_Gruppe5;
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `Ferienhausverwaltung_Gruppe5`
+-- Datenbank: `ferienhausverwaltung`
 --
+CREATE DATABASE IF NOT EXISTS `ferienhausverwaltung` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `ferienhausverwaltung`;
 
 DELIMITER $$
 --
@@ -100,12 +100,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateBooking` (IN `p_nutzerID` INT
 
     -- Wenn ein Haus gebucht wird
     IF p_HausID IS NOT NULL THEN
-        IF NOT EXISTS (SELECT 1 FROM haus WHERE HausID = p_HausID) THEN
+        IF NOT EXISTS (SELECT 1 FROM haus WHERE p_HausID = HausID ) THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Haus existiert nicht.';
         END IF;
 
         SET p_Naechte = GREATEST(DATEDIFF(p_EndDatum, p_StartDatum), 1);
-        SELECT COALESCE(Preis, 0) INTO p_HausPreis FROM haus WHERE HausID = p_HausID;
+        SELECT COALESCE(Preis, 0) INTO p_HausPreis FROM haus WHERE p_HausID = HausID;
 
         IF p_HausPreis = 0 THEN
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Hauspreis ist nicht definiert.';
@@ -169,7 +169,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateBooking` (IN `p_nutzerID` INT
     -- Mietvertrag einfügen
     INSERT INTO mietvertrag (Vertragsdatum, Vertragsdetails, BuchungID)  
     VALUES (CURDATE(), p_Vertragsdetails, p_BuchungID);
+	
+    -- Ausgabe der Buchung mit der oben generierten BuchungsID
+		SELECT buchungID FROM buchung WHERE p_buchungID = buchungID;
 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreatePDF` (IN `p_bookingID` INT, IN `p_userID` INT)   BEGIN
+SELECT * from buchung where p_buchungID = buchungID;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateVacationHome` (IN `p_Adresse` VARCHAR(255), IN `p_AnzahlZimmer` INT, IN `p_AnzahlBetten` INT, IN `p_Beschreibung` TEXT, IN `p_OrtName` VARCHAR(255), IN `p_EigentümerName` VARCHAR(255))   BEGIN
@@ -251,6 +258,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteUser` (IN `p_NutzerID` INT)  
     DELETE FROM nutzer WHERE NutzerID = p_NutzerID;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetActivityById` (IN `p_ID` INT)   BEGIN
+SELECT name FROM freizeitaktivität WHERE p_ID = AktivitätsID;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getActivitys` (IN `p_OrtID` INT)   SELECT * FROM freizeitaktivität WHERE OrtID = p_OrtID$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getAllUsers` ()   BEGIN
@@ -317,6 +328,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBookingByUser` (IN `p_eingabeID`
     -- Select bookings if the user is authorized
     SELECT * FROM buchung WHERE NutzerID = p_nutzerID;
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetBookingDetails` (IN `p_buchungid` INT)   BEGIN
+    SELECT 
+        b.buchungid,
+        r.betrag as Rechnungsbetrag,
+        h.adresse as Adresse,
+        h.beschreibung AS Beschreibung,
+        a.beschreibung AS Aktivitaets_Beschreibung
+    FROM buchung b
+    JOIN rechnung r ON b.buchungid = r.buchungid
+    JOIN haus h ON b.hausID = h.hausID  -- Falls es eine andere Beziehung gibt, anpassen!
+    LEFT JOIN buchung_aktivitaet ab ON b.buchungid = ab.buchungid
+    LEFT JOIN freizeitaktivität a ON ab.aktivitaetsID = a.aktivitätsID
+    WHERE b.buchungid = p_buchungid;
+    
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCityFromRegion` (IN `p_regionID` INT)   SELECT Distinct OrtName FROM ort Where regionID = p_regionID$$
@@ -426,11 +453,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetInvoicesByUser` (IN `p_UserID` I
     WHERE b.NutzerID = p_UserID;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `getLandlordIDfromUserID` (IN `p_nutzerID` INT)   SELECT EigentümerID FROM eigentümer 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getLandlordIDfromUserID` (IN `p_nutzerID` INT)   SELECT EigentümerID as EigentuemerID FROM eigentümer 
     Where nutzerID = p_nutzerID$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getLandlordNameFromID` (IN `p_ID` INT)   BEGIN
-	SELECT EigentümerName FROM eigentümer WHERE p_ID = eigentümerID;
+	SELECT EigentümerName as EigentuemerName FROM eigentümer WHERE p_ID = eigentümerID;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getMaengelanzeige` (IN `p_mangelID` INT)   SELECT * FROM mängelanzeige WHERE mangelID = p_mangelID$$
@@ -467,6 +494,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserIDFromEmail` (IN `p_email` V
     FROM nutzer
     WHERE Email = p_email
     LIMIT 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserNameByID` (IN `p_ID` INT)   BEGIN
+SELECT name from nutzer WHERe p_ID = NutzerID;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `isHouseFree` (IN `p_HausID` INT, OUT `p_vorhanden` TINYINT)   BEGIN
@@ -523,7 +554,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SearchActivities` (IN `p_search` VA
     WHERE CHAR_LENGTH(p_search) - CHAR_LENGTH(REPLACE(p_search, ' ', '')) >= n-1;
 
     -- Select activities where either Name or City (Ort) matches any extracted word
-    SELECT DISTINCT fa.* 
+    SELECT DISTINCT fa.AktivitätsID as AktivitaetsID, fa.*
     FROM freizeitaktivität fa
     JOIN ort o ON fa.OrtID = o.OrtID
     WHERE EXISTS (
@@ -537,7 +568,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SearchActivities` (IN `p_search` VA
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SearchHomes` (IN `p_location_name` VARCHAR(100), IN `p_anzahlZimmer` INT, IN `p_anzahlBetten` INT, IN `p_startDatum` DATE, IN `p_endDatum` DATE)   BEGIN
-    SELECT *
+    SELECT 
+    HausID,
+    Adresse,
+    AnzahlZimmer,
+    AnzahlBetten,
+    Beschreibung,
+    eigentümerID as EigentuemerId,
+    OrtID, 
+    Preis
+    
+    
 FROM haus h
 WHERE
 (
@@ -606,7 +647,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `updateMaengelanzeige` (IN `p_Maenge
     -- Prüfe, ob die Mängelanzeige existiert und speichere die zugehörige HausID
     SELECT HausID INTO v_HausID FROM mängelanzeige WHERE MangelID = p_MaengelID;
     IF v_HausID IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Mängelanzeige existiert nicht.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Maengelanzeige existiert nicht.';
     END IF;
 
     -- Prüfe, ob der Nutzer ein Admin ist
@@ -624,7 +665,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `updateMaengelanzeige` (IN `p_Maenge
     IF NOT EXISTS (
         SELECT 1 FROM eigentümer WHERE EigentümerID = v_EigentuemerID AND nutzerID = p_UserID
     ) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nicht autorisiert: Nur der Eigentümer dieses Hauses oder ein Admin kann die Mängelanzeige aktualisieren.';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nicht autorisiert: Nur der Eigentümer dieses Hauses oder ein Admin kann die Maengelanzeige aktualisieren.';
     END IF;
 
     -- Falls Berechtigung vorhanden, Status aktualisieren
@@ -699,29 +740,6 @@ CREATE TABLE `buchung` (
   `Preis` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Daten für Tabelle `buchung`
---
-
-INSERT INTO `buchung` (`BuchungID`, `NutzerID`, `HausID`, `Startdatum`, `Enddatum`, `Preis`) VALUES
-(1, 22, 4, '2025-02-19', '2026-02-18', 120.00),
-(6, 9, 4, '2026-04-24', '2027-04-26', 18470.00),
-(7, 9, 4, '2026-04-24', '2027-04-26', 18470.00),
-(8, 9, 4, '2026-04-24', '2027-04-26', 18470.00),
-(9, 9, 12, '2026-04-24', '2027-04-26', 18470.00),
-(36, 14, NULL, '2025-02-20', '2025-02-20', 200.00),
-(38, 14, NULL, '2025-02-20', '2025-02-20', 120.00),
-(39, 14, NULL, '1893-06-15', '2026-01-29', 120.00),
-(41, 14, NULL, '1893-06-15', '2026-01-29', 120.00),
-(42, 14, NULL, '1069-06-15', '2026-01-29', 120.00),
-(43, 14, NULL, '0569-06-15', '2026-01-29', 120.00),
-(44, 14, NULL, '2009-06-15', '2026-01-29', 120.00),
-(51, 22, 6, '2025-04-24', '2025-07-26', 0.00),
-(52, 22, 6, '2025-04-24', '2025-07-26', 0.00),
-(54, 21, 6, '2025-02-24', '2025-02-26', 2.00),
-(55, 23, 5, '0004-03-02', '0005-03-02', 3285.00),
-(56, 23, 5, '5555-01-01', '5555-01-02', 129.00);
-
 -- --------------------------------------------------------
 
 --
@@ -733,20 +751,6 @@ CREATE TABLE `buchung_aktivitaet` (
   `BuchungID` int(11) NOT NULL,
   `AktivitaetsID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Daten für Tabelle `buchung_aktivitaet`
---
-
-INSERT INTO `buchung_aktivitaet` (`BuchungAktivitaetID`, `BuchungID`, `AktivitaetsID`) VALUES
-(66, 36, 4),
-(67, 38, 4),
-(68, 39, 4),
-(72, 41, 4),
-(73, 42, 4),
-(74, 43, 4),
-(75, 44, 4),
-(82, 56, 4);
 
 -- --------------------------------------------------------
 
@@ -766,16 +770,16 @@ CREATE TABLE `eigentümer` (
 --
 
 INSERT INTO `eigentümer` (`EigentümerID`, `EigentümerName`, `EigentümerAdresse`, `nutzerID`) VALUES
-(1, 'TestEigentümer', 'Adresse 1, Testhausen', 9),
-(2, 'Test', '', 22),
-(3, 'test', '', 16),
-(4, 'test', '', NULL),
-(5, 'test', '', 26),
-(6, 'test', '', NULL),
-(7, 'test', '', NULL),
-(8, 't', '', NULL),
-(9, 'e', '', NULL),
-(10, 's', '', NULL),
+(1, 'Max Mustermann', 'Adresse 1, Testhausen', 9),
+(2, 'Anna Schmidt', '', 22),
+(3, 'Lukas Meyer', '', 16),
+(4, 'Sophie Bauer', '', NULL),
+(5, 'Felix Wagner', '', 26),
+(6, 'Laura Becker', '', NULL),
+(7, 'Jonas Weber', '', NULL),
+(8, 'Mia Schulz', '', NULL),
+(9, 'Tim Hoffmann', '', NULL),
+(10, 'Clara Neumann', '', NULL),
 (11, NULL, '', NULL);
 
 -- --------------------------------------------------------
@@ -798,11 +802,16 @@ CREATE TABLE `freizeitaktivität` (
 --
 
 INSERT INTO `freizeitaktivität` (`AktivitätsID`, `Name`, `Beschreibung`, `Preis`, `AnzahlTeilnehmer`, `OrtID`) VALUES
-(1, 'Nordsee-Segeltour', 'Segeln entlang der Nordseeküste', 150.00, 5, 1),
-(3, 'Weinverkostung', 'Weinprobe im Schwarzwald', 50.00, 2, 3),
-(4, 'Ostsee-Segeltour', 'Segeln entlang der Ostseeküste', 120.00, 4, 1),
-(6, 'spast', 'test', 12.00, 4, 1),
-(7, 'Raketenflug_Activity123', '95% Explosionwahrscheinlichkeit, 3% Überlebenswahrscheinlichkeit; Genießen sie wenige Minuten in einer SpaceGate-Rakete', 99999999.99, 1, 1);
+(1, 'Surfen', 'Surfkurs für Anfänger', 50.00, 10, 1),
+(2, 'Kitesurfen', 'Erlebnis am Strand', 70.00, 8, 2),
+(3, 'Wandern', 'Geführte Tour durch die Berge', 30.00, 15, 3),
+(4, 'Skifahren', 'Tageskarte für die Piste', 80.00, 20, 4),
+(5, 'Bootstour', 'Tagesausflug mit dem Boot', 60.00, 12, 5),
+(6, 'Kanu fahren', 'Abenteuer auf dem Fluss', 40.00, 10, 6),
+(7, 'Stadtführung', 'Historische Sehenswürdigkeiten', 25.00, 20, 7),
+(8, 'Escape Room', 'Lösen Sie das Rätsel', 35.00, 6, 8),
+(9, 'Weinverkostung', 'Regionale Weine entdecken', 45.00, 10, 9),
+(10, 'Theaterbesuch', 'Aufführung im Stadttheater', 50.00, 15, 10);
 
 -- --------------------------------------------------------
 
@@ -826,18 +835,26 @@ CREATE TABLE `haus` (
 --
 
 INSERT INTO `haus` (`HausID`, `Adresse`, `AnzahlZimmer`, `AnzahlBetten`, `Beschreibung`, `EigentümerID`, `OrtID`, `Preis`) VALUES
-(4, 'Strandweg 1, Sylt', 4, 8, 'Ein Strandhaus mit Blick auf die Nordsee', 3, 1, 50),
-(5, 'Bergstraße 12, München', 6, 12, 'Modernes Haus in Zentrallage', 2, 4, 9),
-(6, 'Waldweg 5, Freiburg', 3, 5, 'Gemütliches Haus in der Nähe des Schwarzwaldes', 2, 4, 1),
-(7, 'Strandweg 2, Sylt', 2, 1, 'test', 3, 3, 45),
-(8, 'Strandweg 3, Sylt', 2, 1, 'test', 4, 7, 876),
-(12, 'string', 1, 2, 'string', 1, 2, 123),
-(13, 'stringadasdasd', 1, 2, 'asdadasd1d1 ', 5, 1, 123),
-(14, 'string', 1, 2, 'string', 2, 1, 123),
-(15, 'address bllb', 1, 2, 'descs cc', 2, 1, 123),
-(16, 'Test', 12, 9, '12131231231231', 9, 1, 67),
-(17, 'Test13124', 12, 9, '12131231231231', 10, 1, 10),
-(21, 'dasisteine Testadresse', 100, 100, 'Nils stinkt', 11, 3, NULL);
+(1, 'Hauptstraße 1', 3, 5, 'Modernes Ferienhaus mit Meerblick', 1, 1, 120),
+(2, 'Hauptstraße 2', 2, 4, 'Kleines gemütliches Haus', 1, 1, 100),
+(3, 'Seestraße 3', 4, 6, 'Luxusvilla am Strand', 2, 2, 250),
+(4, 'Seestraße 4', 3, 5, 'Ferienhaus mit Garten', 2, 2, 130),
+(5, 'Altstadt 5', 2, 4, 'Stilvolles Apartment', 3, 3, 90),
+(6, 'Altstadt 6', 3, 6, 'Großes Stadthaus', 3, 3, 150),
+(7, 'Bergstraße 7', 3, 5, 'Berghütte mit Kamin', 4, 4, 140),
+(8, 'Bergstraße 8', 2, 3, 'Rustikales Chalet', 4, 4, 110),
+(9, 'Schwarzwaldstraße 9', 4, 7, 'Luxuriöse Lodge', 5, 5, 200),
+(10, 'Schwarzwaldstraße 10', 3, 5, 'Ferienhaus im Grünen', 5, 5, 120),
+(11, 'Seeweg 11', 2, 4, 'Apartment mit Seeblick', 6, 6, 95),
+(12, 'Seeweg 12', 3, 5, 'Modernes Loft', 6, 6, 130),
+(13, 'Elbstraße 13', 4, 6, 'Penthouse mit Dachterrasse', 7, 7, 180),
+(14, 'Elbstraße 14', 3, 5, 'Charmantes Stadthaus', 7, 7, 140),
+(15, 'Markt 15', 3, 6, 'Elegantes Apartment', 8, 8, 160),
+(16, 'Markt 16', 2, 4, 'Gemütliche Ferienwohnung', 8, 8, 100),
+(17, 'Domplatz 17', 4, 7, 'Villa mit Pool', 9, 9, 220),
+(18, 'Domplatz 18', 3, 5, 'Klassisches Landhaus', 9, 9, 150),
+(19, 'Goetheplatz 19', 2, 4, 'Altbauwohnung', 10, 10, 90),
+(20, 'Goetheplatz 20', 3, 5, 'Stilvolle Ferienwohnung', 10, 10, 120);
 
 -- --------------------------------------------------------
 
@@ -852,24 +869,6 @@ CREATE TABLE `mietvertrag` (
   `BuchungID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Daten für Tabelle `mietvertrag`
---
-
-INSERT INTO `mietvertrag` (`VertragID`, `Vertragsdatum`, `Vertragsdetails`, `BuchungID`) VALUES
-(5, '2025-02-19', 'Buchungsdauer: 93 Nächte, Gesamtpreis: 3800.00 EUR', 1),
-(8, '2025-02-19', 'Buchungsdauer: 2 Nächte, Gesamtpreis: 210.00 EUR', 6),
-(17, '2025-02-20', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 200.00 EUR', 36),
-(19, '2025-02-20', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 120.00 EUR', 38),
-(20, '2025-02-20', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 120.00 EUR', 39),
-(22, '2025-02-20', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 120.00 EUR', 41),
-(23, '2025-02-20', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 120.00 EUR', 42),
-(24, '2025-02-20', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 120.00 EUR', 43),
-(25, '2025-02-20', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 120.00 EUR', 44),
-(32, '2025-02-25', 'Buchungsdauer: 2 Nächte, Gesamtpreis: 2.00 EUR', 54),
-(33, '2025-02-28', 'Buchungsdauer: 365 Nächte, Gesamtpreis: 3285.00 EUR', 55),
-(34, '2025-02-28', 'Buchungsdauer: 1 Nächte, Gesamtpreis: 129.00 EUR', 56);
-
 -- --------------------------------------------------------
 
 --
@@ -883,24 +882,6 @@ CREATE TABLE `mängelanzeige` (
   `Beschreibung` text NOT NULL,
   `state` enum('Neu','In Bearbeitung','Gelöst') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Daten für Tabelle `mängelanzeige`
---
-
-INSERT INTO `mängelanzeige` (`MangelID`, `HausID`, `MeldeDatum`, `Beschreibung`, `state`) VALUES
-(12, 5, '2025-02-21', 'Das Haus ist umgefallen. Konnten nicht drinne wohnen. 5/5 Sterne', 'Neu'),
-(13, 4, '2025-02-21', 'test', 'Neu'),
-(14, 4, '2025-02-25', 'TEstbeschreibung', 'Neu'),
-(15, 4, '2025-02-27', 'description', 'Neu'),
-(16, 4, '2025-02-27', 'description', 'Neu'),
-(17, 4, '2025-02-27', 'test123424', 'Neu'),
-(18, 13, '2025-02-27', 'eretr', 'Neu'),
-(19, 13, '2025-02-27', 'testeergaegaqfrgvb', 'Neu'),
-(20, 12, '2025-02-27', 'was für ein haus bist du?', 'Neu'),
-(21, 6, '2025-02-27', 'strandweg 5 freiburg ist scheiße', 'Neu'),
-(22, 16, '2025-02-27', 'ad', 'Neu'),
-(23, 5, '2025-02-28', 'Gas ist ausgetreten. Haus ist explodiert', 'Neu');
 
 -- --------------------------------------------------------
 
@@ -926,7 +907,6 @@ INSERT INTO `nutzer` (`NutzerID`, `Name`, `Email`, `Telefonnummer`, `RolleID`, `
 (10, 'TestNAme', 'testsdae@test.de', '45000', 2, 'passwort'),
 (11, 'TestNAme121412', 'testsdae@test.de', '45000', 2, 'passwort'),
 (14, 'ConnectionTest', 'connection@test.com', '+4917649825448', 1, '$2y$10$bhVgVKi2vHnSLS7U1Hb2KuMvZsk4zG2c/bQY9yTXZpm55n6xiXkqG'),
-(15, 'spast', 'sp@st.te', '+124124', 3, 'qerqwe'),
 (16, 'ConnectionTest', 'connection1@test.com', '+4917649825448', 1, '$2y$10$7qR6hIgOiHzfYLTgAPXDgutgPYcjHgGCpDav/k5tlSOxq3p6E.s6S'),
 (17, 'abc', 't.est@test.com', '+199519', 2, '$2y$10$Hp8jhkDA//6svwpMAQoc5.08L/EowKy1yfI1L199okI.c9uBSPpbq'),
 (18, 'ConnectionTest', 'connection1@test1.com', '+4917649825448', 2, '$2y$10$RxoMVteHpyM01pZ0V3prCukM0ljlJmiTZG4RkTrY.a27cSNJYD3nC'),
@@ -942,7 +922,11 @@ INSERT INTO `nutzer` (`NutzerID`, `Name`, `Email`, `Telefonnummer`, `RolleID`, `
 (38, 'usser', 'userspam4@pw123.com', '+4917649825448', 3, '$2y$10$QnQ4RTJ.tAnsZAsXQl.E5OFU4.VG8AwfXYmonohFR0cGwJdt8XmLy'),
 (43, 'guest123', 'guest123@pw123.com', '+4918669322471', 3, '$2y$10$G4jmzcZh18LRhGnW4qHBMu0Zb/5U80PFduWAq6H4gKi0cfoteB.6m'),
 (49, 'Tom; DROP TABLES', 'teste123@test.de', '123123123', 3, '$2y$10$rKHlz8xX9EMd/YSMZjDOr.aCbTBl22Af7jYKvwTdL5qGKW2dwKXjq'),
-(50, 'Test, test@ergeg.de, 124124, 2, passwort);', 'test@erqewgeg.de', '123123123', 3, '$2y$10$y40eWgcuC/Wzy0u6QsRAvucD2Tbq0tQPtXdWN5eyMGWdwbyEjSx.i');
+(50, 'Test, test@ergeg.de, 124124, 2, passwort);', 'test@erqewgeg.de', '123123123', 3, '$2y$10$y40eWgcuC/Wzy0u6QsRAvucD2Tbq0tQPtXdWN5eyMGWdwbyEjSx.i'),
+(51, 'testcase1', 'testcase1.pw@testcase1.com', '+1234562341', 3, '$2y$10$o3GM/oGF/4YhO/6ScUOXjOyk5HDk2n88Lk3Jjx32kV8rWVJHY4N4G'),
+(52, 'user', 'user@pw123.com', '+32435678', 3, '$2y$10$GGb.AVTbSOgMcHy6hQFzpe2adJo8ZgrD5NETbhKe.a/9coFHoySwG'),
+(53, 'registered123', 'registered-1@pw123.com', '+4918669322471', 3, '$2y$10$rTjPGzbcK1vJZIE7L8hT7OdodXVr4ogPeHcuoWrEhZOFmIxbeDWHC'),
+(54, 'dasfg', 'dda.add@pw123.com', '+12345612345', 3, '$2y$10$tSSdFDxOoaoHXrumB0ZAcunrPm8P/niFfw8XbUbwnKcA.ldJwGW2y');
 
 -- --------------------------------------------------------
 
@@ -961,14 +945,16 @@ CREATE TABLE `ort` (
 --
 
 INSERT INTO `ort` (`OrtID`, `RegionID`, `OrtName`) VALUES
-(1, 1, 'Sylt'),
-(2, 2, 'München'),
-(3, 3, 'Freiburg'),
-(4, 1, 'Sylt'),
-(5, 2, 'München'),
-(6, 3, 'Freiburg'),
-(7, 1, 'Testname'),
-(10, 1, 'Testname');
+(1, 1, 'Insel Sylt'),
+(2, 1, 'Cuxhaven'),
+(3, 2, 'München'),
+(4, 2, 'Garmisch-Partenkirchen'),
+(5, 3, 'Freiburg'),
+(6, 3, 'Titisee-Neustadt'),
+(7, 4, 'Dresden'),
+(8, 4, 'Leipzig'),
+(9, 5, 'Erfurt'),
+(10, 5, 'Weimar');
 
 -- --------------------------------------------------------
 
@@ -990,20 +976,7 @@ CREATE TABLE `rechnung` (
 INSERT INTO `rechnung` (`RechnungID`, `Rechnungsdatum`, `Betrag`, `BuchungID`) VALUES
 (1, '2025-01-25', 1350.00, NULL),
 (2, '2025-03-01', 1580.00, NULL),
-(3, '2025-04-05', 1050.00, NULL),
-(4, '2025-02-18', 18470.00, 9),
-(6, '2025-02-19', 3800.00, 1),
-(9, '2025-02-19', 210.00, 6),
-(27, '2025-02-20', 200.00, 36),
-(29, '2025-02-20', 120.00, 38),
-(30, '2025-02-20', 120.00, 39),
-(32, '2025-02-20', 120.00, 41),
-(33, '2025-02-20', 120.00, 42),
-(34, '2025-02-20', 120.00, 43),
-(35, '2025-02-20', 120.00, 44),
-(42, '2025-02-25', 2.00, 54),
-(43, '2025-02-28', 3285.00, 55),
-(44, '2025-02-28', 129.00, 56);
+(3, '2025-04-05', 1050.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -1024,10 +997,8 @@ INSERT INTO `region` (`RegionID`, `RegionName`) VALUES
 (1, 'Nordsee'),
 (2, 'Bayern'),
 (3, 'Schwarzwald'),
-(4, 'Harz'),
-(7, 'Baden Württemberg'),
-(8, 'Schwazwald'),
-(9, 'Schwa');
+(4, 'Sachsen'),
+(5, 'Thüringen');
 
 -- --------------------------------------------------------
 
@@ -1090,7 +1061,8 @@ ALTER TABLE `freizeitaktivität`
 ALTER TABLE `haus`
   ADD PRIMARY KEY (`HausID`),
   ADD KEY `fk_ort_haus` (`OrtID`),
-  ADD KEY `haus_ibfk_2` (`EigentümerID`);
+  ADD KEY `haus_ibfk_2` (`EigentümerID`),
+  ADD KEY `HausID` (`HausID`);
 
 --
 -- Indizes für die Tabelle `mietvertrag`
@@ -1111,14 +1083,16 @@ ALTER TABLE `mängelanzeige`
 --
 ALTER TABLE `nutzer`
   ADD PRIMARY KEY (`NutzerID`),
-  ADD KEY `nutzer_ibfk_1` (`RolleID`);
+  ADD KEY `nutzer_ibfk_1` (`RolleID`),
+  ADD KEY `NutzerID` (`NutzerID`);
 
 --
 -- Indizes für die Tabelle `ort`
 --
 ALTER TABLE `ort`
   ADD PRIMARY KEY (`OrtID`),
-  ADD KEY `ort_ibfk_1` (`RegionID`);
+  ADD KEY `ort_ibfk_1` (`RegionID`),
+  ADD KEY `OrtID` (`OrtID`);
 
 --
 -- Indizes für die Tabelle `rechnung`
@@ -1137,7 +1111,8 @@ ALTER TABLE `region`
 -- Indizes für die Tabelle `rolle`
 --
 ALTER TABLE `rolle`
-  ADD PRIMARY KEY (`RolleID`);
+  ADD PRIMARY KEY (`RolleID`),
+  ADD KEY `RolleID` (`RolleID`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
@@ -1147,25 +1122,25 @@ ALTER TABLE `rolle`
 -- AUTO_INCREMENT für Tabelle `buchung`
 --
 ALTER TABLE `buchung`
-  MODIFY `BuchungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `BuchungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT für Tabelle `buchung_aktivitaet`
 --
 ALTER TABLE `buchung_aktivitaet`
-  MODIFY `BuchungAktivitaetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `BuchungAktivitaetID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
 
 --
 -- AUTO_INCREMENT für Tabelle `eigentümer`
 --
 ALTER TABLE `eigentümer`
-  MODIFY `EigentümerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `EigentümerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT für Tabelle `freizeitaktivität`
 --
 ALTER TABLE `freizeitaktivität`
-  MODIFY `AktivitätsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `AktivitätsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT für Tabelle `haus`
@@ -1177,7 +1152,7 @@ ALTER TABLE `haus`
 -- AUTO_INCREMENT für Tabelle `mietvertrag`
 --
 ALTER TABLE `mietvertrag`
-  MODIFY `VertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `VertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT für Tabelle `mängelanzeige`
@@ -1189,7 +1164,7 @@ ALTER TABLE `mängelanzeige`
 -- AUTO_INCREMENT für Tabelle `nutzer`
 --
 ALTER TABLE `nutzer`
-  MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `NutzerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT für Tabelle `ort`
@@ -1201,7 +1176,7 @@ ALTER TABLE `ort`
 -- AUTO_INCREMENT für Tabelle `rechnung`
 --
 ALTER TABLE `rechnung`
-  MODIFY `RechnungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `RechnungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT für Tabelle `region`
