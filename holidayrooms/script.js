@@ -13,9 +13,6 @@ async function initializeData(){
   initialiseComponents();
   await loadHouses();
   await loadActivities();
-  setTimeout(() => {
-    // disableBookButton();
-  });
 }
 
 function initialiseComponents(){
