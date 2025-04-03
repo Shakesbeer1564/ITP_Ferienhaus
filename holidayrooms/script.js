@@ -14,7 +14,7 @@ async function initializeData(){
   await loadHouses();
   await loadActivities();
   setTimeout(() => {
-    disableBookButton();
+    // disableBookButton();
   });
 }
 
@@ -195,9 +195,24 @@ function loadStyle(href){
 //------------------------------------------
 //-------- Apply-Filter-Buttons ------------
 //------------------------------------------
-// document.querySelector(input[type='date']).addEventListener('click', () => {
-
-// })
+document.querySelector("input[type='date']").addEventListener('input', () => {
+  setTimeout(() => {
+    const applyFilterButton = document.getElementById('apply_filter');
+  
+    const shadowHost = document.querySelectorAll("p-card");
+    if(shadowHost){
+      shadowHost.forEach(cardShadowHost => {
+        const shadowRoot = cardShadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
+        const bookButton = shadowRoot.querySelector(".book-button");
+        bookButton.disabled = true;
+      
+        applyFilterButton.addEventListener('click', () => {
+          bookButton.disabled = false;
+        })
+      })
+    }
+  })
+})
 
 function disableBookButton(){
   const dateStart = document.getElementById('date_start');
