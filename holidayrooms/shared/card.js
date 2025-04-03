@@ -1,5 +1,5 @@
 (async () => {
-  // const { HTTPService } = await import('../http-service.js');
+  const { HTTPService } = await import('../http-service.js');
   const { getOverviewClass } = await import('../class/overview.js');
   const Overview = await getOverviewClass();
   
@@ -64,7 +64,7 @@
 
           if(Overview.getInstance().getHouseItem().houseId === -1){
             try{
-              const calculatedPrice = await this.HTTPService.postData('get_house_booking_price.php', {
+              const calculatedPrice = await HTTPService.postData('get_house_booking_price.php', {
                 houseId: this.getAttribute('id'),
                 startDate: document.getElementById('date_start').value,
                 endDate: document.getElementById('date_end').value

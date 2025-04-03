@@ -10,12 +10,12 @@ initializeData();
 
 async function initializeData(){
   checkLogoutButtonVisibility();
+  initialiseComponents();
+  await loadHouses();
+  await loadActivities();
   setTimeout(() => {
     disableBookButton();
   });
-  initialiseComponents();
-  loadHouses();
-  loadActivities();
 }
 
 function initialiseComponents(){
@@ -202,30 +202,30 @@ function disableBookButton(){
   const dateEnd = document.getElementById('date_end');
   const applyFilterButton = document.getElementById('apply_filter');
 
-  const shadowHost = document.querySelector("p-card");
-  let shadowRoot, bookButton;
-  
+  const shadowHost = document.querySelectorAll("p-card");
   if(shadowHost){
-    shadowRoot = shadowHost.shadowRoot;
-    bookButton = shadowRoot.querySelector(".book-button");
+    shadowHost.forEach(cardShadowHost => {
+      const shadowRoot = cardShadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
+      const bookButton = shadowRoot.querySelector(".book-button");
+
+      let dateChanged = false;
+  
+      function disableButton(){
+        bookButton.disabled = true;
+        dateChanged = true;
+      }
+    
+      dateStart.addEventListener('input', disableButton);
+      dateEnd.addEventListener('input', disableButton);
+    
+      applyFilterButton.addEventListener('click', () => {
+        if(dateChanged){
+          dateChanged = false;
+          bookButton.disabled = false;
+        }
+      })
+    })
   }
-
-  let dateChanged = false;
-
-  function disableButton(){
-    bookButton.disabled = true;
-    dateChanged = true;
-  }
-
-  dateStart.addEventListener('input', disableButton);
-  dateEnd.addEventListener('input', disableButton);
-
-  applyFilterButton.addEventListener('click', () => {
-    if(dateChanged){
-      dateChanged = false;
-      bookButton.disabled = false;
-    }
-  })
 }
 
 document.getElementById('apply_filter').addEventListener('click', async () => {
