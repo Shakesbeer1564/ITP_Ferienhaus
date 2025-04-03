@@ -46,7 +46,7 @@ export async function checkLogoutButtonVisibility(){
   if(res.username !== null){
     loginButton.style.display = 'none';
     registrationButton.style.display = 'none';
-    logoutButton.style.disBplay = 'block';
+    logoutButton.style.display = 'block';
     username.textContent = `Welcome ${res.username}`;
     // overview.style.display = 'block';
     // notificationOfDefectsButton.style.display = 'block';
@@ -67,6 +67,7 @@ export async function checkLogoutButtonVisibility(){
     notificationOfDefectsButton.style.display = 'none';
     username.style.display = `none`;
     overview.style.display = 'none';
+    adminPageButton.style.display = 'none';
     loginButton.style.display = 'block';
     registrationButton.style.display = 'block';
   }
@@ -107,7 +108,7 @@ function renderHouseCards(cardElements){
     const card = document.createElement('p-card');
     card.setAttribute('id', element.HausID);
     card.setAttribute('image', element.image);
-    card.setAttribute('owner', element.EigentümerName);
+    card.setAttribute('owner', element.EigentuemerName);
     card.setAttribute('place', element.Adresse);
     card.setAttribute('room_count', element.AnzahlZimmer);
     card.setAttribute('bed_count', element.AnzahlBetten);
@@ -144,7 +145,7 @@ function renderActivityCards(acCardElements){
   
   for(let el of acCardElements){
     const card = document.createElement('p-card-activity');
-    card.setAttribute('id', el.AktivitätsID);
+    card.setAttribute('id', el.AktivitaetsID);
     card.setAttribute('title', el.Name);
     card.setAttribute('price', el.Preis);
     card.setAttribute('participants', el.AnzahlTeilnehmer);
@@ -202,8 +203,12 @@ function disableBookButton(){
   const applyFilterButton = document.getElementById('apply_filter');
 
   const shadowHost = document.querySelector("p-card");
-  const shadowRoot = shadowHost.shadowRoot; // Zugriff auf das Shadow DOM Element
-  const bookButton = shadowRoot.querySelector(".book-button");
+  let shadowRoot, bookButton;
+  
+  if(shadowHost){
+    shadowRoot = shadowHost.shadowRoot;
+    bookButton = shadowRoot.querySelector(".book-button");
+  }
 
   let dateChanged = false;
 

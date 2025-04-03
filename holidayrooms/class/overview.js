@@ -88,6 +88,10 @@ const overviewPromise = (async () => {
       const res = await HTTPService.postData('book_house.php', data);
   
       if(res){
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(res);
+        link.download = '.pdf';
+        link.click();
         window.location.reload();
       }
     }
