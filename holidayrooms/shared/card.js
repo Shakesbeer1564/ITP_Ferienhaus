@@ -1,6 +1,5 @@
-// !Müssen wir dynamisch importieren, da wir keine html-Datei haben um es als type=module zu kennzeichnen
 (async () => {
-  const { HTTPService } = await import('../http-service.js');
+  // const { HTTPService } = await import('../http-service.js');
   const { getOverviewClass } = await import('../class/overview.js');
   const Overview = await getOverviewClass();
   

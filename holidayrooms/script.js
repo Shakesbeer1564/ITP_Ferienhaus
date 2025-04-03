@@ -32,18 +32,43 @@ function initialiseComponents(){
     './components/authentification/maengelanzeige/maengel.css', './components/authentification/maengelanzeige/maengel.js');
 }
 
-function checkLogoutButtonVisibility(){
+// Function is being used in login and registration too
+export async function checkLogoutButtonVisibility(){
+  const loginButton = document.getElementById('open_Login');
+  const registrationButton = document.getElementById('open_registration');
   const logoutButton = document.getElementById('logout');
+  const notificationOfDefectsButton = document.getElementById('open_maengelanzeige');
+  const username = document.getElementById('username');
+  const overview = document.getElementById('overview');
+  const adminPageButton = document.getElementById('open_admin_page');
 
-  // Müssen wir über ein extra Endpunkt prüfen ob die Session da ist, weil die 
-  // Session_ID generiert wird und kein fester Key angegeben wird      
-  if(document.cookie.length > 0){
-    logoutButton.style.display = 'block';
-    document.getElementById('open_Login').style.display = 'none';
-    document.getElementById('open_registration').style.display = 'none';
+  const res = await HTTPService.getData('get_user.php');
+  if(res.username !== null){
+    loginButton.style.display = 'none';
+    registrationButton.style.display = 'none';
+    logoutButton.style.disBplay = 'block';
+    username.textContent = `Welcome ${res.username}`;
+    // overview.style.display = 'block';
+    // notificationOfDefectsButton.style.display = 'block';
+
+    if(res.rolename === 'Admin'){
+      notificationOfDefectsButton.style.display = 'none';
+      overview.style.display = 'none';
+      adminPageButton.style.display = 'block';
+    }
+    else{
+      overview.style.display = 'block';
+      notificationOfDefectsButton.style.display = 'block';
+    }
+    
   }
   else{
-    logoutButton.style.display = 'none';
+    logoutButton.style.disBplay = 'none';
+    notificationOfDefectsButton.style.display = 'none';
+    username.style.display = `none`;
+    overview.style.display = 'none';
+    loginButton.style.display = 'block';
+    registrationButton.style.display = 'block';
   }
 }
 
@@ -287,8 +312,11 @@ document.querySelector('#open_maengelanzeige').addEventListener('click', () => {
   document.getElementById('maengel_dialog').style.display = 'block';
   document.getElementById("dark_background").style.display = 'block';
 })
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 5065050264aa30125a6d0c6019726a10287ae326
 
 //------------------------------------------
 //---------------- Logout ------------------
@@ -298,4 +326,15 @@ document.getElementById('logout').addEventListener('click', async () => {
 
   if(res)
     window.location.reload();
+<<<<<<< HEAD
+=======
+})
+
+
+//------------------------------------------
+//-------------- Admin Page ----------------
+//------------------------------------------
+document.getElementById('open_admin_page').addEventListener('click', () => {
+  window.location.href = './components/admin/admin.html';
+>>>>>>> 5065050264aa30125a6d0c6019726a10287ae326
 })
