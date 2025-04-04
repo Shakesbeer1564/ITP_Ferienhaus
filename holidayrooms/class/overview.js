@@ -75,7 +75,7 @@ const overviewPromise = (async () => {
     }
   
     async book(){
-      if(this.#houseItem.houseId === '-1')
+      if(this.#houseItem.houseId == -1)
         return alert('You need to book a house first');
   
       const data = {
